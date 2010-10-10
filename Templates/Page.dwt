@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<!-- TemplateBeginEditable name="doctitle" -->
+		<title>FV-Extender / </title>
+		<!-- TemplateEndEditable -->
+		<!-- TemplateBeginEditable name="head" -->
+		<!-- TemplateEndEditable -->
+		<link href="style.css" rel="stylesheet" type="text/css" />
+	</head>	
+	<body>
+		<div class="site">
+			<div class="top">
+				<div class="logo"><a href="index.html" title="Home" class="image-link"></a></div>
+			</div>
+			<div class="main-menu">
+				<div><a href="index.html">About</a></div>
+				<div class="sep">-</div>
+				<div><a href="download.html">Download</a></div>
+				<div class="sep">-</div>
+				<div><a href="user_guide.html">User guide</a></div>
+				<div class="sep">-</div>
+				<div><a href="report_bug.html">Report bug</a></div>
+				<div class="sep">-</div>
+				<div><a href="future_plans.html">Future plans</a></div>
+				<div class="sep">-</div>
+				<div><a href="contact.html">Contact</a></div>				
+			</div>
+			<div class="content">
+				<div class="main-column">
+					<h1><!-- TemplateBeginEditable name="headline" -->headline<!-- TemplateEndEditable --></h1>
+					<!-- TemplateBeginEditable name="main_column" -->main_column<!-- TemplateEndEditable -->
+				</div>
+				<div class="right-column">
+					<!-- TemplateBeginEditable name="right_column" -->right_column<!-- TemplateEndEditable -->
+				</div>
+			</div>
+			<div class="bottom">
+				<div><a href="#">Report bug</a></div>
+				<div class="sep">-</div>
+				<div><a href="#">Contact</a></div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,159 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* begin reset */
+
+h1,p,h2 {
+	padding:0px;
+	margin:0px;
+	line-height:1;	
+}
+
+/* end reset */
+
+body {
+	background-color:#fff;
+	background-image:url(graphics/BG_article.jpg);
+	background-position:center;
+	background-repeat:repeat-y;
+	padding:0px;
+	margin:0px;
+}
+
+a:link,
+a:active,
+a:visited {
+	color:#FF7F00;
+	text-decoration:none;	
+}
+
+a:hover {
+	color:#FFBF7F;
+	text-decoration:none;	
+}
+
+a.image-link {
+	display:block;
+	width:100%;
+	height:100%;	
+}
+
+.site {
+	margin: 0px auto;
+	width:770px;
+}
+
+.site .top {
+	width:770px;;
+	height:86px;
+	position:relative;
+}
+
+.site .top .logo {
+	position:absolute;
+	width:487px;
+	height:80px;
+	background-image:url(graphics/Logo.jpg);
+	float:left;
+	clear:both;
+}
+
+.site .main-menu {
+	width:752px;
+	height:25px;
+	background-color:#666666;
+	margin-left:1px;	
+	font-family:Verdana, Geneva, sans-serif;
+	font-size: 11px;
+	padding-left:16px;
+	padding-top:0px;
+}
+
+.site .main-menu div {
+	float:left;
+	height:25px;
+}
+
+.site .main-menu a {
+	display:block;
+	float:left;	
+	height:100%;
+	padding-left:4px;
+	padding-right:4px;
+	padding-top:5px;
+}
+
+.site .main-menu div.sep {
+	padding-top:5px;
+	color:#fff;	
+}
+
+.site .main-menu a:link,
+.site .main-menu a:visited {
+	color:#fff;	
+}
+
+.site .main-menu a:hover {
+	color:#FF7F00;
+}
+
+.site .content {
+	padding-top:20px;
+	padding-bottom:20px;
+}
+
+.site .content > div {
+	float:left;
+	height:200px;
+}
+
+.site .content .main-column {
+	width:447px;
+	margin-left:20px;
+	margin-right:20px;	
+}
+
+.site .content .right-column {
+	width:220px;
+}
+
+.site .bottom {
+	display:none;
+}
+
+
+/* paragraph layouts */
+
+div.path {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	color:#666;		
+}
+
+h1 {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:16px;
+	color:#666;	
+}
+
+h1 + p, h1 + h2 {
+	margin-top:10px;		
+}
+
+p, h2 {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:11px;
+	color:#666;	
+}
+
+h2 + p {
+	margin-top:5px;	
+}
+
+h2 {
+	font-weight:bold;	
+}
+
+p {
+	line-height: 1.2em;	
+}
