@@ -1,7 +1,8 @@
 {
-  "name": "FV Get Gifts",
+  "name": "FV-Extender",
+  "update_url": "http://a-creative.github.com/FV-extender/updates.xml",
   "version": "1.0",
-  "description": "Easy gift collecting in FV",
+  "description": "Extends Farmville with new features",
   "background_page": "background.html",
   "content_scripts": [
     {
