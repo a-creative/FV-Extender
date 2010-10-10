@@ -1,0 +1,14 @@
+{
+  "name": "FV Get Gifts",
+  "version": "1.0",
+  "description": "Easy gift collecting in FV",
+  "background_page": "background.html",
+  "content_scripts": [
+    {
+      "matches": ["http://www.farmville.com/*","http://www.facebook.com/reqs.php*","http://apps.facebook.com/onthefarm*"],
+      "js": ["jquery.js","myscript.js"],
+      "css" : ["mystyles.css"],
+      "all_frames" : true
+    }
+  ]
+}
