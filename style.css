@@ -9,6 +9,19 @@ h1,p,h2 {
 	line-height:1;	
 }
 
+ul,li {
+	padding-top:0px;
+	padding-bottom:0px;
+	margin-top:0px;
+	margin-bottom:0px;	
+}
+
+li + li {
+	margin-top: 5px;	
+}
+
+
+
 /* end reset */
 
 body {
@@ -136,18 +149,26 @@ h1 {
 	color:#666;	
 }
 
-h1 + p, h1 + h2 {
+h1 + p, h1 + h2, h1 + ul {
 	margin-top:10px;		
 }
 
-p, h2 {
+p, h2, ul {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:11px;
 	color:#666;	
 }
 
+h2 + ul, p + p, p + ul {
+	margin-top:10px;	
+}
+
 h2 + p {
-	margin-top:5px;	
+	margin-top:3px;	
+}
+
+p + h2, ul + h2{
+	margin-top:15px;	
 }
 
 h2 {
