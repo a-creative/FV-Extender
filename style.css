@@ -20,6 +20,9 @@ li + li {
 	margin-top: 5px;	
 }
 
+img {
+	border:none;	
+}
 
 
 /* end reset */
@@ -69,6 +72,7 @@ a.image-link {
 	background-image:url(graphics/Logo.jpg);
 	float:left;
 	clear:both;
+	background-color:red;
 }
 
 .site .main-menu {
@@ -159,7 +163,7 @@ p, h2, ul {
 	color:#666;	
 }
 
-h2 + ul, p + p, p + ul {
+h2 + ul, p + p, p + ul, ul + p {
 	margin-top:10px;	
 }
 

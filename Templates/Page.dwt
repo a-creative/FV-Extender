@@ -32,6 +32,8 @@
 			<div class="main-menu">
 				<div><a href="index.html">About</a></div>
 				<div class="sep">-</div>
+				<div><a href="features.html">Features</a></div>
+				<div class="sep">-</div>
 				<div><a href="download.html">Download</a></div>
 				<div class="sep">-</div>
 				<div><a href="user_guide.html">User guide</a></div>
@@ -46,6 +48,8 @@
 				<div class="main-column">
 					<h1><!-- TemplateBeginEditable name="headline" -->headline<!-- TemplateEndEditable --></h1>
 					<!-- TemplateBeginEditable name="main_column" -->main_column<!-- TemplateEndEditable -->
+					<p>&nbsp;</p>
+					<p>&nbsp;</p>
 				</div>
 				<div class="right-column">
 					<!-- TemplateBeginEditable name="right_column" --><!-- TemplateEndEditable -->
