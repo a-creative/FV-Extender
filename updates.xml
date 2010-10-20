@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
   <app appid='oemkjpkjokkldhfljaoofepbdfemhini'>
-    <updatecheck codebase='http://a-creative.github.com/FV-extender/FV-extender.crx' version='2.0' />
+    <updatecheck codebase='http://a-creative.github.com/FV-extender/FV-extender-v2.crx' version='2.0' />
   </app>
 </gupdate>
