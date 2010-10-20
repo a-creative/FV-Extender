@@ -1,38 +1,10 @@
 <html>
-	<script>
-		var accept_all = false;
-		var neighbor_update_requested = false;
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="run.js"></script>		
+	</head>
+	<body>
 		
-		var non_neigbor_list_last_updated = 0;
-		var neighbors = new Array();
-		
-		chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
-			if ( request.action == 'update_neighbors' ) {
-				neighbors = request.neighbors;
-				var d = new Date();
-				var time_now = d.getTime();
-				non_neigbor_list_last_updated = time_now;
-				sendResponse( { result: true } );					
-			} else if ( request.action == 'check_neighbor_update_request' ) {
-				sendResponse( { result: neighbor_update_requested } );
-					
-			} else if ( request.action == 'check_neighbor_update' ) {
-				var d = new Date();
-				var time_now = d.getTime();
-				
-				
-				if ( non_neigbor_list_last_updated > ( time_now - 300000 ) ) {
-					sendResponse( { result: true } );	
-				} else {
-					neighbor_update_requested = true;
-					
-					sendResponse( { result: false } );	
-				}					
-			} else if ( request.get_accept_all ) {
-				sendResponse( { accept_all: accept_all } );
-			} else if ( request.set_accept_all ) {
-				accept_all = request.accept_all;
-			}
-		});
-	</script>
+	</body>
 </html>
