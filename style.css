@@ -130,7 +130,8 @@ a.image-link {
 }
 
 .site .content .right-column {
-	width:220px;
+	width:200px;
+	padding:10px;
 }
 
 .site .bottom {
@@ -156,10 +157,19 @@ h1 + p, h1 + h2, h1 + ul {
 	margin-top:10px;		
 }
 
-p, h2, ul {
+p, h2, ul, h3 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:11px;
 	color:#666;	
+}
+
+.site .content .right-column p {
+	color:#fff;	
+}
+
+h3 {
+	font-style:italic;	
+	font-weight:normal;
 }
 
 h2 + ul, p + p, p + ul, ul + p {
@@ -178,6 +188,8 @@ h2 {
 	font-weight:bold;	
 }
 
-p {
+
+
+p,h3 {
 	line-height: 1.2em;	
 }
