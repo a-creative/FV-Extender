@@ -8,7 +8,8 @@
     {
       "matches": ["http://www.farmville.com/*","http://*.facebook.com/*", "https://*.facebook.com/*","http://apps.facebook.com/onthefarm*"],
       "js": ["jquery.js","js/jquery-ui-1.8.5.custom.min.js", "myscript.js"],
-      "css" : ["css/custom-theme/jquery-ui-1.8.5.custom.css", "mystyles.css"]
+      "css" : ["css/custom-theme/jquery-ui-1.8.5.custom.css", "mystyles.css"],
+      "run_at": "document_end"
     }
   ],
   "permissions": [
