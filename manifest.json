@@ -1,7 +1,7 @@
 {
   "name": "FV Extender",
   "update_url": "http://a-creative.github.com/FV-extender/updates.xml",
-  "version": "2.0",
+  "version": "2.0.1",
   "description": "Extends FarmVille with new features",
   "background_page": "background.html",
   "content_scripts": [
