@@ -1,18 +1,18 @@
-#my-accept-all-btn {
+label.my-accept-all-btn {
 	margin-left:10px;
 	position:relative;
 	top:-3px;
 }
 
-#my-accept-all-btn input {
+label.my-accept-all-btn input {
 	color:#fff;
 }
 
-#accept-all-info {
+.accept-all-info {
 	margin-left:10px;	
 }
 
-#accept-all-popup {
+.accept-all-popup {
 	position:absolute;
 	top:25px;
 	left:0px;

@@ -1,74 +1,210 @@
-var items;
 var aborted = false;
 
-function _accept_all_click (evt) {
 
-	my_accept_all()	
-}
 
 $(document).ready( function() {
-	
-	/* filter requests to be accepted */
-	
-	lists = $('div.mbl');
-	
-	var list_header;
-	var button_added = false;
-	
-	var lists = lists.filter( function( index ) {
-		
-		list_header = $(this).find('>.uiHeader div div  h3');
-		
-		if ( list_header.length ) {
-			if ( list_header.html().match( /\sFarmVille$/ ) ) {
-				var acceptBtnBg = chrome.extension.getURL('acceptAllBtnBg.png'); 
-				
-				var accept_all_btn = '<label class="uiButton uiButtonMedium" id="my-accept-all-btn" style="background:url('+acceptBtnBg+')"><div id="accept-all-popup" /><input value="Accept all" type="button"></label><span id="accept-all-info">Provided by <a href="http://a-creative.github.com/FV-extender/" target="_blank">FV Extender</a></span>';
-				list_header.css('position','relative');
-				list_header.append( accept_all_btn );
-				$('#my-accept-all-btn').click( _accept_all_click );
-							
-				return true;
-			} 
-		}
-		return false;		
-	} );	
-		
-	var list = lists.first();
-	if ( list.length ) {
-		items = list.find( '> ul > li.uiListItem' ).filter( function( index ) {
-			var body_el = $(this).find('.requestBody');
-			if ( body_el.length ) {
-				if ( body_el.html().match( /Support my cause/i ) ) {
-					return false;
-				}
-				
-				if ( body_el.html().match( /collecting Shovels in FarmVille/i ) ) {
-					return false;
-				}
-			}		
-			
-			var msg_el = $(this).find('.requestMessage');
-			if ( msg_el.length ) {
-				return false;
-			} else {
-				return true;
+
+	function callLast(func, t){
+		if(!t){ t = 100; }
+		var callLastTimeout = null; 
+		return function(){
+			if(callLastTimeout!==null){
+				window.clearTimeout(callLastTimeout); 
 			}
-			
-		});		
+			callLastTimeout = window.setTimeout(function(){ callLastTimeout = null; func(); }, t);
+		};
 	}
 	
+	run();
+	
+	function run(){
+	
+		var request_lists = null;
+		function work(){
+			request_lists = jQuery("div.mbl");
+				
+			if( request_lists.length ){
+				
+				removeWorker();
+				request_lists.each( function( i,el ) { 
+					
+					var request_list = $(el);
+					
+					// Find requests
+					var requests = request_list.find( '> ul > li.uiListItem' );
+					if ( requests.length ) {
+						
+						// Find first request	
+						var first = requests.first();
+						
+						// Check if it is a FarmVille requests
+						var frm = first.find('form');
+						var action_url = escape($(frm).find('input[type="submit"]:first').attr('name'));
+						
+						if ( action_url.match( /apps\.facebook\.com\/onthefarm/ ) ) {
+							
+							// Add "Accept all" button to request list header if it is not already found
+							var list_header = request_list.find('>.uiHeader div div  h3');
+							if ( list_header.attr( 'has_accept_all_button' ) != 'yes' ) {						 
+							
+								var acceptBtnBg = chrome.extension.getURL('acceptAllBtnBg.png'); 
+								
+								var accept_all_btn = $('<label class="uiButton uiButtonMedium my-accept-all-btn" style="background:url('+acceptBtnBg+')"></label>');
+								
+								var popup_layer = $('<div class="accept-all-popup" />');
+								var btn = $('<input value="Accept all" type="button">');
+								
+								accept_all_btn.append( popup_layer );
+								accept_all_btn.append( btn );
+								
+								var accept_all_info = $('<span class="accept-all-info">Provided by <a href="http://a-creative.github.com/FV-extender/" target="_blank">FV Extender</a></span>');
+								
+								list_header.css( 'position', 'relative' )
+								
+								list_header.append( accept_all_btn );
+								list_header.append( accept_all_info );
+								
+								list_header.attr( 'has_accept_all_button', 'yes' );
+								
+								accept_all_btn.find('input').click( function() {
+									show_accept_all_dialog({
+										all_requests: requests,
+										accept_all_btn: accept_all_btn
+									})
+								} );
+							}
+						}
+					}				
+					
+				} );
+				
+				addWorker();
+			}
+		}
+	
+		var workLast = callLast(work);
+		function addWorker(){       document.addEventListener("DOMSubtreeModified", workLast, false); }
+		function removeWorker(){ document.removeEventListener("DOMSubtreeModified", workLast, false); } 
+		function startWork(){ addWorker(); workLast(); }
+	
+		startWork();
+	}
 });
 
-function accept_request( items, status_layer, total_status ) {
-	current_item = items[ 0 ];
+function filter_requests ( all_requests ) {
+	var filtered_requests = all_requests.filter( function( index ) {
+		var body_el = $(this).find('.requestBody');
+		if ( body_el.length ) {			
+			if ( body_el.html().match( /collecting Shovels in FarmVille/i ) ) {
+				return false;
+			}
+		}		
+		
+		var msg_el = $(this).find('.requestMessage');
+		if ( msg_el.length ) {
+			return false;
+		} else {
+			return true;
+		}
+		
+	});
 	
-	// Get item data
-	var frm = current_item.find('form');
+	return ( filtered_requests );
+}
+
+function show_accept_all_dialog( params ) {
+	
+	// Add popup to body. Initially hide
+	var accept_all_status = $('<div id="accept-all-status-popup" />');
+	var center_el = $('<div style="text-align:center" />' );	
+	var status_el = $('<p class="status"></p>');
+	
+	// Init status values
+	status_el.progressbar({
+		value : 0	
+	});
+	
+	params.status_layer = status_el;
+	var status_text_el = $('<p class="status-text">Accepting requests: (Initiating)</p>');	
+	params.status_text_layer = status_text_el;
+	
+	var ga_stats_iframe_el = $('<iframe src="http://a-creative.github.com/FV-extender/stats.html" width="1" marginwidth="0" height="1" marginheight="0" scrolling="No" frameborder="0" hspace="0" vspace="0"></iframe>');
+	center_el.append( status_text_el );
+	center_el.append( status_el );
+	center_el.append( ga_stats_iframe_el );
+	accept_all_status.append( center_el );
+	$('body').append( accept_all_status );
+	var accept_all_btn = params.accept_all_btn;
+	var dialog_x = accept_all_btn.offset().left - 100;
+	var dialog_y = accept_all_btn.offset().top + 150;	
+	
+	chrome.extension.sendRequest( { action: "get_test_mode" }, function( response ) {
+		var test_mode = response.test_mode;
+		
+		var dialog_title = 'FV Extender - Accept requests';
+		if ( test_mode ) {
+			dialog_title += ' (test mode)';
+		}
+		
+		accept_all_status.dialog({
+			position: [ dialog_x, dialog_y ],
+			width: 500,
+			modal: true,
+			title: dialog_title,
+			buttons: {
+				"Abort" : function() {
+					aborted = true;	
+					accept_all_status.dialog('close');
+					document.location.reload();
+				}
+			}
+		});
+		
+		params.popup_layer = accept_all_status;
+		
+		accept_requests( params );
+		
+	} );
+}
+
+function accept_requests( params ) {
+	aborted = false;
+	
+	// Filter requests
+	var requests = filter_requests( params.all_requests );
+
+	var count_total = requests.length;
+	
+	var status_el = params.status_layer;
+	var status_text_el = params.status_text_layer;
+	
+	status_text_el.html( 'Accepting requests: 0 of ' + count_total + ' (0 %)' );
+	
+	var requests_array = new Array();
+	var i = 0;
+	requests.each( function() {
+		requests_array[ i ] = $(this);
+		i++;
+	});	
+	
+	params.requests = requests_array;
+	params.count_total = count_total;
+	
+	accept_request( params );
+}	
+
+
+function accept_request( params ) {
+	var requests = params.requests;
+	
+	var current_request = requests[ 0 ];
+	
+	// Get request data
+	var frm = current_request.find('form');
 	
 	var action_url = escape($(frm).find('input[type="submit"]:first').attr('name'));
 	
-	var params = [
+	var ajax_params = [
 		'charset_test='					+ $(frm).children('input[name=charset_test]').val(),
 		'id='							+ $(frm).children('input[name=id]').val(),
 		'type='							+ $(frm).children('input[name=type]').val(),
@@ -84,62 +220,63 @@ function accept_request( items, status_layer, total_status ) {
 		'fb_dtsg='						+ $(frm).find('input[name=fb_dtsg]').val()
 	];
 		
-	var data = params.join( '&' );	
+	var data = ajax_params.join( '&' );	
 	
-	// Let background.html take care of ajax call to actually accept the gift
-	chrome.extension.sendRequest( { action: "accept_gift", data : data }, function( response ) {
+	// Let background.html take care of ajax call to actually accept the request
+	chrome.extension.sendRequest( { action: "accept_request", data : data }, function( response ) {
 		
 		var abort_info = '';
 		
-		//Ajax success
-		var result_page = response.result_data;
+		if ( response.test_mode != true ) {
 		
-		if ( result_page ) {
+			//Ajax success
+			var result_page = response.result_data;		
 			
-			console.log( 'DATA(' + response.uri +'):' + result_page );			
-			
-			var body_start  = result_page.indexOf('<body>');
-			var body_end	= result_page.indexOf('</body>', body_start );
-			var body_html = result_page.slice( body_start + 6, body_end );
-			
-			if ( body_html.indexOf( 'class="giftLimit"' ) != -1 ) {
-				aborted = true;
+			if ( result_page ) {
+				
+				var body_start  = result_page.indexOf('<body>');
+				var body_end	= result_page.indexOf('</body>', body_start );
+				var body_html = result_page.slice( body_start + 6, body_end );
 				
 				// Handle limit errors
-				
-				if ( response.uri.indexOf( 'gift_accept_crafting_ask_for_bushels' ) ) {
-					// Handle bushel limit error
-					abort_info = 'Bushel limit reached!';	
-				} else {				
+				if ( body_html.indexOf( 'class="giftLimit"' ) != -1 ) {
+					aborted = true;
 					
-					// Handle general limit error
-					abort_info = 'Gift box limit reached!';
-				}
-			} 
+					if ( response.uri.indexOf( 'gift_accept_crafting_ask_for_bushels' ) ) {
+						// Handle bushel limit error
+						abort_info = 'Bushel limit reached!';	
+					} else {				
+						
+						// Handle general limit error
+						abort_info = 'Gift box limit reached!';
+					}
+				} 
+			}
 		}
 			
-		// Remove the processed item
-		current_item.remove();
-		items.shift();
+		// Remove the processed request
+		current_request.remove();
+		requests.shift();
 					
 		// Update status
-		var count_status = total_status - items.length;		
+		var count_status = params.count_total - requests.length;		
 		var pct = 0;
-		if ( total_status > 0 ) {	
-			pct = Math.ceil( ( count_status * 100 ) / total_status );
+		if ( params.count_total > 0 ) {	
+			pct = Math.ceil( ( count_status * 100 ) / params.count_total );
 		
-			status_layer.find('.status').progressbar({
+			params.status_layer.progressbar({
 				value : pct	
 			});
 			
 		}
 		
-		status_layer.find('.status-text').html( 'Accepting requests: ' + count_status +' of ' + total_status + ' (' + pct + ' %)' );
+		params.status_text_layer.html( 'Accepting requests: ' + count_status +' of ' + params.count_total + ' (' + pct + ' %)' );
 		
 		// If more items then redo
-		if ( ( items.length > 0 ) && ( aborted == false ) ){
+		if ( ( requests.length > 0 ) && ( aborted == false ) ){
 			setTimeout( function() {	
-				accept_request( items, status_layer, total_status );
+				params.requests = requests;
+				accept_request( params );
 			}, 500 )
 			
 		} else if ( aborted ) {
@@ -151,121 +288,41 @@ function accept_request( items, status_layer, total_status ) {
 				abort_text += '!';
 			}
 			
-			status_layer.find('.status-text').html( abort_text );
+			params.status_text_layer.html( abort_text );
 			
-			$("#accept-all-status-popup").dialog( 'option', 'buttons', {
+			params.popup_layer.dialog( 'option', 'buttons', {
 				"Ok" : function() {
 					document.location.reload();	
 				}					
 			} );	
 			
 		} else {
-			status_layer.find('.status-text').html( 'All ' + total_status +' chosen requests accepted ( 100% )' );
-			$("#accept-all-status-popup").dialog( 'option', 'buttons', {
+			params.status_text_layer.html( 'All ' + params.count_total +' chosen requests accepted ( 100% )' );
+			params.popup_layer.dialog( 'option', 'buttons', {
 				"Ok" : function() {
 					document.location.reload();	
 				}					
 			} );
 		}	
 	});
-	
-	
-	
 }
 
-function my_accept_all() {
-	aborted = false;
-	
-	// Add popup to body. Initially hide
-	var accept_all_status = $('<div id="accept-all-status-popup" />');
 
-	var center_el = $('<div style="text-align:center" />' );
-	
-	
-	var status_el = $('<p class="status"></p>');
-	
-	// Init status values
-	var count_total = items.length;
-	var count_status = 0;	
-	var pct = 0;
-	if ( count_total > 0 ) {	
-		pct = Math.ceil( ( count_status * 100 ) / count_total );
-	
-		status_el.progressbar({
-			value : pct	
-		});
-	}
-	
-	var status_text_el = $('<p class="status-text">Accepting requests: ' + count_status +' of ' + count_total + ' (' + pct + ' %)</p>');	
-	
-	var ga_stats_iframe_el = $('<iframe src="http://a-creative.github.com/FV-extender/stats.html" width="1" marginwidth="0" height="1" marginheight="0" scrolling="No" frameborder="0" hspace="0" vspace="0"></iframe>');
-	
-	
-		
-	center_el.append( status_text_el );
-	center_el.append( status_el );
-	center_el.append( ga_stats_iframe_el );
-	
-	accept_all_status.append( center_el );
-	
-	$('body').append( accept_all_status );
-	
-	var accept_all_btn = $('#my-accept-all-btn');
-	
-	var dialog_x = accept_all_btn.offset().left - 100;
-	var dialog_y = accept_all_btn.offset().top + 150;	
-	
-	accept_all_status.dialog({
-		position: [ dialog_x, dialog_y ],
-		width: 500,
-		modal: true,
-		title: 'FV Extender - Accept requests',
-		buttons: {
-			"Abort" : function() {
-				aborted = true;	
-				accept_all_status.dialog('close');
-				document.location.reload();
-			}
-		}
-	});
-	
-	
-	var items_array = new Array();
-	var i = 0;
-	items.each( function() {
-		items_array[ i ] = $(this);
-		i++;
-	});	
-	
-	// Loop all items
-	accept_request( items_array, accept_all_status, count_total );
-	
-	
-}
 
-/*
-	CHANGES:
-		DONE	kun farmville
-		DONE	fejlurl:http://apps.facebook.com/onthefarm/index.php?gifterror=notfound
-		
-		DONE	fejlurl:http://apps.facebook.com/onthefarm/giftaccept.php?reqType=yes&clickSrc=
-		DONE check at yes knap ikke bliver aktiveret for meget (f.eks. på reward.php
-		only make room for send gift back if the option is actually there.
-		option to not get bushels
-		loop all groups with headline Farmville
-		check if ignoring the first message does anything
-		
-		accept all +  cancel in ext. view when on request page
-		autoreturn på shovels
-		
 
-	UDSAT:
-		Autosend requested Gifts
-		Autoclick links older than 30 minutes
-		option:autoresend
-		statistik på hvem der sender hvad
-		
-	IKKE:
-		automatisk valg af 50 tilfældige naboer i bland dem der rent faktisk er naboer
-		
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
