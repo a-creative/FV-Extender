@@ -170,10 +170,24 @@ p, h2, ul, h3 {
 h3 {
 	font-style:italic;	
 	font-weight:normal;
+	margin:0px;
+	padding:0px;
+}
+
+h2 + h3 {
+	margin-top:10px;	
+}
+
+ul + h3 {
+	margin-top:10px;	
 }
 
 h2 + ul, p + p, p + ul, ul + p {
 	margin-top:10px;	
+}
+
+h3 + ul {
+	margin-top:3px;	
 }
 
 h2 + p {
