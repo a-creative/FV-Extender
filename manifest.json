@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": ["http://www.farmville.com/*","http://*.facebook.com/*", "https://*.facebook.com/*","http://apps.facebook.com/onthefarm*"],
-      "js": ["js/jquery.js","js/main_content_script.js","js/start_content_script.js"],
+      "js": ["js/jquery.js","js/shared.js","js/main_content_script.js","js/start_content_script.js"],
       "css" : ["css/style.css"],
       "run_at": "document_end"
     }
