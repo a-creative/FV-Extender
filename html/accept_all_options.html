@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>FV-Extender</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<link href="../css/background.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript">
+			function start() {
+				var options = new Object;
+				
+				options.return_gift_message = $('#return-gift-msg').val();
+				
+				chrome.extension.sendRequest( { 
+					action: "set_accept_options", 
+					options: options
+				}, function() {
+					document.location.replace( 'accept_all_status.html' );	
+				} );
+				
+			}	
+		</script>
+	</head>
+	<body>
+		<div class="site">
+			<h1>Accept requests - Options</h1>
+			<div class="field wide">
+				<div class="label">Message for when you return gifts:</div>
+				<div class="input"><textarea id="return-gift-msg" rows="3">This gift was returned using FV Extender</textarea></div>	
+			</div>
+			<div class="field submit">
+				<div class="buttons">
+					<div class="button"><a href="#" onclick="start();return false" title="Start accepting request">Start</a></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

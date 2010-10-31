@@ -2,16 +2,20 @@
   "name": "FV Extender",
   "version": "3.0.0",
   "description": "Extends FarmVille with new features",
-  "background_page": "html/background.html",
+  "background_page": "background.html",
   "content_scripts": [
     {
       "matches": ["http://www.farmville.com/*","http://*.facebook.com/*", "https://*.facebook.com/*","http://apps.facebook.com/onthefarm*"],
-      "js": ["js/jquery.js","js/main_content_script.js","js/start_content_script.js"],
-      "css" : ["css/style.css"],
+      "js": ["jquery.js","js/jquery-ui-1.8.5.custom.min.js", "myscript.js"],
+      "css" : ["css/custom-theme/jquery-ui-1.8.5.custom.css", "mystyles.css"],
       "run_at": "document_end"
     }
   ],
   "permissions": [
     "tabs", "http://*.facebook.com/*", "https://*.facebook.com/*","http://*.farmville.com/*","http://a-creative.github.com/*"
-  ]
+  ],
+  "icons": {
+  	"48" : "chrome_48.jpg",
+  	"128" : "chrome_128.jpg"
+  }
 }

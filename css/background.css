@@ -1,0 +1,89 @@
+body {
+	padding:0px;
+	margin:0px;
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+}
+
+h1,textarea {
+	padding:0px;
+	margin:0px;
+}
+
+h1 {
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+	text-align: left;
+	color: #333;
+	font-size: 13px;	
+	margin-bottom:10px;
+}
+
+.site {
+	padding:10px;
+	width: 260px;	
+	margin: 0px auto;
+}
+
+.field {
+	float:left;
+	clear:both;
+	width:100%;
+}
+
+.field + .field {
+	margin-top:10px;
+}
+
+.field.wide .label {
+	width: 100%;
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+	text-align: left;
+	color: #333;
+	font-size: 11px;
+}
+
+.field.wide .input {
+	width: 100%;
+}
+
+.field.wide .label + .input {
+	margin-top:5px;
+}
+
+.field.wide .input textarea {
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;	
+	padding:3px;	
+	font-size: 11px;
+	width:252px;
+}
+
+.field.submit {
+	position:relative;
+	width:100%;
+	height:25px;
+}
+
+.field.submit .buttons {
+	position:absolute;
+	right:0px;
+	bottom:0px;
+}
+
+.button {
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;	
+	font-size: 11px;	
+	font-weight:bold;
+	float:left;
+	background: #EEE url(../graphics/acceptAllBtnBg.png) repeat 0px 0px;	
+	-webkit-box-shadow: 0px 1px 0px #818181;
+}
+
+.button + .button {
+	margin-left:10px;
+}
+
+.button a {
+	text-decoration:none;
+	color:#fff;
+	padding:4px 6px;
+	display:block;
+}

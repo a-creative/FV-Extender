@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>FV-Extender</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="../css/custom-theme/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css" />
+		<link href="../css/background.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../js/jquery-ui-1.8.5.custom.min.js"></script>
+		<script type="text/javascript">
+			var aborted = false;
+			
+			function update_status() {
+				
+				if ( !aborted ) {
+					chrome.extension.sendRequest( { action: "get_status" }, function( response ) {
+						var pct = Math.ceil( response.pct );
+						
+						$("#status-bar div").progressbar({
+							value : pct	
+						});
+						
+						$("#status-text").html( response.status + ' of ' + response.total + '(' + pct + '%) requests processed!' );
+						
+						if ( response.done ) {
+							document.getElementById('done-sound').play()
+							$("#status-text").html( 'All requests processed(100%)!' );
+							
+							$("#status-bar div").progressbar({
+								value : 100	
+							});
+							
+							$('#submit-btn').html('Goto game');
+							$('#submit-btn').attr('title','Goto game');
+							$('#submit-btn').click( function(){
+								chrome.extension.sendRequest( { action: "goto_game" } );		
+							});	
+						} else {
+							setTimeout( update_status, 1000 );				
+						} 
+					} );
+				}	
+			}
+			
+			$(document).ready( function() {
+				$("#status-bar div").progressbar({
+					value : 0	
+				});
+				
+				$("#submit-btn").click( function() {
+					aborted = true;
+					
+					chrome.extension.sendRequest( { action: "abort" }, function(){
+						$("#status-text").html( 'Processing of requests was aborted!' );
+						
+						$('#submit-btn').html('Goto game');
+						$('#submit-btn').attr('title','Goto game');
+						$('#submit-btn').click( function(){
+							chrome.extension.sendRequest( { action: "goto_game" } );		
+						});	
+					} );
+				});
+				
+				
+				chrome.extension.sendRequest( { action: "accept_first" }, function( response ) {
+					update_status();		
+				});
+			});				
+		</script>
+	</head>
+	<body>
+		<audio id="done-sound">
+ 			 <source src="../sound/cow.ogg" type="audio/ogg" />
+ 		</audio>
+		
+		<div class="site">
+			<h1>Accept requests - Status</h1>
+			<div class="field wide">
+				<div class="label" id="status-text">0 of 0(100%) requests processed!</div>
+			</div>
+			<div class="field" id="status-bar">
+				<div></div>	
+			</div>
+			<div class="field submit">
+				<div class="buttons">
+					<div class="button"><a href="#" title="Abort accepting" id="submit-btn">Abort</a></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
