@@ -84,7 +84,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 											&&	( game_request['IsSendByFvExtender'] != true )
 										)
 					)) {
-						temp_requests.push( el );
+						temp_requests.push( game_request );
 					}	
 				});
 				
@@ -101,12 +101,13 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 					sendResponse( null );	
 				}
 					
-			} else {
-				console.log('1: Unexpected');
+			} else {		
 				
 				// There is no more game request, and processing should stop.
 				sendResponse( null );
 			}
+		} else {
+			console.log('1: Unexpected');			
 		} 
 		
 		sendResponse( null );
@@ -128,10 +129,25 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 			});	
 		} 
 	} else if ( request.action == 'remove_request' ) {
+		
+		// Remove request from UI
 		var status_div = $( '#' + request.request_id );
+		
 		var frm = status_div.parent();
 		var request_div = frm.parent();
+		
 		request_div.remove();
+		
+		// Remove request memory
+		var temp_requests = new Array();
+		jQuery.each( current_requests, function( i, game_request ) {
+			if ( game_request['id'] != request.request_id ) {
+				temp_requests.push( game_request );
+			}
+		} )
+		
+		current_requests = temp_requests;
+		
 		sendResponse( {} );
 	}	
 });

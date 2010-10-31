@@ -136,7 +136,6 @@ function accept_request_ajax_result_page_success( data, textStatus, XMLHttpReque
 	
 	// Analyze result_html for: gift limits, errors
 	
-	
 	// Remove request from UI
 	removeRequestFromUI( current_game_request[ current_app_id ], function() {
 		processed_game_requests_count++;

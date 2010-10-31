@@ -57,13 +57,9 @@ function handle_accept_and_return() {
 			}
 			
 			ok_btn = jQuery( 'input[value=OK]' );
-			console.log('ok_btn:' + ok_btn );
 			if ( ok_btn.length ) {
-				console.log('ok_btn l :' + ok_btn.length );
 				if ( document.location.href.match( /onthefarm/ ) ) {
-					console.log( 'ok_btns' );
 					if_not_detected( ok_btn, function( ok_btn ) {
-						console.log('ok_btn click' );
 						document.location.replace( 'http://www.facebook.com/reqs.php' );
 					})
 				}
