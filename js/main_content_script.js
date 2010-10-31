@@ -1,4 +1,11 @@
 function main() {	
+	var blank = jQuery(".fbReqBlankState");
+	if ( blank.length ) {
+		if_not_detected( blank, function( blank ) {	
+			chrome.extension.sendRequest( { action: "done" } );
+		})
+	}
+	
 	handle_accept_and_return();
 	insert_accept_all_button();	
 }

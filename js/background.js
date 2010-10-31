@@ -269,6 +269,9 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 			processed_game_requests_count++; 	
 			accept_next();
 		}				
+	} else if ( request.action == 'done' ) {
+		done = true;		
+		accept_and_return_active = false;	
 	} else if ( request.action == 'get_accept_and_return_active' ) {
 		sendResponse( {
 			"accept_and_return_active" : accept_and_return_active	
