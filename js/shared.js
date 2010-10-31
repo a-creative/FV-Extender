@@ -57,7 +57,7 @@ function group_request( request ) {
 	} 
 	
 	// Is send by FV extender
-	if ( request['user_text'] && request['user_text'].match( /This gift was returned by FV Extender/ ) ) {
+	if ( request['user_text'] && request['user_text'].match( /This gift was returned using FV Extender/ ) ) {
 		log_types.push('IsSendByFvExtender' );
 		request[ 'IsSendByFvExtender' ] = true;				  
 	}

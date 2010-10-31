@@ -13,5 +13,9 @@
   ],
   "permissions": [
     "tabs", "http://*.facebook.com/*", "https://*.facebook.com/*","http://*.farmville.com/*","http://a-creative.github.com/*"
-  ]
+  ],
+  "icons": {
+  	"48" : "graphics/chrome_48.jpg",
+  	"128" : "graphics/chrome_128.jpg"
+  }
 }

@@ -110,7 +110,10 @@ function handle_accept_and_return() {
 						msg_box.show();	
 						var txt_area = msg_box.find('textarea');
 						if ( txt_area && txt_area.length ) {
-							txt_area.val( 'This gift was returned by FV Extender 3.0(unreleased)' );
+							
+							chrome.extension.sendRequest( { action : "get_option", group: "accept_all", option: "return-gift-msg" }, function( response ) {
+								txt_area.val( response["value"] );
+							})
 						}
 					}
 					

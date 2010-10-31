@@ -21,6 +21,23 @@ var current_app;
 var aborted = false;
 var accept_and_return_active = false;
 var done = false;
+var options = new Object();
+
+
+function load_options( group ) {
+	if ( ( localStorage[ group ] == undefined ) ) {
+		localStorage[ group ] = "{}";
+	}
+	
+	options[ group ] = JSON.parse( localStorage[ group ] );
+
+}
+
+function save_options( group ) {
+	localStorage[ group ] = JSON.stringify( options[ group ] );
+}
+
+load_options( "accept_all" );
 
 function get_handled_app( sendResponse, cand_app_id ) {
 	var app;
@@ -258,7 +275,28 @@ function goto_game() {
 }
 
 chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
-	if ( request.action == 'get_current_request' ) {
+	if ( ( request.action == 'set_option' ) && ( request["option"] != undefined ) )  {
+		
+		if ( options[ request["group"] ] == undefined ) {
+			options[ request["group"] ] = new Object();	
+		}
+		
+		options[ request["group"] ][ request["option"] ] = request["value"];
+		save_options( request["group"] );
+		
+		sendResponse( { "value" : request["value"] } );
+	} else if ( ( request.action == 'get_option' ) && ( request["option"] != undefined ) ) {
+		if ( options[ request["group"] ] == undefined ) {
+			options[ request["group"] ] = new Object();	
+		}
+		
+		var val = options[ request["group"] ][ request["option"] ];
+		if ( ( val == undefined ) && ( request["group"] == 'accept_all' ) && ( request["option"] == 'return-gift-msg' ) ) {
+			val = 'This gift was returned using FV Extender';
+		}
+		
+		sendResponse( {"value" : val } );
+	} else if ( request.action == 'get_current_request' ) {
 		sendResponse( { current_request : current_game_request[ current_app_id ] } ); 	
 		
 	} else if ( request.action == 'accept_and_return_response' ) {
@@ -290,8 +328,6 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		accept_next();
 	} else if ( request.action == 'accept_next' ) {
 		accept_next();
-	} else if ( request.action == 'set_accept_options' ) {
-		accept_options = request.options;	
 	} else if ( request.action == 'activate_accept_all' ) {
 		requests_tab = sender.tab;
 		

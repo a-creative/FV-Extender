@@ -6,14 +6,18 @@
 		<script type="text/javascript" src="../js/jquery.js"></script>
 		<link href="../css/background.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
+			$(document).ready( function() {
+				chrome.extension.sendRequest( { "action" : "get_option", "group": "accept_all", "option": "return-gift-msg" }, function( response ) {
+					$('#return-gift-msg').val( response[ "value" ] );						
+				} );	
+			});			
+			
 			function start() {
-				var options = new Object;
-				
-				options.return_gift_message = $('#return-gift-msg').val();
-				
 				chrome.extension.sendRequest( { 
-					action: "set_accept_options", 
-					options: options
+					"action": "set_option",
+					"group": "accept_all", 
+					"option": "return-gift-msg",
+					"value"	: $('#return-gift-msg').val()
 				}, function() {
 					document.location.replace( 'accept_all_status.html' );	
 				} );
@@ -26,7 +30,7 @@
 			<h1>Accept requests - Options</h1>
 			<div class="field wide">
 				<div class="label">Message for when you return gifts:</div>
-				<div class="input"><textarea id="return-gift-msg" rows="3">This gift was returned using FV Extender</textarea></div>	
+				<div class="input"><textarea id="return-gift-msg" rows="3"></textarea></div>	
 			</div>
 			<div class="field submit">
 				<div class="buttons">
