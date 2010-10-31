@@ -1,11 +1,18 @@
 function group_request( request ) {
 	var matches;
 	if ( matches = request['action_url'].match( /&gift=([^&]+)&/i ) ) {
-		request.gift_id = matches[ 0 ];
+		request[ 'gift_id' ] = matches[ 0 ];
 	}	
 	
+	// Is wish grant
+	console.log('action url:' + request['action_url'] );
+	if ( request['action_url'] && request['action_url'].match( /ref\=gift_accept_friend_gift/i ) ) {
+		console.log('IsWishGrant');
+		request[ 'IsWishGrant' ] = true;
+	}
+	
 	// Is seed
-	if ( ( request.gift_id ) && ( request.gift_id.match( /seedpackage$/ ) ) ) {
+	if ( ( request[ 'gift_id' ] ) && ( request[ 'gift_id' ].match( /seedpackage$/ ) ) ) {
 		request[ 'IsSeed' ] = true;	
 	}
 	
@@ -50,4 +57,8 @@ function group_request( request ) {
 	}		
 	
 	return request;
+}
+
+function request_to_string( game_request ) {
+	return game_request[ 'gift_id'] + ' : ' + game_request['profile_name']
 }

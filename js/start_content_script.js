@@ -78,11 +78,11 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 					
 					if (!( 
 							( game_request[ 'IsNeighborRequest' ] )  
-										||  ( game_request[ 'IsShovelRequest' ] )
-										|| (
-												( game_request['HasUserText'] )
-											&&	( game_request['IsSendByFvExtender'] != true )
-										)
+						||  ( game_request[ 'IsShovelRequest' ] )
+						|| (
+									( game_request['HasUserText'] )
+								&&	( game_request['IsSendByFvExtender'] != true )
+							)
 					)) {
 						temp_requests.push( game_request );
 					}	

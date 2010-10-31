@@ -72,7 +72,8 @@ function accept_all( params ) {
 
 function eval_request( request ) {	
 	if ( 
-				( request['IsThankYouGift'] ) 
+				( request['IsWishGrant'] )
+			||	( request['IsThankYouGift'] ) 
 			||	( request['IsMaterialRequest'] )
 			||  ( request['IsOneWayGift'] )
 			||  ( request['IsBushel'] ) 
@@ -150,7 +151,7 @@ function removeRequestFromUI( game_request, callback ) {
 }
 
 function accept_request( request ) {
-	console.log('Accepting request:' + request['text'] + '...' );
+	console.log('Accepting request:' + request_to_string( request ) + '...' );
 	$.ajax({
 		type: "POST",
 		timeout: 10000,
@@ -162,6 +163,8 @@ function accept_request( request ) {
 }
 
 function accept_and_return( request ) {
+	console.log('Accepting and return request:'+ request_to_string( request ) + '...' );
+	
 	accept_and_return_active = true;
 	
 	var req_id = request['id'];
