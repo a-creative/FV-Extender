@@ -59,12 +59,21 @@ function accept_and_return_test( game_request ) {
 }
 
 chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
+
 	if ( request.action == 'get_next_request' ) {
+		// Get first of non-skiped game requests from frontend
+		
 		if ( current_requests ) {
 			if ( current_requests.length ) {
+				
+				// If there is still game requests to proces
+				
+				// Remove game requests that should be skipped.
 				var temp_requests = new Array();
-				jQuery.each( current_requests,  function( i, el ) {
-					el = group_request( el );
+				jQuery.each( current_requests,  function( i, game_request ) {
+					
+					// Add group info
+					game_request = group_request( game_request );
 					
 					
 					if (!( 
@@ -76,31 +85,31 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 										)
 					)) {
 						temp_requests.push( el );
-					}		
+					}	
 				});
 				
 				current_requests = temp_requests;				
 				
-				
+				// If there is still game request left after skipping				
 				if ( current_requests.length ) {
+					
+					// Return the first game request
 					sendResponse( current_requests[ 0 ] );	
 				} else {
+					
+					// Return null to stop processing of game requetss
 					sendResponse( null );	
 				}
-				
-				/*
-				chrome.extension.sendRequest( { action : "filter_skipped", requests: current_requests }, function( response ){
-					current_requests = response.requests;
-					sendResponse( current_requests.shift() );	
-				});
-				*/
 					
 			} else {
+				console.log('1: Unexpected');
+				
+				// There is no more game request, and processing should stop.
 				sendResponse( null );
 			}
 		} 
 		
-		sendResponse( {} );
+		sendResponse( null );
 	} else if ( request.action == 'accept_and_return' ) {
 		if ( current_requests ) {		
 			

@@ -79,15 +79,6 @@ function eval_request( request ) {
 			
 	) {
 		return 'accept'	
-	} else if (
-					( request[ 'IsNeighborRequest' ] )  
-				||  ( request[ 'IsShovelRequest' ] )
-				|| (
-						( request['HasUserText'] )
-					&&	( request['IsSendByFvExtender'] != true )
-				)
-	) { 
-		return 'skip'				
 	} else {
 		return 'return_gift';		
 	}
@@ -179,32 +170,40 @@ function accept_and_return( request ) {
 }
 
 function accept_next() {
-	console.log('Accept next called')
 	if ( !aborted ) {
 		
-		console.log( 'Querying for next request' );
-		
+		// Only proces more requests if aborted is false
 		chrome.tabs.sendRequest( requests_tab.id, { action: "get_next_request" }, function( game_request ) {
+			
+			// Get first of non-skiped game requests from frontend
 			if ( game_request ) {
+				
+				//If more game requests found
+				
+				// Add extra attributes to the game request for grouping of game requests
 				game_request = group_request( game_request );
 				
-				console.log( 'Got next request:' + game_request['id'] );
-				
+				// Set game request currently under processing
 				current_game_request[ current_app_id ] = game_request;
 				
-				setTimeout( function() {
-					var eval_request_res = eval_request( game_request ) 
-					console.log('evaled to ' + eval_request_res );
-					if ( eval_request_res == 'skip' ) {
-						skip_request( game_request );			
-					} else if ( eval_request_res == 'accept' ) {
-						accept_request( game_request )
-					} else {
-						accept_and_return( game_request );
-					}
+				// Decide what action to use on the game request
+				var eval_request_res = eval_request( game_request ) 
+				if ( eval_request_res == 'accept' ) {
 					
-				}, 100 );
+					// Accept the game request(using ajax)
+					accept_request( game_request )
+				} else if ( eval_request_res = 'accept_and_return' ) {
+					
+					// Accept the game request and send return gift(using click)
+					accept_and_return( game_request );
+				} else {
+					console.log( '2: Unexpected' );
+				}
 			} else {
+				
+				// If no more game requests found
+				
+				// Mark prosessing of game requests as done
 				done = true;
 			}	
 		})
@@ -257,20 +256,6 @@ function goto_game() {
 }
 
 chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
-	/*
-	if ( request.action == 'filter_skipped' ) {
-		var eval_res;
-		var requests = new Array();
-		jQuery.each( request.requests, function( i, el ) {
-			eval_res = eval_request( el );
-			if ( eval_res != 'skip' ) {
-				requests.push ( el );
-			}						
-		});
-		sendResponse( { requests: requests } );
-		
-	} else
-	*/ 
 	if ( request.action == 'get_current_request' ) {
 		sendResponse( { current_request : current_game_request[ current_app_id ] } ); 	
 		
