@@ -148,7 +148,7 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 			timeout: 10000,
 			dataType: 'text',
 			success: function( data, textStatus, XMLHttpRequest ) {
-				accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequestm, URI );
+				accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, URI );
 			}
 		})
 	}
