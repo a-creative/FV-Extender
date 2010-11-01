@@ -77,17 +77,17 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 				if ( current_requests.length ) {
 					
 					// Return the first game request
-					sendResponse( current_requests[ 0 ] );	
+					sendResponse( { game_request: current_requests[ 0 ], more_after_this: ( current_requests.length > 1 ) } );	
 				} else {
 					
 					// Return null to stop processing of game requetss
-					sendResponse( null );	
+					sendResponse( { game_request: null, more_after_this: false } );	
 				}
 					
 			} else {		
 				
 				// There is no more game request, and processing should stop.
-				sendResponse( null );
+				sendResponse( { game_request: null, more_after_this: false } );	
 			}
 		} else {
 			console.log('1: Unexpected');			

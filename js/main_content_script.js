@@ -1,11 +1,4 @@
 function main() {	
-	var blank = jQuery(".fbReqBlankState");
-	if ( blank.length ) {
-		if_not_detected( blank, function( blank ) {	
-			chrome.extension.sendRequest( { action: "done" } );
-		});
-	}
-	
 	handle_accept_and_return();
 	insert_accept_all_button();	
 }
@@ -25,6 +18,12 @@ function get_handled_app( app_id, callback ) {
 	
 }
 
+function accept_and_return_check_back( callback ) {
+	chrome.extension.sendRequest( { action: "more_after_this" }, function() {
+		if ( callback ) { callback(); }		
+	} );
+}
+
 function handle_accept_and_return() {
 	//console.log('Is accept and return active?...');
 	chrome.extension.sendRequest( { action: "get_accept_and_return_active" }, function( response ) {
@@ -35,7 +34,9 @@ function handle_accept_and_return() {
 						( document.location.href.match( /gifterror=notfound/ ) ) 
 					||	( document.location.href.match( /reqType=yes&clickSrc=$/ ) )			
 			) {
-				document.location.replace( 'http://www.facebook.com/reqs.php' );
+				accept_and_return_check_back( function() {
+					document.location.replace( 'http://www.facebook.com/reqs.php' );
+				});
 			}
 			
 			var gift_limit = jQuery('.giftLimit');
@@ -57,7 +58,9 @@ function handle_accept_and_return() {
 			var h1 = jQuery( 'h1' );
 			if ( h1 && h1.length ) {
 				if ( h1.html().match( /oh no\! It looks like all the bits got lost/ ) ) {
-					document.location.replace( 'http://www.facebook.com/reqs.php' );	
+					accept_and_return_check_back( function() {
+						document.location.replace( 'http://www.facebook.com/reqs.php' );	
+					});
 				}
 			}
 			
@@ -65,7 +68,9 @@ function handle_accept_and_return() {
 			if ( ok_btn.length ) {
 				if ( document.location.href.match( /onthefarm/ ) ) {
 					if_not_detected( ok_btn, function( ok_btn ) {
-						document.location.replace( 'http://www.facebook.com/reqs.php' );
+						accept_and_return_check_back( function() {
+							document.location.replace( 'http://www.facebook.com/reqs.php' );
+						});
 					});
 				}
 			}			
@@ -91,7 +96,9 @@ function handle_accept_and_return() {
 					}
 					
 					if ( !return_gift_btn_found ) {
-						yes_btn.click();
+						accept_and_return_check_back( function() {
+							yes_btn.click();
+						});
 					}
 							
 				});			
@@ -112,7 +119,9 @@ function handle_accept_and_return() {
 						}
 					}
 					
-					send_return_gift_btn.click();					
+					accept_and_return_check_back( function() {
+						send_return_gift_btn.click();		
+					});			
 				});	
 			}			
 		}

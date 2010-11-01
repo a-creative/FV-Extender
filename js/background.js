@@ -23,6 +23,7 @@ var abort_info_id = '';
 var accept_and_return_active = false;
 var done = false;
 var options = new Object();
+var more_after_this = false;
 
 
 function load_options( group ) {
@@ -223,7 +224,9 @@ function accept_next() {
 	if ( !aborted ) {
 		
 		// Only proces more requests if aborted is false
-		chrome.tabs.sendRequest( requests_tab.id, { action: "get_next_request" }, function( game_request ) {
+		chrome.tabs.sendRequest( requests_tab.id, { action: "get_next_request" }, function( response ) {
+			var game_request = response.game_request;
+			more_after_this = response.more_after_this; 
 			
 			// Get first of non-skiped game requests from frontend
 			if ( game_request ) {
@@ -353,6 +356,11 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 			abort_info_id = request.abort_info_id;
 		}
 		
+	} else if ( request.action == 'more_after_this' ) {
+		if ( more_after_this != true ) {
+			done = true;
+			accept_and_return_active = false;
+		}
 	} else if ( request.action == 'goto_game' ) {
 		goto_game();
 	} else if ( request.action == 'get_status' ) {
