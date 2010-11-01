@@ -111,13 +111,12 @@ function handle_accept_and_return() {
 						var txt_area = msg_box.find('textarea');
 						if ( txt_area && txt_area.length ) {
 							
-							chrome.extension.sendRequest( { action : "get_option", group: "accept_all", option: "return-gift-msg" }, function( response ) {
-								txt_area.val( response["value"] );
-							})
+							chrome.extension.sendRequest( { "action" : "get_option", "group": "accept_all", "option": "return-gift-msg" }, function( response ) {
+								txt_area.val( response[ "value" ] );						
+							} );
 						}
 					}
 					
-					send_return_gift_btn.attr( 'fv_extender_handled','true' );	
 					send_return_gift_btn.click();					
 				});	
 			}
