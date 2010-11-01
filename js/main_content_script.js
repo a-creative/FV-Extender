@@ -3,7 +3,7 @@ function main() {
 	if ( blank.length ) {
 		if_not_detected( blank, function( blank ) {	
 			chrome.extension.sendRequest( { action: "done" } );
-		})
+		});
 	}
 	
 	handle_accept_and_return();
@@ -83,7 +83,7 @@ function handle_accept_and_return() {
 				if ( document.location.href.match( /onthefarm/ ) ) {
 					if_not_detected( ok_btn, function( ok_btn ) {
 						document.location.replace( 'http://www.facebook.com/reqs.php' );
-					})
+					});
 				}
 			}			
 			
@@ -111,7 +111,7 @@ function handle_accept_and_return() {
 						yes_btn.click();
 					}
 							
-				})			
+				});			
 			}			
 			
 			send_return_gift_btn = jQuery( 'input[name=sendit]' );
@@ -187,7 +187,7 @@ function insert_accept_all_button() {
 						
 						var accept_all_info = jQuery('<span class="accept-all-info">Provided by <a href="http://a-creative.github.com/FV-extender/" target="_blank">FV Extender</a></span>');
 						
-						list_header.css( 'position', 'relative' )
+						list_header.css( 'position', 'relative' );
 						
 						list_header.append( accept_all_btn );
 						list_header.append( accept_all_info );						
@@ -195,7 +195,7 @@ function insert_accept_all_button() {
 						current_requests = get_requests_data( requests );
 						
 						if ( document.location.href.match( /\/reqs\.php/i ) ) {
-							chrome.extension.sendRequest( { action: "accept_and_return_response" })		
+							chrome.extension.sendRequest( { action: "accept_and_return_response" });
 						}
 						
 						
@@ -219,7 +219,7 @@ function get_requests_data( DOM_requests ) {
 	
 	DOM_requests.each( function() {
 		requests.push( serialize_game_request( $(this) ) );
-	})	
+	});	
 	
 	return requests;
 }

@@ -69,7 +69,8 @@ function accept_all( params ) {
 	
 	var requests = group_requests( params.requests );
 	
-	total_init_game_requests[ params.app.id ] = requests.length
+	total_init_game_requests[ params.app.id ] = requests.length;
+	
 	init_game_requests[ params.app.id ] = requests;
 	current_app_id = params.app.id;	
 	current_app = params.app;
@@ -86,7 +87,7 @@ function accept_all( params ) {
 		"width" : 300,
 		"height" : vh,
 		"left" : params.wnd_x,
-		"top" : params.wnd_y,
+		"top" : params.wnd_y
 	}, function( wnd ) {
 		status_window = wnd;
 	});
@@ -102,7 +103,7 @@ function eval_request( request ) {
 			||  ( request['IsBushel'] ) 
 			
 	) {
-		return 'accept'	
+		return 'accept';	
 	} else {
 		return 'return_gift';		
 	}
@@ -126,7 +127,7 @@ function update_status( sendResponse ) {
 			pct: pct,
 			total: total_init_game_requests[ current_app_id ],
 			status: processed_game_requests_count,
-			done: done,
+			done: done
 	} );
 }
 
@@ -140,8 +141,10 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 	
 	// Find result page URL in result data
 	var temp_data = data;
+	
+	var matches = temp_data.match( /goURI\((\\".*?\\")/ );
 					
-	if ( matches = temp_data.match( /goURI\((\\".*?\\")/ ) ) {
+	if ( matches ) {
 		
 		eval( "var URI_temp = '" + matches[ 1 ] + "'" );
 		var URI = JSON.parse( URI_temp );
@@ -155,7 +158,7 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 			success: function( data, textStatus, XMLHttpRequest ) {
 				accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, URI );
 			}
-		})
+		});
 	}
 }
 
@@ -213,7 +216,7 @@ function accept_and_return( request ) {
 	accept_and_return_active = true;
 	
 	var req_id = request['id'];
-	chrome.tabs.sendRequest( requests_tab.id, { action: "accept_and_return", request_id: request['id'] })
+	chrome.tabs.sendRequest( requests_tab.id, { action: "accept_and_return", request_id: request['id'] });
 }
 
 function accept_next() {
@@ -234,17 +237,17 @@ function accept_next() {
 				current_game_request[ current_app_id ] = game_request;
 				
 				// Decide what action to use on the game request
-				var eval_request_res = eval_request( game_request ) 
+				var eval_request_res = eval_request( game_request ); 
 				if ( eval_request_res == 'accept' ) {
 					
 					// Accept the game request(using ajax)
-					accept_request( game_request )
-				} else if ( eval_request_res = 'accept_and_return' ) {
+					accept_request( game_request );
+				} else if ( eval_request_res == 'return_gift' ) {
 					
 					// Accept the game request and send return gift(using click)
 					accept_and_return( game_request );
 				} else {
-					console.log( '2: Unexpected' );
+					console.log( '2: Unexpected >' + eval_request_res );
 				}
 			} else {
 				
@@ -253,7 +256,7 @@ function accept_next() {
 				// Mark prosessing of game requests as done
 				done = true;
 			}	
-		})
+		});
 		
 	}	
 }
@@ -277,7 +280,7 @@ function goto_game() {
 				chrome.tabs.update( 
 					found_tab.id, {
 						url : found_tab.url,
-						selected: true,	
+						selected: true	
 					}, 
 					function() {
 						if ( status_window ) {

@@ -1,6 +1,6 @@
 function group_request( request ) {
-	var matches;
-	if ( matches = request['action_url'].match( /%26gift%3D([^%]+)%26/i ) ) {
+	var matches = request['action_url'].match( /%26gift%3D([^%]+)%26/i );
+	if ( matches ) {
 		request[ 'gift_id' ] = matches[ 1 ];
 	}	
 	
@@ -68,11 +68,11 @@ function group_request( request ) {
 		request[ 'IsBushel' ] = true;	
 	}		
 	
-	console.log( 'types:' + log_types.join( ', ' ) )
+	console.log( 'types:' + log_types.join( ', ' ) );
 	
 	return request;
 }
 
 function request_to_string( game_request ) {
-	return game_request[ 'gift_id'] + ' : ' + game_request['profile_name']
+	return game_request[ 'gift_id'] + ' : ' + game_request['profile_name'];
 }

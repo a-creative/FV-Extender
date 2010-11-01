@@ -144,7 +144,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 			if ( game_request['id'] != request.request_id ) {
 				temp_requests.push( game_request );
 			}
-		} )
+		} );
 		
 		current_requests = temp_requests;
 		
@@ -183,22 +183,3 @@ $(document).ready( function() {
 		startWork();
 	}
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
