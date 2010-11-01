@@ -46,14 +46,29 @@ function handle_accept_and_return() {
 						accept_and_return_test( current_request.id, frm, null );
 					});
 				}
-			});	
-			
+			});			
 			
 			if ( 
 						( document.location.href.match( /gifterror=notfound/ ) ) 
 					||	( document.location.href.match( /reqType=yes&clickSrc=$/ ) )			
 			) {
 				document.location.replace( 'http://www.facebook.com/reqs.php' );
+			}
+			
+			var gift_limit = jQuery('.giftLimit');
+			if ( gift_limit && gift_limit.length ) {
+				if_not_detected( gift_limit, function( gift_limit ) {				
+				
+					var abort_info_id;
+					
+					if ( document.location.href.indexOf( 'gift_accept_crafting_ask_for_bushels' ) ) {
+						abort_info_id = 'BUSHEL_LIMIT';
+					} else {
+						abort_info_id = 'GIFT_LIMIT';
+					}
+					
+					chrome.extension.sendRequest( { action: "abort", abort_info_id: abort_info_id } );
+				});				
 			}			
 			
 			var h1 = jQuery( 'h1' );
@@ -70,8 +85,7 @@ function handle_accept_and_return() {
 						document.location.replace( 'http://www.facebook.com/reqs.php' );
 					})
 				}
-			}					
-			
+			}			
 			
 			// Click button show return gift window
 			return_gift_btn = jQuery( 'input[name=send]' );
@@ -81,8 +95,7 @@ function handle_accept_and_return() {
 						return_gift_btn.click();
 					} );
 				}
-			}
-			
+			}			
 			
 			yes_btn = jQuery( 'input[value=Yes]' );
 			if ( yes_btn.length ) {
@@ -99,8 +112,7 @@ function handle_accept_and_return() {
 					}
 							
 				})			
-			}
-			
+			}			
 			
 			send_return_gift_btn = jQuery( 'input[name=sendit]' );
 			if ( send_return_gift_btn.length ) {
@@ -119,10 +131,7 @@ function handle_accept_and_return() {
 					
 					send_return_gift_btn.click();					
 				});	
-			}
-			
-			
-			
+			}			
 		}
 	});
 }

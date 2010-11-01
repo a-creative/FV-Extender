@@ -19,6 +19,7 @@ var requests_tab;
 var status_window;
 var current_app;
 var aborted = false;
+var abort_info_id = '';
 var accept_and_return_active = false;
 var done = false;
 var options = new Object();
@@ -115,6 +116,8 @@ function update_status( sendResponse ) {
 	}
 	
 	sendResponse( { 
+			aborted: aborted,
+			abort_info_id: abort_info_id,
 			pct: pct,
 			total: total_init_game_requests[ current_app_id ],
 			status: processed_game_requests_count,
@@ -144,15 +147,35 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 			url: URI,
 			timeout: 10000,
 			dataType: 'text',
-			success: accept_request_ajax_result_page_success
+			success: function( data, textStatus, XMLHttpRequest ) {
+				accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequestm, URI );
+			}
 		})
 	}
 }
 
-function accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest ) { 
+function accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, result_page_url ) { 
 	var result_html = data;
 	
 	// Analyze result_html for: gift limits, errors
+	
+	var body_start  = result_html.indexOf('<body>');
+	var body_end	= result_html.indexOf('</body>', body_start );
+	var body_html = result_html.slice( body_start + 6, body_end );
+	
+	// Handle limit errors
+	if ( body_html.indexOf( 'class="giftLimit"' ) != -1 ) {
+		aborted = true;
+		
+		if ( result_page_url.indexOf( 'gift_accept_crafting_ask_for_bushels' ) ) {
+			// Handle bushel limit error
+			abort_info_id = 'BUSHEL_LIMIT';	
+		} else {				
+			
+			// Handle general limit error
+			abort_info_id = 'GIFT_LIMIT';
+		}
+	}	
 	
 	// Remove request from UI
 	removeRequestFromUI( current_game_request[ current_app_id ], function() {
@@ -295,7 +318,8 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 			val = 'This gift was returned using FV Extender';
 		}
 		
-		sendResponse( {"value" : val } );
+		sendResponse( {
+"value" : val } );
 	} else if ( request.action == 'get_current_request' ) {
 		sendResponse( { current_request : current_game_request[ current_app_id ] } ); 	
 		
@@ -316,12 +340,18 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		} );	
 	} else if ( request.action == 'abort' ) {
 		aborted = true;
+		
+		if ( request.abort_info_id ) {
+			abort_info_id = request.abort_info_id;
+		}
+		
 	} else if ( request.action == 'goto_game' ) {
 		goto_game();
 	} else if ( request.action == 'get_status' ) {
 		update_status( sendResponse );		
 	} else if ( request.action == 'accept_first' ) {
 		aborted = false;
+		abort_info_id = '';
 		processed_game_requests_count = 0;
 		done = false;
 		

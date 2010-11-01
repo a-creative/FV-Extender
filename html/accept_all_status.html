@@ -10,6 +10,19 @@
 		<script type="text/javascript">
 			var aborted = false;
 			
+			var abort_info = {
+				"BUSHEL_LIMIT" 	: 'Bushel storage limit reached!',
+				"GIFT_LIMIT" 	: 'Gift box limit reached!'
+			};
+			
+			function add_goto_game_btn() {
+				$('#submit-btn').html('Goto game');
+				$('#submit-btn').attr('title','Goto game');
+				$('#submit-btn').click( function(){
+					chrome.extension.sendRequest( { action: "goto_game" } );		
+				});	
+			}
+			
 			function update_status() {
 				
 				if ( !aborted ) {
@@ -22,7 +35,12 @@
 						
 						$("#status-text").html( response.status + ' of ' + response.total + '(' + pct + '%) requests processed!' );
 						
-						if ( response.done ) {
+						if ( response.aborted ) {
+							document.getElementById('aborted-sound').play();
+							$("#status-text").html( 'Aborted: ' +  abort_info[ response.abort_info_id ] );
+							add_goto_game_btn();
+							
+						} else if ( response.done ) {
 							document.getElementById('done-sound').play()
 							$("#status-text").html( 'All requests processed(100%)!' );
 							
@@ -30,11 +48,8 @@
 								value : 100	
 							});
 							
-							$('#submit-btn').html('Goto game');
-							$('#submit-btn').attr('title','Goto game');
-							$('#submit-btn').click( function(){
-								chrome.extension.sendRequest( { action: "goto_game" } );		
-							});	
+							add_goto_game_btn();
+								
 						} else {
 							setTimeout( update_status, 1000 );				
 						} 
@@ -53,11 +68,7 @@
 					chrome.extension.sendRequest( { action: "abort" }, function(){
 						$("#status-text").html( 'Processing of requests was aborted!' );
 						
-						$('#submit-btn').html('Goto game');
-						$('#submit-btn').attr('title','Goto game');
-						$('#submit-btn').click( function(){
-							chrome.extension.sendRequest( { action: "goto_game" } );		
-						});	
+						add_goto_game_btn();	
 					} );
 				});
 				
@@ -71,6 +82,9 @@
 	<body>
 		<audio id="done-sound">
  			 <source src="../sound/cow.ogg" type="audio/ogg" />
+ 		</audio>
+ 		<audio id="aborted-sound">
+ 			 <source src="../sound/sheep.mp3" type="audio/mpeg" />
  		</audio>
 		
 		<div class="site">
