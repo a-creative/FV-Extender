@@ -74,8 +74,9 @@ function accept_all( params ) {
 	current_app_id = params.app.id;	
 	current_app = params.app;
 	
-	var whn = 170;
-	var whb = 245;
+	var whn = 235;
+	bh = 15 + 60;
+	var whb = whn + bh;
 	var vh = whn;
 	
 	// Open window
