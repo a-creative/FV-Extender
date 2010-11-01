@@ -74,12 +74,16 @@ function accept_all( params ) {
 	current_app_id = params.app.id;	
 	current_app = params.app;
 	
+	var whn = 170;
+	var whb = 245;
+	var vh = whn;
+	
 	// Open window
 	chrome.windows.create({
 		"url" : "html/accept_all_options.html",
 		"type" : "popup",
 		"width" : 300,
-		"height" : 220,
+		"height" : vh,
 		"left" : params.wnd_x,
 		"top" : params.wnd_y,
 	}, function( wnd ) {
