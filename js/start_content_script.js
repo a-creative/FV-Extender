@@ -41,23 +41,6 @@ function serialize_game_request ( DOM_game_request ) {
 	return ( game_request );
 }
 
-
-function accept_and_return_test( game_request ) {
-	var cand_request_id = $(request_form).children('input[name=status_div_id]').val(); 		
-	if ( request_id == cand_request_id ) {
-		var accept_btn = $(request_form).find('input[type="submit"]:first');
-		
-		if ( sendResponse ) {
-			sendResponse( {} );
-		}
-		
-		//accept_btn.click();
-		return false;
-	} else {
-		return true;
-	}	
-}
-
 chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
 
 	if ( request.action == 'get_next_request' ) {

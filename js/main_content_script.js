@@ -30,24 +30,7 @@ function handle_accept_and_return() {
 	chrome.extension.sendRequest( { action: "get_accept_and_return_active" }, function( response ) {
 		//console.log('Is accept and return active: ' + ( response['accept_and_return_active'] == true ? 'yes' : 'no') );
 		if ( response['accept_and_return_active'] == true ) {
-			//console.log('Getting current request...');
-			chrome.extension.sendRequest( { action: "get_current_request" }, function( response ) {
-				var current_request = response.current_request;
-				
-				//console.log(current_request['id'] +' : Got current request:' + current_request['profile_name'] );
-				
-				var request_dom = jQuery('#' + current_request['id'] );
-				if ( request_dom && request_dom.length ) {
-					//console.log( current_request['id'] +' : Found request in dom' );
-					
-					if_not_detected( request_dom, function( request_dom ) {
-						//console.log(current_request['id'] +' : Clicking it' );
-						var frm = request_dom.parent();
-						accept_and_return_test( current_request.id, frm, null );
-					});
-				}
-			});			
-			
+						
 			if ( 
 						( document.location.href.match( /gifterror=notfound/ ) ) 
 					||	( document.location.href.match( /reqType=yes&clickSrc=$/ ) )			
