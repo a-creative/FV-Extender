@@ -51,7 +51,7 @@
 							var abort_text;
 							
 							if ( response.abort_info_id.indexOf( 'UNKNOWN' ) ) {
-								abort_text = abort_info[ 'UNKNOWN' ] + ' ( error code: ' + response.abort_info_id ')'
+								abort_text = abort_info[ 'UNKNOWN' ] + ' ( error code: ' + response.abort_info_id + ')';
 							} else {
 								abort_text = abort_info[ response.abort_info_id ];
 							}
@@ -61,7 +61,7 @@
 							add_goto_game_btn();
 							
 						} else if ( response.done ) {
-							document.getElementById('done-sound').play()
+							document.getElementById('done-sound').play();
 							$("#status-text").html( 'All requests processed(100%)!' );
 							
 							$("#status-bar div").progressbar({
