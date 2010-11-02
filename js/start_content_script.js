@@ -90,7 +90,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 				sendResponse( { game_request: null, more_after_this: false } );	
 			}
 		} else {
-			sendResponse( { game_request: null, more_after_this: false, aborted: true, abort_info_id: 'UNKNOWN_1' } );			
+			sendResponse( { game_request: null, more_after_this: false, aborted: true, abort_info_id: 'ERROR_1' } );			
 		} 
 		
 		

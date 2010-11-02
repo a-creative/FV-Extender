@@ -12,16 +12,20 @@
 				} );	
 			});			
 			
-			function start() {
+			function start( accept_mode ) {
 				chrome.extension.sendRequest( { 
-					"action": "set_option",
-					"group": "accept_all", 
-					"option": "return-gift-msg",
-					"value"	: $('#return-gift-msg').val()
+					"action" : "set_accept_mode",
+					"accept_mode" : accept_mode
 				}, function() {
-					document.location.replace( 'accept_all_status.html' );	
-				} );
-				
+					chrome.extension.sendRequest( { 
+						"action": "set_option",
+						"group": "accept_all", 
+						"option": "return-gift-msg",
+						"value"	: $('#return-gift-msg').val()
+					}, function() {
+						document.location.replace( 'accept_all_status.html' );	
+					} );	
+				})
 			}	
 		</script>
 	</head>
@@ -34,7 +38,8 @@
 			</div>
 			<div class="field submit">
 				<div class="buttons">
-					<div class="button"><a href="#" onclick="start();return false" title="Start accepting request">Start</a></div>
+					<div class="button"><a href="#" onclick="start( 'ACCEPT' );return false" title="Accept requests(fast)">Accept</a></div>
+					<div class="button"><a href="#" onclick="start( 'ACCEPT_AND_RETURN' );return false" title="Accept and return gifts(slow and experimental)">Accept & gift back</a></div>
 				</div>
 			</div>
 		</div>

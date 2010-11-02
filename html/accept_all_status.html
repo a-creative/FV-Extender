@@ -13,7 +13,7 @@
 			var abort_info = {
 				"BUSHEL_LIMIT" 	: 'Bushel storage limit reached!',
 				"GIFT_LIMIT" 	: 'Gift box limit reached!',
-				"UNKNOWN"		: 'Something went wrong. Try again!'
+				"ERROR"			: 'Something went wrong. Try again!'
 			};
 			
 			function add_goto_game_btn() {
@@ -50,8 +50,8 @@
 							
 							var abort_text;
 							
-							if ( response.abort_info_id.indexOf( 'UNKNOWN' ) ) {
-								abort_text = abort_info[ 'UNKNOWN' ] + ' ( error code: ' + response.abort_info_id + ')';
+							if ( response.abort_info_id.indexOf( 'ERROR' ) ) {
+								abort_text = abort_info[ 'ERROR' ] + ' ( ' + response.abort_info_id + ')';
 							} else {
 								abort_text = abort_info[ response.abort_info_id ];
 							}

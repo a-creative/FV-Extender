@@ -24,7 +24,8 @@ var accept_and_return_active = false;
 var done = false;
 var options = new Object();
 var more_after_this = false;
-
+var ajax_retries = 0;
+var accept_mode = 'ACCEPT_AND_RETURN';
 
 function load_options( group ) {
 	if ( ( localStorage[ group ] == undefined ) ) {
@@ -138,6 +139,29 @@ function skip_request( game_request ) {
 	accept_next();
 }
 
+function accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, err_abort_info_id ) {
+	
+	var error = false;
+	
+	if ( current_game_request[ current_app_id ] ) {
+		if ( ajax_retries < 4 ) {
+			ajax_retries++;
+			
+			setTimeout( function() {
+				accept_request( current_game_request[ current_app_id ] );							
+			}, 60000 );						
+		} else {
+			ajax_retries = 0;
+			processed_game_requests_count++;
+			accept_next();
+		}	
+	} else {
+		ajax_retries = 0;
+		aborted = true;
+		abort_info_id = err_abort_info_id;	
+	}	
+}
+
 function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 	
 	// Find result page URL in result data
@@ -157,7 +181,11 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 			timeout: 10000,
 			dataType: 'text',
 			success: function( data, textStatus, XMLHttpRequest ) {
+				ajax_retries = 0;
 				accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, URI );
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, 'ERROR_3' );	
 			}
 		});
 	}
@@ -207,7 +235,13 @@ function accept_request( request ) {
 		url: 'http://www.facebook.com/ajax/reqs.php?__a=1',
 		data: request.ajax_init_data,
 		dataType: 'text',
-		success: accept_request_ajax_success
+		success: function(data, textStatus, XMLHttpRequest) {
+			ajax_retries = 0;
+			accept_request_ajax_success(data, textStatus, XMLHttpRequest);	
+		},
+		error: function( XMLHttpRequest, textStatus, errorThrown ) {
+			accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, 'ERROR_4' );			
+		}
 	});
 }
 
@@ -241,9 +275,10 @@ function accept_next() {
 				
 				// Decide what action to use on the game request
 				var eval_request_res = eval_request( game_request ); 
-				if ( eval_request_res == 'accept' ) {
+				if ( ( accept_mode == 'ACCEPT' ) || ( eval_request_res == 'accept' ) ) {
 					
-					// Accept the game request(using ajax)
+					// Accept the game request(using ajax) if it makes sense or if accept_mode is set to ACCEPT
+					ajax_retries = 0;
 					accept_request( game_request );
 				} else if ( eval_request_res == 'return_gift' ) {
 					
@@ -440,6 +475,8 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		accept_all( request );
 	} else if ( request.action == 'get_handled_app' ) {
 		get_handled_app( sendResponse, request.app_id );
+	} else if ( request.action == 'set_accept_mode' ) {
+		accept_mode = request.accept_mode;
 	}
 	
 	sendResponse( {} );
