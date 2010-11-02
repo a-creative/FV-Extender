@@ -104,24 +104,18 @@ function handle_accept_and_return() {
 				});			
 			}			
 			
-			send_return_gift_btn = jQuery( 'input[name=sendit]' );
-			if ( send_return_gift_btn.length ) {
+			var msg_box = $('#personal_msg_box textarea');
+			var send_return_gift_btn = jQuery( 'input[name=sendit]' );
+			if ( ( send_return_gift_btn.length ) && ( msg_box.length) ) {
 				if_not_detected( send_return_gift_btn, function( send_return_gift_btn ) {
-					var msg_box = $('#personal_msg_box');
-					if ( msg_box.length ) {
-						msg_box.show();	
-						var txt_area = msg_box.find('textarea');
-						if ( txt_area && txt_area.length ) {
-							
-							chrome.extension.sendRequest( { "action" : "get_option", "group": "accept_all", "option": "return-gift-msg" }, function( response ) {
-								txt_area.val( response[ "value" ] );						
-							} );
-						}
-					}
-					
-					accept_and_return_check_back( function() {
-						send_return_gift_btn.click();		
-					});			
+					if_not_detected( msg_box, function( msg_box ) {
+						chrome.extension.sendRequest( { "action" : "get_option", "group": "accept_all", "option": "return-gift-msg" }, function( response ) {
+							accept_and_return_check_back( function() {
+								msg_box.val( response[ "value" ] );
+								send_return_gift_btn.click();
+							});							
+						});
+					});
 				});	
 			}			
 		}
