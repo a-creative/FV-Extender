@@ -258,6 +258,7 @@ function accept_next() {
 				
 				// Mark prosessing of game requests as done
 				done = true;
+				console.log('done because no more request where found');
 			}	
 		});
 		
@@ -345,6 +346,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 	} else if ( request.action == 'done' ) {
 		done = true;		
 		accept_and_return_active = false;	
+		console.log('done because it was requested');
 	} else if ( request.action == 'get_accept_and_return_active' ) {
 		sendResponse( {
 			"accept_and_return_active" : accept_and_return_active	
@@ -360,6 +362,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		if ( more_after_this != true ) {
 			done = true;
 			accept_and_return_active = false;
+			console.log('done because there is no more after this, and this is practically done');
 		}
 	} else if ( request.action == 'goto_game' ) {
 		goto_game();
