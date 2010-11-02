@@ -21,6 +21,15 @@
 				$('#submit-btn').click( function(){
 					chrome.extension.sendRequest( { action: "goto_game" } );		
 				});	
+				
+				var request_list_btn = $('<div class="button"><a href="#" title="Show request list">Show request list</a></div>');
+				request_list_btn.find('a').click( function( evt ) {
+					chrome.extension.sendRequest( { action: "goto_FB_request_list" } );					
+					evt.preventDefault();
+				});
+				
+				$('.buttons').prepend( request_list_btn );
+				
 			}
 			
 			function update_status() {
@@ -57,7 +66,8 @@
 				}	
 			}
 			
-			$(document).ready( function() {
+			$(document).ready( function() {			
+				
 				$("#status-bar div").progressbar({
 					value : 0	
 				});
@@ -70,12 +80,13 @@
 						
 						add_goto_game_btn();	
 					} );
-				});
-				
+				});			
 				
 				chrome.extension.sendRequest( { action: "accept_first" }, function( response ) {
 					update_status();		
 				});
+				
+				
 			});				
 		</script>
 	</head>
@@ -97,7 +108,7 @@
 			</div>
 			<div class="field submit">
 				<div class="buttons">
-					<div class="button"><a href="#" title="Abort accepting" id="submit-btn">Abort</a></div>
+					<div class="button"><a href="#" title="Abort processing" id="submit-btn">Abort</a></div>
 				</div>
 			</div>
 			<!--<iframe class="banner" src="http://a-creative.github.com/FV-extender/stats.html" width="234" marginwidth="0" height="60" marginheight="0" scrolling="No" frameborder="0" hspace="0" vspace="0"></iframe>-->

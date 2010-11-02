@@ -309,6 +309,57 @@ function goto_game() {
 	} );	
 }
 
+
+function show_FB_request_list() {
+	chrome.windows.getCurrent( function( wnd ) {
+		
+		chrome.tabs.getAllInWindow( wnd.id, function( tabs ) {
+			var found_tab = '';
+			jQuery.each( tabs, function( i, tab ) {
+				if ( tab.url.match( /^https?\:\/\/www\.facebook\.com\/reqs\.php/i ) ) {
+					found_tab = tab;
+					return false;
+				}			
+			} );
+			
+			if ( found_tab === '' ) {
+				jQuery.each( tabs, function( i, tab ) {
+					if ( tab.url.match( /^https?\:\/\/www\.facebook\.com/i ) ) {
+						found_tab = tab;
+						return false;
+					}			
+				} );		
+			}
+			
+			if ( found_tab ) {
+				chrome.tabs.update( 
+					found_tab.id, {
+						url : 'http://www.facebook.com/reqs.php',
+						selected: true	
+					}, 
+					function() {
+						if ( status_window ) {
+							chrome.windows.remove( status_window.id );
+						}		
+					}
+				);
+			} else {
+				chrome.tabs.create(
+					{
+						"windowId" : wnd.id,
+						"url" : 'http://www.facebook.com/reqs.php'
+					}, 
+					function( tab ) {
+						if ( status_window ) {
+							chrome.windows.remove( status_window.id );
+						}
+					}
+				);							
+			}							
+		});	
+	} );	
+}
+
 chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
 	if ( ( request.action == 'set_option' ) && ( request["option"] != undefined ) )  {
 		
@@ -366,6 +417,8 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		}
 	} else if ( request.action == 'goto_game' ) {
 		goto_game();
+	} else if ( request.action == 'goto_FB_request_list' ) {
+		show_FB_request_list();
 	} else if ( request.action == 'get_status' ) {
 		update_status( sendResponse );		
 	} else if ( request.action == 'accept_first' ) {
