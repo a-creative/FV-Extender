@@ -90,10 +90,10 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 				sendResponse( { game_request: null, more_after_this: false } );	
 			}
 		} else {
-			console.log('1: Unexpected');			
+			sendResponse( { game_request: null, more_after_this: false, aborted: true, abort_info_id: 'UNKNOWN_1' } );			
 		} 
 		
-		sendResponse( null );
+		
 	} else if ( request.action == 'accept_and_return' ) {
 		if ( current_requests ) {		
 			

@@ -252,6 +252,10 @@ function accept_next() {
 				} else {
 					console.log( '2: Unexpected >' + eval_request_res );
 				}
+			} else if ( response.aborted ) {
+				aborted = true;
+				abort_info_id = response.abort_info_id;
+				
 			} else {
 				
 				// If no more game requests found

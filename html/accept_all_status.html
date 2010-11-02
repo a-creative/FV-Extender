@@ -12,7 +12,8 @@
 			
 			var abort_info = {
 				"BUSHEL_LIMIT" 	: 'Bushel storage limit reached!',
-				"GIFT_LIMIT" 	: 'Gift box limit reached!'
+				"GIFT_LIMIT" 	: 'Gift box limit reached!',
+				"UNKNOWN"		: 'Something went wrong. Try again!'
 			};
 			
 			function add_goto_game_btn() {
@@ -46,7 +47,17 @@
 						
 						if ( response.aborted ) {
 							document.getElementById('aborted-sound').play();
-							$("#status-text").html( 'Aborted: ' +  abort_info[ response.abort_info_id ] );
+							
+							var abort_text;
+							
+							if ( response.abort_info_id.indexOf( 'UNKNOWN' ) ) {
+								abort_text = abort_info[ 'UNKNOWN' ] + ' ( error code: ' + response.abort_info_id ')'
+							} else {
+								abort_text = abort_info[ response.abort_info_id ];
+							}
+							
+							$("#status-text").html( 'Aborted: ' +  abort_text );
+							
 							add_goto_game_btn();
 							
 						} else if ( response.done ) {
