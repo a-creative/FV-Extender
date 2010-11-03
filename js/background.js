@@ -204,7 +204,7 @@ function accept_request_ajax_result_page_success( data, textStatus, XMLHttpReque
 	if ( body_html.indexOf( 'class="giftLimit"' ) != -1 ) {
 		aborted = true;
 		
-		if ( result_page_url.indexOf( 'gift_accept_crafting_ask_for_bushels' ) ) {
+		if ( result_page_url.indexOf( 'gift_accept_crafting_ask_for_bushels' ) != -1 ) {
 			// Handle bushel limit error
 			abort_info_id = 'BUSHEL_LIMIT';	
 		} else {				

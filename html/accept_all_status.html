@@ -50,7 +50,7 @@
 							
 							var abort_text;
 							
-							if ( response.abort_info_id.indexOf( 'ERROR' ) ) {
+							if ( response.abort_info_id.indexOf( 'ERROR' ) != -1 ) {
 								abort_text = abort_info[ 'ERROR' ] + ' ( ' + response.abort_info_id + ')';
 							} else {
 								abort_text = abort_info[ response.abort_info_id ];
