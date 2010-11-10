@@ -32,7 +32,10 @@ function handle_accept_and_return() {
 						
 			if ( 
 						( document.location.href.match( /gifterror=notfound/ ) ) 
-					||	( document.location.href.match( /reqType=yes&clickSrc=$/ ) )			
+					||	( document.location.href.match( /reqType=yes&clickSrc=$/ ) )
+					||	( document.location.href.match( /toolbar\.zynga\.com/i ) )
+					||	( document.location.href.match( /^http\:\/\/www\.farmville\.com\/?$/i ) )
+					||	( document.location.href.match( /^http\:\/\/apps\.facebook\.com\/onthefarm\/?$/i ) ) 		
 			) {
 				accept_and_return_check_back( function() {
 					document.location.replace( 'http://www.facebook.com/reqs.php' );
@@ -56,12 +59,8 @@ function handle_accept_and_return() {
 			}			
 			
 			var h1 = jQuery( 'h1' );
-			if ( h1 && h1.length ) {
-				if ( h1.html().match( /oh no\! It looks like all the bits got lost/ ) ) {
-					accept_and_return_check_back( function() {
-						document.location.replace( 'http://www.facebook.com/reqs.php' );	
-					});
-				}
+			if ( h1 && h1.length && h1.html().match( /oh no\! It looks like all the bits got lost/i ) ) {
+				document.location.replace( 'http://www.facebook.com/reqs.php' );	
 			}
 			
 			ok_btn = jQuery( 'input[value=OK]' );
