@@ -185,9 +185,11 @@ function insert_accept_all_button() {
 						
 						
 						accept_all_btn.find('input').click( function( evt ) {
-							var wnd_x = accept_all_btn.offset().left - 100;
-							var wnd_y = accept_all_btn.offset().top + 150;
+							var wnd_w = 300;
+							var wnd_h = 235;
 							
+							var wnd_x = Math.round( ( screen.width / 2 ) - ( wnd_w / 2 ) );
+							var wnd_y = Math.round( ( screen.height / 2 ) - ( wnd_h / 2 ) );
 							
 							accept_all_btn_click( app, requests, wnd_x, wnd_y );	
 						});
