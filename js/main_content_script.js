@@ -86,6 +86,21 @@ function handle_accept_and_return() {
 			
 			yes_btn = jQuery( 'input[value=Yes]' );
 			if ( yes_btn.length ) {
+				var out_of_requests_h2 = jQuery( 'div.errorDialog h2.dialog_title' );
+				var out_of_requests_btn = jQuery( 'div.errorDialog input[name=ok]' );
+				
+				if ( out_of_requests_h2.length && out_of_requests_btn.length && ( out_of_requests_h2.html().match( /out of requests/i ) ) ) {
+					if_not_detected( out_of_requests_h2, function( out_of_requests_h2 ) {	
+						if_not_detected( out_of_requests_btn, function( out_of_requests_btn ) {	
+							out_of_requests_btn.click();
+							accept_and_return_check_back( function() {
+								yes_btn.click();
+							});
+						});	
+					});
+				}
+				
+				
 				if_not_detected( yes_btn, function( yes_btn ) {
 					var return_gift_btn_found = false;
 					if ( return_gift_btn.length ) {
