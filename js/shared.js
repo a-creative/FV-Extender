@@ -4,7 +4,10 @@ function group_request( request ) {
 		request[ 'gift_id' ] = matches[ 1 ];
 	}	
 	
-	console.log( 'gift:' + request[ 'gift_id' ] );
+	matches = request['text'].match( /Here is a (.*?) for your farm/i );
+	if ( matches ) {
+		request[ 'gift_name' ] = matches[ 1 ];
+	}
 	
 	var log_types = new Array();
 	
@@ -21,7 +24,7 @@ function group_request( request ) {
 	}
 	
 	// It thank you gift
-	if ( request['text'] && request['text'].match( /^Thank you for your gift/i ) ) {
+	if ( request['text'] && request['text'].match( /^(?:Thank you for your gift|Thank you for sending me such a wonderful gift)/i ) ) {
 		log_types.push('IsThankYouGift' );
 		request[ 'IsThankYouGift' ] = true;
 	}
@@ -68,7 +71,7 @@ function group_request( request ) {
 		request[ 'IsBushel' ] = true;	
 	}		
 	
-	console.log( 'types:' + log_types.join( ', ' ) );
+	console.log( 'types:' + log_types.join( ', ' ) + ':' + request['text'] );
 	
 	return request;
 }

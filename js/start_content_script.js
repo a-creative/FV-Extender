@@ -25,13 +25,12 @@ function serialize_game_request ( DOM_game_request ) {
 	];
 	
 	var ajax_init_data_url = ajax_init_data.join( '&' );	
-	
-	
+		
 	var game_request = {
 		"id"			 : request_id,
 		"ajax_init_data" : ajax_init_data_url,
 		"user_text"		 : DOM_game_request.find('.requestMessage').html(),
-		"text"			 : DOM_game_request.find('.requestBody span').html(),
+		"text"			 : DOM_game_request.find('.streamStyleRequestBody span').html(),
 		"action_url"	 : action_url,
 		"profile_id"	 : from_id,
 		"profile_img"	 : DOM_game_request.find('a.UIImageBlock_SMALL_Image img').attr('src'),

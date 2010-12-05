@@ -86,7 +86,7 @@ function accept_all( params ) {
 	chrome.windows.create({
 		"url" : "html/accept_all_options.html",
 		"type" : "popup",
-		"width" : 300,
+		"width" : 400,
 		"height" : vh,
 		"left" : params.wnd_x,
 		"top" : params.wnd_y
@@ -309,11 +309,17 @@ function goto_game() {
 		
 		chrome.tabs.getAllInWindow( wnd.id, function( tabs ) {
 			var found_tab;
+			var url = current_app.Game_url;
 			jQuery.each( tabs, function( i, tab ) {
 				if (
 						( tab.url.toLowerCase().indexOf( current_app.FB_url ) == 0 )
 					||	( tab.url.toLowerCase().indexOf( current_app.Game_url ) == 0 )
 				) {
+					
+					if ( tab.url.toLowerCase().indexOf( current_app.FB_url ) == 0 ) {
+						url = current_app.FB_url;
+					}
+					
 					found_tab = tab;
 					return false;
 				}			
@@ -322,7 +328,7 @@ function goto_game() {
 			if ( found_tab ) {
 				chrome.tabs.update( 
 					found_tab.id, {
-						url : found_tab.url,
+						url : url,
 						selected: true	
 					}, 
 					function() {
@@ -335,7 +341,7 @@ function goto_game() {
 				chrome.tabs.create(
 					{
 						"windowId" : wnd.id,
-						"url" : current_app.Game_url
+						"url" : url
 					}, 
 					function( tab ) {
 						if ( status_window ) {
@@ -477,6 +483,26 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		get_handled_app( sendResponse, request.app_id );
 	} else if ( request.action == 'set_accept_mode' ) {
 		accept_mode = request.accept_mode;
+	} else if ( request.action === 'resize_me' ) {
+		
+		var new_width = request.width + 10;
+		var new_height = request.height + 58;
+		
+		var dif_width = status_window.width - new_width;
+		var dif_height = status_window.height - new_height;
+		
+		var top = Math.round( status_window.top + ( dif_height / 2 ) );
+		var left = Math.round( status_window.left + ( dif_width / 2 ) );
+		
+		
+		chrome.windows.update( 
+			status_window.id, {
+				"width" : new_width,
+				"height" : new_height,
+				"left" : left,
+				"top" : top,
+			} 
+		);
 	}
 	
 	sendResponse( {} );

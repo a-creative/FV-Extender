@@ -27,6 +27,18 @@
 					} );	
 				})
 			}	
+			
+			function advanced() {
+				jQuery('.site').html('<div class="wnd-loading" style="width:300px;height:20px;margin-top:-30px;margin-left:-150px">Loading advanced options. Please wait...</div>');
+				
+				chrome.extension.sendRequest( { 
+					"action" : "resize_me",
+					"height" : 315,
+					"width"  : 528
+				}, function() {
+					document.location.replace( 'accept_all_options_adv.html' );	
+				})
+			}
 		</script>
 	</head>
 	<body>
@@ -38,8 +50,9 @@
 			</div>
 			<div class="field submit">
 				<div class="buttons">
+					<!--<div class="button"><a href="#" onclick="advanced();return false" title="Accept requests(fast)">Advanced</a></div>-->
 					<div class="button"><a href="#" onclick="start( 'ACCEPT' );return false" title="Accept requests(fast)">Accept</a></div>
-					<div class="button"><a href="#" onclick="start( 'ACCEPT_AND_RETURN' );return false" title="Accept and return gifts(slow and experimental)">Accept & return gift</a></div>
+					<div class="button"><a href="#" onclick="start( 'ACCEPT_AND_RETURN' );return false" title="Accept and return gifts(slow and experimental)">Accept & return</a></div>
 				</div>
 			</div>
 		</div>

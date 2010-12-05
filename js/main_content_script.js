@@ -29,6 +29,18 @@ function handle_accept_and_return() {
 	chrome.extension.sendRequest( { action: "get_accept_and_return_active" }, function( response ) {
 		//console.log('Is accept and return active: ' + ( response['accept_and_return_active'] == true ? 'yes' : 'no') );
 		if ( response['accept_and_return_active'] == true ) {
+			var h1 = jQuery( 'h1' );
+			console.log( 'h1a:' + h1.html() );
+			
+			if ( h1 && h1.length && h1.html().match( /Oh no/i ) ) {
+				console.log( 'h1b:' + h1.html() );
+				if_not_detected( h1, function( h1 ) {
+					alert('oh no');
+					
+					document.location.replace( 'http://www.facebook.com/reqs.php' );		
+				} );
+			}
+			
 						
 			if ( 
 						( document.location.href.match( /gifterror=notfound/ ) ) 
@@ -58,10 +70,7 @@ function handle_accept_and_return() {
 				});				
 			}			
 			
-			var h1 = jQuery( 'h1' );
-			if ( h1 && h1.length && h1.html().match( /oh no\! It looks like all the bits got lost/i ) ) {
-				document.location.replace( 'http://www.facebook.com/reqs.php' );	
-			}
+			
 			
 			ok_btn = jQuery( 'input[value=OK]' );
 			if ( ok_btn.length ) {
