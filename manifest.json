@@ -15,6 +15,8 @@
     "tabs", "http://*.facebook.com/*", "https://*.facebook.com/*","http://*.farmville.com/*","http://a-creative.github.com/*"
   ],
   "icons": {
+  	"16" : "graphics/chrome_16.jpg",
+  	"32" : "graphics/chrome_32.jpg",
   	"48" : "graphics/chrome_48.jpg",
   	"128" : "graphics/chrome_128.jpg"
   }

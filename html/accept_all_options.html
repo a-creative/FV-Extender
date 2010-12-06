@@ -7,24 +7,26 @@
 		<link href="../css/background.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			$(document).ready( function() {
-				chrome.extension.sendRequest( { "action" : "get_option", "group": "accept_all", "option": "return-gift-msg" }, function( response ) {
-					$('#return-gift-msg').val( response[ "value" ] );						
-				} );	
+				
+				chrome.extension.sendRequest( { "action" : "init_accept_options" }, function( response ) {
+					if ( response.action == 'init_accept_options' ) {
+					
+						$('#return-gift-msg').val( response[ "return-gift-msg" ] );
+						$('#disable-sound').attr('checked', response[ "disable-sound" ] );
+						$('#disable-looping').attr('checked', response[ "disable-looping" ] );
+					}
+				});	
 			});			
 			
-			function start( accept_mode ) {
-				chrome.extension.sendRequest( { 
-					"action" : "set_accept_mode",
-					"accept_mode" : accept_mode
+			function start( accept_mode ) {				
+				chrome.extension.sendRequest( {
+					"action" : "start_accept",
+					"accept_mode" : accept_mode,
+					"return-gift-msg" : $('#return-gift-msg').val(),
+					"disable-sound" : $('#disable-sound:checked').val(),
+					"disable-looping" : $('#disable-looping:checked').val()
 				}, function() {
-					chrome.extension.sendRequest( { 
-						"action": "set_option",
-						"group": "accept_all", 
-						"option": "return-gift-msg",
-						"value"	: $('#return-gift-msg').val()
-					}, function() {
-						document.location.replace( 'accept_all_status.html' );	
-					} );	
+					document.location.replace( 'accept_all_status.html' );	
 				})
 			}	
 			
@@ -48,6 +50,15 @@
 				<div class="label">Message for when you return gifts:</div>
 				<div class="input"><textarea id="return-gift-msg" rows="3"></textarea></div>	
 			</div>
+			
+			<div class="field checkbox">				
+				<div class="input"><input type="checkbox" id="disable-sound" /></div>
+				<div class="label">Disable sounds</div>	
+			</div>
+			<div class="field checkbox">				
+				<div class="input"><input type="checkbox" id="disable-looping" /></div>	
+				<div class="label">Don't return gift when receiving a "Thank you" gift.</div>
+			</div>			
 			<div class="field submit">
 				<div class="buttons">
 					<!--<div class="button"><a href="#" onclick="advanced();return false" title="Accept requests(fast)">Advanced</a></div>-->

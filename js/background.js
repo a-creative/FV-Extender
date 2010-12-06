@@ -77,7 +77,7 @@ function accept_all( params ) {
 	current_app_id = params.app.id;	
 	current_app = params.app;
 	
-	var whn = 235;
+	var whn = 255;
 	bh = 15 + 60;
 	var whb = whn + bh;
 	var vh = whn;
@@ -99,7 +99,7 @@ function accept_all( params ) {
 function eval_request( request ) {	
 	if ( 
 				( request['IsWishGrant'] )
-			||	( request['IsThankYouGift'] ) 
+			||	( request['IsThankYouGift'] && ( options[ 'accept_all' ][ 'disable-looping' ] === true ) ) 
 			||	( request['IsMaterialRequest'] )
 			||  ( request['IsOneWayGift'] )
 			||  ( request['IsBushel'] ) 
@@ -129,7 +129,8 @@ function update_status( sendResponse ) {
 			pct: pct,
 			total: total_init_game_requests[ current_app_id ],
 			status: processed_game_requests_count,
-			done: done
+			done: done,
+			play_sound : ( options[ 'accept_all' ][ 'disable-sound' ] === true ? false : true ),
 	} );
 }
 
@@ -406,7 +407,47 @@ function show_FB_request_list() {
 }
 
 chrome.extension.onRequest.addListener( function(request, sender, sendResponse) {
-	if ( ( request.action == 'set_option' ) && ( request["option"] != undefined ) )  {
+	if ( request.action == 'init_accept_options' ) {
+		
+		var return_gift_msg = options[ 'accept_all' ][ 'return-gift-msg' ];
+		var disable_sound = options[ 'accept_all' ][ 'disable-sound' ];
+		var disable_looping = options[ 'accept_all' ][ 'disable-looping' ];
+		
+		if ( return_gift_msg == undefined ) {
+			return_gift_msg = 'This gift was returned using FV Extender';
+		}
+		
+		if ( disable_sound == undefined ) {
+			disable_sound = false;
+		}
+		
+		if ( disable_looping == undefined ) {
+			disable_looping = false;
+		}		
+		
+		sendResponse( {
+			"action" : 'init_accept_options',
+			"return-gift-msg" : return_gift_msg, 
+			"disable-sound"	: disable_sound,
+			"disable-looping" : disable_looping
+		});
+	} else if ( request.action == 'start_accept' ) {
+		
+		// Save accept mode
+		accept_mode = request.accept_mode;
+		
+		// Save gift back message
+		options[ 'accept_all' ][ 'return-gift-msg' ] = request[ 'return-gift-msg' ];
+		
+		// Save sound disabled status_window
+		options[ 'accept_all' ][ 'disable-sound' ] = ( request[ 'disable-sound' ] === 'on' ? true : false );
+		
+		// Save looping disabled status_window
+		options[ 'accept_all' ][ 'disable-looping' ] = ( request[ 'disable-looping' ] === 'on' ? true : false );
+		
+		save_options( 'accept_all' );
+		
+	} else if ( ( request.action == 'set_option' ) && ( request["option"] != undefined ) )  {
 		
 		if ( options[ request["group"] ] == undefined ) {
 			options[ request["group"] ] = new Object();	
@@ -422,9 +463,6 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		}
 		
 		var val = options[ request["group"] ][ request["option"] ];
-		if ( ( val == undefined ) && ( request["group"] == 'accept_all' ) && ( request["option"] == 'return-gift-msg' ) ) {
-			val = 'This gift was returned using FV Extender';
-		}
 		
 		sendResponse( {
 "value" : val } );

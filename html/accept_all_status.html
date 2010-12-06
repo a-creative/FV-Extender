@@ -46,7 +46,10 @@
 						$("#status-text").html( response.status + ' of ' + response.total + '(' + pct + '%) requests processed!' );
 						
 						if ( response.aborted ) {
-							document.getElementById('aborted-sound').play();
+							
+							if ( response.play_sound ) { 
+								document.getElementById('aborted-sound').play();
+							}
 							
 							var abort_text;
 							
@@ -61,7 +64,11 @@
 							add_goto_game_btn();
 							
 						} else if ( response.done ) {
-							document.getElementById('done-sound').play();
+							
+							if ( response.play_sound ) { 
+								document.getElementById('done-sound').play();
+							}
+							
 							$("#status-text").html( 'All requests processed(100%)!' );
 							
 							$("#status-bar div").progressbar({
