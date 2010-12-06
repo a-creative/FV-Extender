@@ -1,4 +1,6 @@
-console.log('Loading background script...');
+check_version();
+
+
 var apps = [
 	{
 		"id" 			: "102452128776",
@@ -139,6 +141,8 @@ function skip_request( game_request ) {
 	processed_game_requests_count++;
 	accept_next();
 }
+
+
 
 function accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, err_abort_info_id ) {
 	
@@ -546,4 +550,44 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 	sendResponse( {} );
 } );
 
-console.log('Background script ended.');
+function onInstall() {
+	console.log("Extension Installed");
+}
+
+function onUpdate() {
+	chrome.tabs.create( { url:'http://a-creative.github.com/FV-extender/updates.html' } );
+}
+
+function getVersion() {
+	var version = 'NaN';
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+	xhr.send(null);
+	var manifest = JSON.parse( xhr.responseText );
+	return manifest.version;
+}
+
+function check_version() {
+
+	// Check if the version has changed.
+	var currVersion = getVersion();
+	
+	console.log('Executing FV Extender version ' + currVersion );
+	
+	var prevVersion = localStorage[ 'version' ]
+	if ( currVersion != prevVersion ) {
+		// Check if we just installed this extension.
+		
+		console.log( 'accept_all:' + localStorage[ 'accept_all' ] );
+		
+		if ( ( typeof prevVersion == 'undefined' ) && ( localStorage[ 'accept_all' ] == undefined ) ) {
+			onInstall();
+		} else {
+			onUpdate();
+		}
+		localStorage['version'] = currVersion;
+	} 
+}
+
+
+console.log('Background script done executing.');
