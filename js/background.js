@@ -258,7 +258,7 @@ function accept_next() {
 	if ( !aborted ) {
 		
 		// Only proces more requests if aborted is false
-		chrome.tabs.sendRequest( requests_tab.id, { action: "get_next_request" }, function( response ) {
+		chrome.tabs.sendRequest( requests_tab.id, { action: "get_next_request", accept_mode: accept_mode }, function( response ) {
 			var game_request = response.game_request;
 			more_after_this = response.more_after_this; 
 			

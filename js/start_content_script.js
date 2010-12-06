@@ -57,15 +57,16 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 					// Add group info
 					game_request = group_request( game_request );
 					
-					
-					if (!( 
+					if ( ( request.accept_mode == 'JUST_HELP' ) && ( game_request[ 'IsMaterialRequest' ] ) ) {
+						temp_requests.push( game_request );
+					} else if ((!( 
 							( game_request[ 'IsNeighborRequest' ] )  
 						||  ( game_request[ 'IsShovelRequest' ] )
 						|| (
 									( game_request['HasUserText'] )
 								&&	( game_request['IsSendByFvExtender'] != true )
 							)
-					)) {
+					)) && ( request.accept_mode != 'JUST_HELP' ) )  {
 						temp_requests.push( game_request );
 					}	
 				});
