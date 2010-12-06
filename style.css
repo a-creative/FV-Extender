@@ -181,7 +181,7 @@ h3 {
 	padding:0px;
 }
 
-h2 + h3 {
+h2 + h3, p + h3 {
 	margin-top:10px;	
 }
 

@@ -51,6 +51,7 @@
 			<div class="content">
 				<div class="main-column">
 					<h1><!-- TemplateBeginEditable name="headline" -->headline<!-- TemplateEndEditable --></h1>
+					<p><!-- #BeginDate format:Am1a -->December 6, 2010 11:35 PM<!-- #EndDate --> GMT+2</p>
 					<!-- TemplateBeginEditable name="main_column" -->main_column<!-- TemplateEndEditable -->
 					<p>&nbsp;</p>
 					<p>&nbsp;</p>
