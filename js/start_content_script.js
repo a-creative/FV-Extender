@@ -1,6 +1,7 @@
 var current_requests;
 
 function serialize_game_request ( DOM_game_request ) {
+	
 	var frm = DOM_game_request.find('form');
 		
 	var action_url = escape(frm.find('input[type="submit"]:first').attr('name'));
@@ -26,10 +27,17 @@ function serialize_game_request ( DOM_game_request ) {
 	
 	var ajax_init_data_url = ajax_init_data.join( '&' );	
 		
+	var matches;
+	
+	var user_text = '';
+	if ( matches = DOM_game_request.html().match( /<div><strong>([^<]+)<\/strong><\/div>/ ) ) {
+		user_text = matches[ 1 ];	
+	}
+	
 	var game_request = {
 		"id"			 : request_id,
 		"ajax_init_data" : ajax_init_data_url,
-		"user_text"		 : DOM_game_request.find('.requestMessage').html(),
+		"user_text"		 : user_text,
 		"text"			 : DOM_game_request.find('.streamStyleRequestBody span').html(),
 		"action_url"	 : action_url,
 		"profile_id"	 : from_id,
