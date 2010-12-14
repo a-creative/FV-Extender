@@ -30,7 +30,7 @@ function group_request( request ) {
 	}
 	
 	// Is material request		
-	if ( request['action_url'] && request['action_url'].match( /sendmats\.php/ ) ) {
+	if ( request['action_url'] && request['action_url'].match( /(?:sendmats|sendcredits)\.php/ ) ) {
 		log_types.push('IsMaterialRequest' );
 		request[ 'IsMaterialRequest' ] = true;
 	}
