@@ -36,7 +36,7 @@ function group_request( request ) {
 	}
 	
 	// Is one way gift
-	if ( request['text'] && request['text'].match( /(?:don\'t|do not) (?:resend|send back)/ ) ) {
+	if ( request['text'] && request['text'].match( /(?:don\'t|do not) (?:resend|send back|return|gift back)/ ) ) {
 		log_types.push('IsOneWayGift' );
 		request[ 'IsOneWayGift' ] = true;
 	} 
@@ -60,7 +60,7 @@ function group_request( request ) {
 	} 
 	
 	// Is send by FV extender
-	if ( request['user_text'] && request['user_text'].match( /This gift was returned using FV Extender/ ) ) {
+	if ( request['user_text'] && request['user_text'].match( /FV Extender/ ) ) {
 		log_types.push('IsSendByFvExtender' );
 		request[ 'IsSendByFvExtender' ] = true;				  
 	}
