@@ -36,7 +36,7 @@ function group_request( request ) {
 	}
 	
 	// Is one way gift
-	if ( request['text'] && request['text'].match( /(?:don\'t|do not) (?:resend|send back|return|gift back)/ ) ) {
+	if ( request['text'] && request['user_text'].match( /(?:don\'t|do not) (?:resend|send back|return|gift back)/ ) ) {
 		log_types.push('IsOneWayGift' );
 		request[ 'IsOneWayGift' ] = true;
 	} 
