@@ -68,9 +68,7 @@ function handle_accept_and_return() {
 					
 					chrome.extension.sendRequest( { action: "abort", abort_info_id: abort_info_id } );
 				});				
-			}			
-			
-			
+			}
 			
 			ok_btn = jQuery( 'input[value=OK]' );
 			if ( ok_btn.length ) {
