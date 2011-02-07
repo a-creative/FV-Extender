@@ -65,7 +65,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 					// Add group info
 					game_request = group_request( game_request );
 					
-					if ( ( request.accept_mode == 'JUST_HELP' ) && ( game_request[ 'IsMaterialRequest' ] ) ) {
+					if ( ( request.accept_mode == 'JUST_HELP' ) && ( game_request[ 'IsMaterialRequest' ] || game_request[ 'IsMaterialRequestManual' ] ) ) {
 						temp_requests.push( game_request );
 					} else if ((!( 
 							( game_request[ 'IsNeighborRequest' ] )  
