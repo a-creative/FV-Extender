@@ -36,7 +36,7 @@ function group_request( request ) {
 	}
 	
 	// Is material request( do manual )
-	if ( request['action_url'] && request['action_url'].match( /breeding\.php\?action\=inviteAnswered/ ) ) {
+	if ( request['action_url'] && request['action_url'].match( /breeding\.php%3Faction%3DinviteAnswered/i ) ) {
 		log_types.push('IsMaterialRequestManual' );
 		request[ 'IsMaterialRequestManual' ] = true;
 	}
@@ -77,7 +77,7 @@ function group_request( request ) {
 		request[ 'IsBushel' ] = true;	
 	}		
 	
-	console.log( 'types:' + log_types.join( ', ' ) + ':' + request['text'] );
+	console.log( 'types:' + log_types.join( ', ' ) + ':' + request['text'] + ', action_url:"' + request['action_url'] + '"' );
 	
 	return request;
 }
