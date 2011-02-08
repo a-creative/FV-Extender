@@ -108,6 +108,8 @@ function eval_request( request ) {
 			
 	) {
 		return 'accept';	
+	} else if ( request['IsMaterialRequestManual'] ) {
+		return 'force_return_gift';
 	} else {
 		return 'return_gift';		
 	}
@@ -280,12 +282,12 @@ function accept_next() {
 				
 				// Decide what action to use on the game request
 				var eval_request_res = eval_request( game_request ); 
-				if ( ( accept_mode == 'ACCEPT' ) || ( eval_request_res == 'accept' ) ) {
+				if ( ( ( accept_mode == 'ACCEPT' ) || ( eval_request_res == 'accept' ) ) && ( eval_request_res != 'force_return_gift' ) ) {
 					
 					// Accept the game request(using ajax) if it makes sense or if accept_mode is set to ACCEPT
 					ajax_retries = 0;
 					accept_request( game_request );
-				} else if ( eval_request_res == 'return_gift' ) {
+				} else if ( ( eval_request_res == 'return_gift' ) || ( eval_request_res == 'force_return_gift' ) ) {
 					
 					// Accept the game request and send return gift(using click)
 					accept_and_return( game_request );
