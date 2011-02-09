@@ -38,7 +38,7 @@ function serialize_game_request ( DOM_game_request ) {
 		"id"			 : request_id,
 		"ajax_init_data" : ajax_init_data_url,
 		"user_text"		 : user_text,
-		"text"			 : DOM_game_request.find('.streamStyleRequestBody span').html(),
+		"text"			 : DOM_game_request.find('.streamStyleRequestBody span, .appRequestBody span').html(),
 		"action_url"	 : action_url,
 		"profile_id"	 : from_id,
 		"profile_img"	 : DOM_game_request.find('a.UIImageBlock_SMALL_Image img').attr('src'),
