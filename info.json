@@ -1,0 +1,10 @@
+[
+	{
+		"type" : "headline",
+		"text"	: "Info"
+	},
+	{
+		"type" : "paragraph",
+		"text"	: "No info at the moment"
+	}
+]
