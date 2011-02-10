@@ -1,10 +1,10 @@
 [
 	{
-		"type" : "headline",
-		"text"	: "Info"
+		"FVE_type" : "headline",
+		"FVE_text"	: "Info"
 	},
 	{
-		"type" : "paragraph",
-		"text"	: "No info at the moment"
+		"FVE_type" : "paragraph",
+		"FVE_text"	: "No info at the moment"
 	}
 ]
