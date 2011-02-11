@@ -1,10 +1,13 @@
-[
-	{
-		"FVE_type" : "headline",
-		"FVE_text"	: "Info"
-	},
-	{
-		"FVE_type" : "paragraph",
-		"FVE_text"	: "No info at the moment"
-	}
-]
+{
+	"ok" : true,
+	"elements" : [
+		{
+			"FVE_type" : "headline",
+			"FVE_text"	: "Info"
+		},
+		{
+			"FVE_type" : "paragraph",
+			"FVE_text"	: "No info at the moment"
+		}
+	]
+}
