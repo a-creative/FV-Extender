@@ -557,7 +557,7 @@ function onInstall() {
 }
 
 function onUpdate() {
-	chrome.tabs.create( { url:'http://fv-extender.proboards.com/index.cgi?action=display&board=updates&thread=66' } );
+	chrome.tabs.create( { url:'http://a-creative.github.com/FV-extender/updated.html' } );
 }
 
 function getVersion() {
