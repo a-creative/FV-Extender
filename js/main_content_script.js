@@ -45,6 +45,7 @@ function handle_accept_and_return() {
 						( document.location.href.match( /gifterror=notfound/ ) ) 
 					||	( document.location.href.match( /reqType=yes&clickSrc=$/ ) )
 					||	( document.location.href.match( /breeding\.php\?action\=inviteAnswered/i ) )
+					||	( document.location.href.match( /sendreqs\.php/i ) )
 					||	( document.location.href.match( /toolbar\.zynga\.com/i ) )
 					||	( document.location.href.match( /^http\:\/\/www\.farmville\.com\/?$/i ) )
 					||	( document.location.href.match( /^http\:\/\/apps\.facebook\.com\/onthefarm\/?$/i ) ) 		
@@ -93,6 +94,7 @@ function handle_accept_and_return() {
 			
 			yes_btn = jQuery( 'input[value=Yes]' );
 			if ( yes_btn.length ) {
+				
 				var out_of_requests_h2 = jQuery( 'div.errorDialog h2.dialog_title' );
 				var out_of_requests_btn = jQuery( 'div.errorDialog input[name=ok]' );
 				

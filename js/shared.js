@@ -36,7 +36,10 @@ function group_request( request ) {
 	}
 	
 	// Is material request( do manual )
-	if ( request['action_url'] && request['action_url'].match( /breeding\.php%3Faction%3DinviteAnswered/i ) ) {
+	if (
+			( request['action_url'] && request['action_url'].match( /breeding\.php%3Faction%3DinviteAnswered/i ) )
+		||	( request['action_url'] && request['action_url'].match( /sendreqs\.php/i ) )	
+	) {
 		log_types.push('IsMaterialRequestManual' );
 		request[ 'IsMaterialRequestManual' ] = true;
 	}
