@@ -79,8 +79,8 @@ function accept_all( params ) {
 	current_app_id = params.app.id;	
 	current_app = params.app;
 	
-	var whn = 275;
-	bh = 15 + 60;
+	var whn = 325;
+	var bh = 15 + 60;
 	var whb = whn + bh;
 	var vh = whn;
 	
@@ -265,7 +265,7 @@ function accept_next() {
 	if ( !aborted ) {
 		
 		// Only proces more requests if aborted is false
-		chrome.tabs.sendRequest( requests_tab.id, { action: "get_next_request", accept_mode: accept_mode }, function( response ) {
+		chrome.tabs.sendRequest( requests_tab.id, { action: "get_next_request", accept_mode: accept_mode, options : options[ 'accept_all' ] }, function( response ) {
 			var game_request = response.game_request;
 			more_after_this = response.more_after_this; 
 			
@@ -418,6 +418,9 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		var return_gift_msg = options[ 'accept_all' ][ 'return-gift-msg' ];
 		var disable_sound = options[ 'accept_all' ][ 'disable-sound' ];
 		var disable_looping = options[ 'accept_all' ][ 'disable-looping' ];
+		var auto_accept_friend_requests = options[ 'accept_all' ][ 'auto-accept-friend-requests' ];
+		var ignore_user_messages = options[ 'accept_all' ][ 'ignore-user-messages' ];
+		
 		
 		if ( return_gift_msg == undefined ) {
 			return_gift_msg = 'This gift was returned using FV Extender';
@@ -429,13 +432,24 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		
 		if ( disable_looping == undefined ) {
 			disable_looping = false;
+		}
+		
+		if ( auto_accept_friend_requests == undefined ) {
+			auto_accept_friend_requests = false;
+		}
+		
+		if ( ignore_user_messages == undefined ) {
+			ignore_user_messages = false;
 		}		
 		
 		sendResponse( {
 			"action" : 'init_accept_options',
 			"return-gift-msg" : return_gift_msg, 
 			"disable-sound"	: disable_sound,
-			"disable-looping" : disable_looping
+			"disable-looping" : disable_looping,
+			"auto-accept-friend-requests" : auto_accept_friend_requests,
+			"ignore-user-messages" : ignore_user_messages
+			
 		});
 	} else if ( request.action == 'start_accept' ) {
 		
@@ -450,6 +464,9 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		
 		// Save looping disabled status_window
 		options[ 'accept_all' ][ 'disable-looping' ] = ( request[ 'disable-looping' ] === 'on' ? true : false );
+		
+		options[ 'accept_all' ][ 'auto-accept-friend-requests' ] = ( request[ 'auto-accept-friend-requests' ] === 'on' ? true : false );
+		options[ 'accept_all' ][ 'ignore-user-messages' ] = ( request[ 'ignore-user-messages' ] === 'on' ? true : false );
 		
 		save_options( 'accept_all' );
 		

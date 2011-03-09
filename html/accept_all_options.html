@@ -14,6 +14,8 @@
 						$('#return-gift-msg').val( response[ "return-gift-msg" ] );
 						$('#disable-sound').attr('checked', response[ "disable-sound" ] );
 						$('#disable-looping').attr('checked', response[ "disable-looping" ] );
+						$('#auto-accept-friend-requests').attr( 'checked', response[ "auto-accept-friend-requests" ] );
+						$('#ignore-user-messages').attr( 'checked', response[ "ignore-user-messages" ] );
 					}
 				});	
 			});			
@@ -24,7 +26,9 @@
 					"accept_mode" : accept_mode,
 					"return-gift-msg" : $('#return-gift-msg').val(),
 					"disable-sound" : $('#disable-sound:checked').val(),
-					"disable-looping" : $('#disable-looping:checked').val()
+					"disable-looping" : $('#disable-looping:checked').val(),
+					"auto-accept-friend-requests" : $('#auto-accept-friend-requests:checked').val(),
+					"ignore-user-messages" : $('#ignore-user-messages:checked').val(),
 				}, function() {
 					document.location.replace( 'accept_all_status.html' );	
 				})
@@ -58,7 +62,15 @@
 			<div class="field checkbox">				
 				<div class="input"><input type="checkbox" id="disable-looping" /></div>	
 				<div class="label">Don't return gift when receiving a "Thank you" gift.</div>
-			</div>			
+			</div>
+			<div class="field checkbox">				
+				<div class="input"><input type="checkbox" id="auto-accept-friend-requests" /></div>	
+				<div class="label">Automatically accept friend requests</div>
+			</div>
+			<div class="field checkbox">				
+				<div class="input"><input type="checkbox" id="ignore-user-messages" /></div>	
+				<div class="label">Ignore user message when processing a request</div>
+			</div>
 			<div class="field submit">
 				<div class="buttons">
 					<!--<div class="button"><a href="#" onclick="advanced();return false" title="Accept requests(fast)">Advanced</a></div>-->

@@ -68,10 +68,11 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 					if ( ( request.accept_mode == 'JUST_HELP' ) && ( game_request[ 'IsMaterialRequest' ] || game_request[ 'IsMaterialRequestManual' ] ) ) {
 						temp_requests.push( game_request );
 					} else if ((!( 
-							( game_request[ 'IsNeighborRequest' ] )  
+							( game_request[ 'IsNeighborRequest' ] && ( !request.options[ 'auto-accept-friend-requests' ] ) )  
 						||  ( game_request[ 'IsShovelRequest' ] )
 						|| (
 									( game_request['HasUserText'] )
+								&&	( !request.options[ 'ignore-user-messages' ] )
 								&&	( game_request['IsSendByFvExtender'] != true )
 							)
 					)) && ( request.accept_mode != 'JUST_HELP' ) )  {
