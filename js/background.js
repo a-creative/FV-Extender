@@ -561,7 +561,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 				"width" : new_width,
 				"height" : new_height,
 				"left" : left,
-				"top" : top,
+				"top" : top
 			} 
 		);
 	}

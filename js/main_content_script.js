@@ -147,19 +147,21 @@ function handle_accept_and_return() {
 
 function insert_accept_all_button() {
 	
-	var request_lists = jQuery("div.mbl");
-		
-	if( request_lists.length ){		
-		
-		if (!request_lists) {
-			alert('do2');
-		}
+	// Search for lists using the new way
+	var request_lists = jQuery("#contentArea > div > ul > li:visible");
+	
+	// Try the old if none was found
+	if ( !( request_lists && request_lists.length ) ) {
+		request_lists = jQuery("#contentArea > div > div.mbl:visible");
+	}
+	
+	if( request_lists.length ){
 		request_lists.each( function( i,el ) { 
 			
 			var request_list = jQuery(el);
 			
 			// Find requests
-			var requests = request_list.find( '> ul > li.uiListItem' );
+			var requests = request_list.find( 'ul.requests > li' );
 			
 			if ( requests.length ) {
 				
@@ -172,12 +174,10 @@ function insert_accept_all_button() {
 				var app_id;
 				if ( app_id_el && app_id_el.length ) {
 					app_id = app_id_el.val();
-				} 
+				}
 				
-				var action_url = escape(jQuery(frm).find('input[type="submit"]:first').attr('name'));
+				var list_header = request_list.find('>.uiHeader div div  h3');				
 				
-				var list_header = request_list.find('>.uiHeader div div  h3');
-					
 				// Check if accept all button has not already been added
 				if_not_detected( list_header, function( list_header ) {
 					

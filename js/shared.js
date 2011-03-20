@@ -30,7 +30,7 @@ function group_request( request ) {
 	}
 	
 	// Is material request		
-	if ( request['action_url'] && request['action_url'].match( /(?:sendmats|sendcredits|confirmfeatureinvite)\.php/ ) ) {
+	if ( request['action_url'] && request['action_url'].match( /(?:sendreqs|sendmats|sendcredits|confirmfeatureinvite)\.php/ ) ) {
 		log_types.push('IsMaterialRequest' );
 		request[ 'IsMaterialRequest' ] = true;
 	}
@@ -38,7 +38,6 @@ function group_request( request ) {
 	// Is material request( do manual )
 	if (
 			( request['action_url'] && request['action_url'].match( /breeding\.php%3Faction%3DinviteAnswered/i ) )
-		||	( request['action_url'] && request['action_url'].match( /sendreqs\.php/i ) )	
 	) {
 		log_types.push('IsMaterialRequestManual' );
 		request[ 'IsMaterialRequestManual' ] = true;
