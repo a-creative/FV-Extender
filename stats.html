@@ -16,6 +16,61 @@
 		  })();
 		
 		</script>
+		<style type="text/css">
+			p {
+				font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+				font-size:11px;
+			}
+			
+			a:link,
+			a:active,
+			a:visited {
+				color:#FF7F00;				
+				text-decoration:none;	
+			}
+			
+			a:hover {
+				color:#FFBF7F;
+				text-decoration:none;	
+			}
+		</style>
 	</head>	
-	<body style="padding:0px;margin:0px"></body>
+	<body style="padding:0px;margin:0px">
+		<script type="text/javascript">
+			var query = document.location.search;	
+			
+			var newest_version = '3.0.14';
+			
+			var version_matches = query.match( /current_version\=([^\&]+)/ ); //\=([^\&]+)\& 
+			
+			if ( version_matches && version_matches.length > 1 ) {
+				var current_version = version_matches[ 1 ];
+				
+				var force_update_link = 'http://fv-extender.proboards.com/index.cgi?action=gotopost&board=updates&thread=67&post=325';
+				var current_version_link = 'http://fv-extender.proboards.com/index.cgi?board=updates&action=display&thread=66';
+				
+				var text;
+				
+				var your_version_text = 'Your version: <a href="' + current_version_link + '" target="_blank">' + current_version + '</a>';
+				
+				if ( current_version < newest_version ) {
+					text =
+							'<strong>New version available:</strong> Your version is '
+						+ 	current_version
+						+	'. Version <a href="'
+						+ 	current_version_link
+						+ 	'" target="_blank">'
+						+ 	newest_version
+						+ 	'</a> is now available. <a href="'
+						+ 	force_update_link
+						+ 	'" target="_blank">Force an update</a> now to get it instantly!';	
+				} else {
+					text = your_version_text;
+				}
+				
+				document.write('<p>' + text + '</p>' );
+			}
+			
+		</script>		
+	</body>
 </html>
