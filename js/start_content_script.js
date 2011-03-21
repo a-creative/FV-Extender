@@ -155,7 +155,7 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 					
 					accept_btn.click();
 					return false;
-				}	
+				}
 			});	
 		} 
 	} else if ( request.action == 'remove_request' ) {

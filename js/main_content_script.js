@@ -148,12 +148,7 @@ function handle_accept_and_return() {
 function insert_accept_all_button() {
 	
 	// Search for lists using the new way
-	var request_lists = jQuery("#contentArea > div > ul > li:visible");
-	
-	// Try the old if none was found
-	if ( !( request_lists && request_lists.length ) ) {
-		request_lists = jQuery("#contentArea > div > div.mbl:visible");
-	}
+	var request_lists = jQuery('ul.uiList.requests:visible');
 	
 	if( request_lists.length ){
 		request_lists.each( function( i,el ) { 
@@ -161,7 +156,7 @@ function insert_accept_all_button() {
 			var request_list = jQuery(el);
 			
 			// Find requests
-			var requests = request_list.find( 'ul.requests > li' );
+			var requests = request_list.find( '> li' );
 			
 			if ( requests.length ) {
 				
@@ -176,7 +171,22 @@ function insert_accept_all_button() {
 					app_id = app_id_el.val();
 				}
 				
-				var list_header = request_list.find('>.uiHeader div div  h3');				
+				var l_parent = request_list.parent();
+				var list_header;
+				
+				if ( l_parent && l_parent.length ) {
+					if ( l_parent.hasClass('mbl') ) {
+						list_header = l_parent.find('>.uiHeader div div  h3');		
+					} else {
+						var L_2_parent = l_parent.parent();
+						if ( L_2_parent && L_2_parent.length ) {
+							var L_3_parent = L_2_parent.parent();
+							if ( L_3_parent && L_3_parent.length ) {
+								list_header = L_3_parent.find('>.uiHeader div div  h3');
+							}
+						}
+					}					
+				}
 				
 				// Check if accept all button has not already been added
 				if_not_detected( list_header, function( list_header ) {
