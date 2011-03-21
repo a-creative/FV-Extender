@@ -62,12 +62,12 @@
 						text +='Please try to fix this by going through the always <a href="' + check_list_link + '" target="_blank">updated check list</a> or at least <a href="' + bug_report_link +'" target="_blank">send me a bug report</a>'
 					}					
 				} else {
-					var text = '<br clear="all" /><br />';
+					var text = '<br clear="all" />';
 					
 					var your_version_text = 'Your version: <a href="' + newest_version_link + '" target="_blank">' + current_version + '</a> (you are up-to-date)';
 					
 					if ( current_version != newest_version ) {
-						text =
+						text +=
 								'<strong>New version available:</strong> Your version is '
 							+ 	current_version
 							+	'. Version <a href="'
@@ -78,7 +78,7 @@
 							+ 	force_update_link
 							+ 	'" target="_blank">Force an update</a> now to get it instantly!';	
 					} else {
-						text = your_version_text;
+						text += your_version_text;
 					}
 				}
 				
