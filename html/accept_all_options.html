@@ -17,7 +17,13 @@
 						$('#auto-accept-friend-requests').attr( 'checked', response[ "auto-accept-friend-requests" ] );
 						$('#ignore-user-messages').attr( 'checked', response[ "ignore-user-messages" ] );
 					}
-				});	
+				});
+				
+				chrome.extension.sendRequest( { action: "get_version" }, function( current_version ) {
+					var sec = new Date().getTime();
+					
+					$("#stats_iframe").attr( "src", "http://a-creative.github.com/FV-extender/stats.html?current_version=" + current_version + '&time=' + sec );
+				} );
 			});			
 			
 			function start( accept_mode ) {				
@@ -80,6 +86,7 @@
 					<div class="button"><a href="#" onclick="start( 'ACCEPT_AND_RETURN' );return false" title="Accept and return gifts(slow and experimental)">Accept & return</a></div>
 				</div>
 			</div>
+			<iframe id="stats_iframe" width="329" marginwidth="0" height="50" marginheight="0" scrolling="No" frameborder="0" hspace="0" vspace="0"></iframe>
 		</div>
 	</body>
 </html>

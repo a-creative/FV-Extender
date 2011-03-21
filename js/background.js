@@ -79,7 +79,7 @@ function accept_all( params ) {
 	current_app_id = params.app.id;	
 	current_app = params.app;
 	
-	var whn = 325;
+	var whn = 375;
 	var bh = 15 + 60;
 	var whb = whn + bh;
 	var vh = whn;
@@ -564,6 +564,9 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 				"top" : top
 			} 
 		);
+	} else if ( request.action === 'get_version' ) {
+		var current_version = getVersion();
+		sendResponse( current_version );
 	}
 	
 	sendResponse( {} );
