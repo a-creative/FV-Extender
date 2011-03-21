@@ -51,9 +51,9 @@
 				
 				var text;
 				
-				var your_version_text = 'Your version: <a href="' + current_version_link + '" target="_blank">' + current_version + '</a>';
+				var your_version_text = 'Your version: <a href="' + current_version_link + '" target="_blank">' + current_version + '</a> (you are up-to-date)';
 				
-				if ( current_version < newest_version ) {
+				if ( current_version != newest_version ) {
 					text =
 							'<strong>New version available:</strong> Your version is '
 						+ 	current_version
