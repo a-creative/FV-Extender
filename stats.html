@@ -47,25 +47,37 @@
 				var current_version = version_matches[ 1 ];
 				
 				var force_update_link = 'http://fv-extender.proboards.com/index.cgi?action=gotopost&board=updates&thread=67&post=325';
-				var current_version_link = 'http://fv-extender.proboards.com/index.cgi?board=updates&action=display&thread=66';
+				var newest_version_link = 'http://fv-extender.proboards.com/index.cgi?board=updates&action=display&thread=66';
+				var bug_report_link = 'http://fv-extender.proboards.com/index.cgi?board=reportbug&action=post';
+				var check_list_link = 'http://fv-extender.proboards.com/index.cgi?action=gotopost&board=updates&thread=67&post=337';
 				
-				var text;
-				
-				var your_version_text = 'Your version: <a href="' + current_version_link + '" target="_blank">' + current_version + '</a> (you are up-to-date)';
-				
-				if ( current_version != newest_version ) {
-					text =
-							'<strong>New version available:</strong> Your version is '
-						+ 	current_version
-						+	'. Version <a href="'
-						+ 	current_version_link
-						+ 	'" target="_blank">'
-						+ 	newest_version
-						+ 	'</a> is now available. <a href="'
-						+ 	force_update_link
-						+ 	'" target="_blank">Force an update</a> now to get it instantly!';	
+				if ( query.match( /error/ ) ) {
+					var text = 'FV Extender failed to load. ';
+					
+					if ( current_version != newest_version ) {
+						text +='To fix this try <a href="' + force_update_link + '" target="_blank">forcing an update</a> to the <a href="' + newest_version_link + '" target="_blank">latest version.</a>.';
+					} else {
+						text +='Please try to fix this by going through the always <a href="' + check_list_link + '" target="_blank">updated check list</a> or at least <a href="' + bug_report_link +'" target="_blank">send me a bug report</a>'
+					}					
 				} else {
-					text = your_version_text;
+					var text;
+					
+					var your_version_text = 'Your version: <a href="' + newest_version_link + '" target="_blank">' + current_version + '</a> (you are up-to-date)';
+					
+					if ( current_version != newest_version ) {
+						text =
+								'<strong>New version available:</strong> Your version is '
+							+ 	current_version
+							+	'. Version <a href="'
+							+ 	newest_version_link
+							+ 	'" target="_blank">'
+							+ 	newest_version
+							+ 	'</a> is now available. <a href="'
+							+ 	force_update_link
+							+ 	'" target="_blank">Force an update</a> now to get it instantly!';	
+					} else {
+						text = your_version_text;
+					}
 				}
 				
 				document.write('<p>' + text + '</p>' );
