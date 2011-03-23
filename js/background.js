@@ -44,6 +44,10 @@ function save_options( group ) {
 
 load_options( "accept_all" );
 
+chrome.browserAction.onClicked.addListener( function() {
+	goto_requests();
+} );
+
 function get_handled_app( sendResponse, cand_app_id ) {
 	var app;
 	for ( var i = 0 ; i < apps.length; i++ ) {
@@ -354,6 +358,41 @@ function goto_game() {
 						if ( status_window ) {
 							chrome.windows.remove( status_window.id );
 						}
+					}
+				);							
+			}							
+		});	
+	} );	
+}
+
+function goto_requests() {
+	chrome.windows.getCurrent( function( wnd ) {
+		
+		chrome.tabs.getAllInWindow( wnd.id, function( tabs ) {
+			var found_tab;
+			
+			jQuery.each( tabs, function( i, tab ) {
+				
+				if ( tab.url.toLowerCase().match('reqs.php' ) ) {
+					found_tab = tab;
+					return false;
+				}
+				
+				return true;
+			} );
+			
+			if ( found_tab ) {
+				chrome.tabs.update( 
+					found_tab.id, {
+						url: found_tab.url,
+						selected: true	
+					}
+				);
+			} else {
+				chrome.tabs.create(
+					{
+						"windowId" : wnd.id,
+						"url" : 'http://www.facebook.com/reqs.php'
 					}
 				);							
 			}							
