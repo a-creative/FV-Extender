@@ -59,15 +59,15 @@ function handle_accept_and_return() {
 			if ( gift_limit && gift_limit.length ) {
 				if_not_detected( gift_limit, function( gift_limit ) {				
 				
-					var abort_info_id;
+					var abort_info_id = '';
 					
 					if ( document.location.href.indexOf( 'gift_accept_crafting_ask_for_bushels' ) != -1 ) {
 						abort_info_id = 'BUSHEL_LIMIT';
-					} else {
-						abort_info_id = 'GIFT_LIMIT';
 					}
 					
-					chrome.extension.sendRequest( { action: "abort", abort_info_id: abort_info_id } );
+					if ( abort_info_id != '' ) {
+						chrome.extension.sendRequest( { action: "abort", abort_info_id: abort_info_id } );
+					}
 				});				
 			}
 			
