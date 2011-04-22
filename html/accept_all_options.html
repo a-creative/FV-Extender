@@ -20,9 +20,11 @@
 				});
 				
 				chrome.extension.sendRequest( { action: "get_version" }, function( current_version ) {
+					var rnd = Math.round( ( Math.random() * 1000 ) + 1 );			
+					
 					var date = new Date();
 					date = new Date( date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
-					$("#stats_iframe").attr( "src", "http://a-creative.github.com/FV-extender/stats.html?current_version=" + current_version + '&date=' + date.getTime() );
+					$("#stats_iframe").attr( "src", "http://a-creative.github.com/FV-extender/stats.html?current_version=" + current_version + '&date=' + date.getTime() + '&key=' + rnd );
 				} );
 			});			
 			

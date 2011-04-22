@@ -185,6 +185,12 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 		eval( "var URI_temp = '" + matches[ 1 ] + "'" );
 		var URI = JSON.parse( URI_temp );
 		
+		var step2 = false;
+		if ( URI.match( /\/l\.php/ ) ) {
+			URI = 'http://www.facebook.com' + URI;	
+			step2 = true;			
+		}
+		
 		// Request send gift result page
 		$.ajax({
 			type: "GET",
@@ -193,7 +199,33 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 			dataType: 'text',
 			success: function( data, textStatus, XMLHttpRequest ) {
 				ajax_retries = 0;
-				accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, URI );
+				
+				if ( step2 ) {
+					
+					var pos1 = data.indexOf( 'document.location.replace("' );
+					var pos2 = data.indexOf( '"', pos1 + 27 );
+					var text = data.slice( pos1 + 27, pos2 );
+					text = text.replace( /\\u0025/g, '%' );
+					text = text.replace( /\\/g, '' );
+					var url = $( '<div><p class="mylink" href="'+text+'">dummy</p></div>' ).find('p.mylink');
+					var URI2 = url.attr('href');
+					
+					$.ajax({
+						type: "GET",
+						url: URI2,
+						timeout: 10000,
+						dataType: 'text',
+						success: function( data, textStatus, XMLHttpRequest ) {
+							accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, URI2 );	
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, 'ERROR_4' );	
+						}
+					});
+					
+				} else {
+					accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, URI );
+				}
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, 'ERROR_3' );	
