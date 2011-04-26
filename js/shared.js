@@ -11,6 +11,12 @@ function group_request( request ) {
 	
 	var log_types = new Array();
 	
+	// Is reject
+	if ( request['action_url'] == 'actions[reject]' ) {
+		log_types.push('IsReject' );
+		request[ 'IsReject' ] = true;
+	}
+	
 	// Is wish grant
 	if ( request['action_url'] && request['action_url'].match( /ref%3Dgift_accept_friend_gift/i ) ) {
 		log_types.push('IsWishGrant' );

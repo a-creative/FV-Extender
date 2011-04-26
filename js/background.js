@@ -108,7 +108,8 @@ function eval_request( request ) {
 			||	( request['IsThankYouGift'] && ( options[ 'accept_all' ][ 'disable-looping' ] === true ) ) 
 			||	( request['IsMaterialRequest'] )
 			||  ( request['IsOneWayGift'] )
-			||  ( request['IsBushel'] ) 
+			||  ( request['IsBushel'] )
+			||  ( request['IsReject'] ) 
 			
 	) {
 		return 'accept';	
