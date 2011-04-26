@@ -43,6 +43,13 @@ function serialize_game_request ( DOM_game_request ) {
 		}
 	}
 	
+	var action_param = '';
+	if ( text == 'This request has expired.' ) {
+		action_param = 'actions[reject]='		
+	} else {
+		action_param = action_url + '='	+ accept_btn_el.attr( 'value' );	
+	}
+	
 	var ajax_init_data = [
 		'charset_test='					+ frm.children('input[name=charset_test]').val(),
 		'id='							+ frm.children('input[name=id]').val(),
@@ -54,7 +61,7 @@ function serialize_game_request ( DOM_game_request ) {
 		'params[is_invite]='			+ frm.find('input[name="params\[is_invite\]"]').val(),
 		'lsd',
 		'post_form_id_source='			+ 'AsyncRequest',
-		 action_url + '='				+ accept_btn_el.attr( 'value' ),
+		 action_param,
 		'post_form_id='					+ frm.find('input[name=post_form_id]').val(),
 		'fb_dtsg='						+ frm.find('input[name=fb_dtsg]').val()
 	];
