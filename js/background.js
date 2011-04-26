@@ -279,8 +279,17 @@ function accept_request( request ) {
 		data: request.ajax_init_data,
 		dataType: 'text',
 		success: function(data, textStatus, XMLHttpRequest) {
-			ajax_retries = 0;
-			accept_request_ajax_success(data, textStatus, XMLHttpRequest);	
+			if ( request.action_url == 'actions[reject]' ) {
+				
+				// Remove request from UI
+				removeRequestFromUI( current_game_request[ current_app_id ], function() {
+					processed_game_requests_count++;
+					accept_next();
+				} );					
+			} else {
+				ajax_retries = 0;
+				accept_request_ajax_success(data, textStatus, XMLHttpRequest);	
+			}
 		},
 		error: function( XMLHttpRequest, textStatus, errorThrown ) {
 			accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, 'ERROR_4' );			
