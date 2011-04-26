@@ -41,27 +41,30 @@ function serialize_game_request ( DOM_game_request ) {
 	var user_text = '';	
 	if ( matches = DOM_game_request.html().match( /<div><strong>([^<]+)<\/strong><\/div>/ ) ) {
 		user_text = matches[ 1 ];
-	}
+	} 
 	
 	// Find text
-	var text;
-	var text_el = DOM_game_request.find('.appRequestBodyNewB span' );
+	var text = '';
+	var text_el = DOM_game_request.find('.appRequestBodyNewB' );
+	
+	if ( ! ( text_el && text_el.length ) ) {
+		text_el = DOM_game_request.find('.appRequestBodyNewA' );
+		
+		if ( ! ( text_el && text_el.length ) ) {
+			text_el = DOM_game_request.find('.streamStyleRequestBody, .appRequestBody');
+		} 
+	}
 	
 	if ( text_el && text_el.length ) {
-		text = text_el.html();
-	} else {
 		
-		text_el = DOM_game_request.find('.appRequestBodyNewA span' );
+		var text_el_cnt =  text_el.find('span');
 		
-		if ( text_el && text_el.length ) {
-			text = text_el.html();
+		if ( text_el_cnt && text_el_cnt.length ) {
+			text = text_el_cnt.html();
 		} else {
-			text_el = DOM_game_request.find('.streamStyleRequestBody span, .appRequestBody span');
-			if ( text_el && text_el.length ) {
-				text = text_el.html();
-			}
+			text = text_el.html();
 		}
-	}
+	} 
 	
 	var game_request = {
 		"id"			 : request_id,
