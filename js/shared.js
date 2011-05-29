@@ -30,7 +30,7 @@ function group_request( request ) {
 	}
 	
 	// It thank you gift
-	if ( request['text'] && request['text'].match( /^(?:Thank you for your gift|Thank you for sending me such a wonderful gift)/i ) ) {
+	if ( request['text'] && request['text'].match( /^(?:Thank you for your gift|Thank you for sending me such a wonderful gift|Thank you for being a great friend!\s+Here is a gift)/i ) ) {
 		log_types.push('IsThankYouGift' );
 		request[ 'IsThankYouGift' ] = true;
 	}
