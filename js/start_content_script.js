@@ -55,18 +55,18 @@ function serialize_game_request ( DOM_game_request ) {
 	
 	var ajax_init_data = [
 		'charset_test='					+ frm.children('input[name=charset_test]').val(),
-		'id='							+ frm.children('input[name=id]').val(),
+		'post_form_id='					+ frm.find('input[name=post_form_id]').val(),
+		'fb_dtsg='						+ frm.find('input[name=fb_dtsg]').val(),
+		'request_id='					+ frm.find('input[name=request_id]').val(),
 		'type='							+ frm.children('input[name=type]').val(),
 		'status_div_id='				+ request_id,
 		'params[from_id]='				+ from_id,
 		'params[app_id]='				+ '102452128776',
 		'params[req_type]='				+ frm.find('input[name="params\[req_type\]"]').val(),
 		'params[is_invite]='			+ frm.find('input[name="params\[is_invite\]"]').val(),
-		'lsd',
-		'post_form_id_source='			+ 'AsyncRequest',
 		 action_url 					+ '=' + action_param_value,
-		'post_form_id='					+ frm.find('input[name=post_form_id]').val(),
-		'fb_dtsg='						+ frm.find('input[name=fb_dtsg]').val()
+		'lsd',
+		'post_form_id_source='			+ 'AsyncRequest'
 	];
 	
 	var ajax_init_data_url = ajax_init_data.join( '&' );

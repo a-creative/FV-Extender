@@ -1,6 +1,6 @@
 {
   "name": "FV Extender",
-  "version": "3.0.19",
+  "version": "3.0.20",
   "description": "Extends FarmVille with new features",
   "background_page": "html/background.html",
   "content_scripts": [
