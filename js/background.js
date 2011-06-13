@@ -83,7 +83,7 @@ function accept_all( params ) {
 	current_app_id = params.app.id;	
 	current_app = params.app;
 	
-	var whn = 375;
+	var whn = 400;
 	var bh = 15 + 60;
 	var whb = whn + bh;
 	var vh = whn;
