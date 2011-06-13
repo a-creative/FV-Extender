@@ -214,3 +214,19 @@ h2 {
 p,h3 {
 	line-height: 1.2em;	
 }
+
+.beta-notice {
+	background-color:red;
+	border-radius:8px;
+	padding:10px;
+	color:#fff;
+}
+
+.beta-notice a:link,
+.beta-notice a:visited,
+.beta-notice a:hover,
+.beta-notice a:active {
+	color:#fff;
+	text-decoration:underline
+}
+
