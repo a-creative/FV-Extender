@@ -3,6 +3,7 @@
   "version": "3.0.22",
   "description": "Extends FarmVille with new features.",
   "background_page": "html/background.html",
+  "homepage_url" : "http://a-creative.github.com/FV-extender/",
   "content_scripts": [
     {
       "matches": [
@@ -18,7 +19,7 @@
   ],
   "browser_action": {
 	"default_icon"	: "graphics/chrome_16.jpg", 
-	"default_title"	: "FV Extender - Requests"           
+	"default_title"	: "FV Extender 3 - Requests"           
   },
   "permissions": [
     "tabs",

@@ -204,7 +204,7 @@ function insert_accept_all_button() {
 						accept_all_btn.append( popup_layer );
 						accept_all_btn.append( btn );
 						
-						var accept_all_info = jQuery('<span class="accept-all-info">Provided by <a href="http://a-creative.github.com/FV-extender/" target="_blank">FV Extender</a></span>');
+						var accept_all_info = jQuery('<span class="accept-all-info">Provided by <a href="http://a-creative.github.com/FV-extender/" target="_blank">FV Extender 3.0</a>. Try the new <a target="_blank" href="http://a-creative.dk/#post_1">ver. 4 beta</a></span>');
 						
 						list_header.css( 'position', 'relative' );
 						
@@ -220,7 +220,7 @@ function insert_accept_all_button() {
 						
 						accept_all_btn.find('input').click( function( evt ) {
 							var wnd_w = 300;
-							var wnd_h = 235;
+							var wnd_h = 430;
 							
 							var wnd_x = Math.round( ( screen.width / 2 ) - ( wnd_w / 2 ) );
 							var wnd_y = Math.round( ( screen.height / 2 ) - ( wnd_h / 2 ) );

@@ -131,12 +131,13 @@ iframe.banner {
 }
 
 .beta-notice {
-	background-color:red;
+	background-color:#fd7e00;
 	border-radius:8px;
 	padding:10px;
 	color:#fff;
 	font-size:13px;
 	width:316px;
+	display:none;
 }
 
 .beta-notice a:link,
@@ -145,4 +146,49 @@ iframe.banner {
 .beta-notice a:active {
 	color:#fff;
 	text-decoration:underline
+}
+
+
+/* blog */
+
+.site .blog-updates-pop-down {
+	background-color:#fff;
+
+	font-family:Tahoma,Geneva,Kalimati,sans-serif;	
+	font-size:11px;
+	color:#666;
+	display:none;
+	margin-top:10px;
+	float:left;
+	clear:both;
+	width:100%;
+}
+
+.site .blog-updates-pop-down .headline {
+	float:left;
+	clear:both;
+	width:100%;
+	margin-right:10px;
+	font-weight:bold;
+}
+
+.site .blog-updates-pop-down .left-content {
+	float:left;
+	clear:both;
+	width:100%;
+}
+
+.site .blog-updates-pop-down .posts {
+	line-height:1.5;
+}
+
+.site .blog-updates-pop-down .read-more {
+	margin-top:5px;
+}
+
+.site .blog-updates-pop-down .read-more a:link,
+.site .blog-updates-pop-down .read-more a:visited,
+.site .blog-updates-pop-down .read-more a:active,
+.site .blog-updates-pop-down .read-more a:hover {
+	color:#FF7F00;
 }

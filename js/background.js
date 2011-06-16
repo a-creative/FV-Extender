@@ -1,3 +1,4 @@
+var currVersion;
 check_version();
 
 
@@ -84,7 +85,7 @@ function accept_all( params ) {
 	current_app_id = params.app.id;	
 	current_app = params.app;
 	
-	var whn = 400;
+	var whn = 430;
 	var bh = 15 + 60;
 	var whb = whn + bh;
 	var vh = whn;
@@ -736,7 +737,7 @@ function getVersion() {
 function check_version() {
 
 	// Check if the version has changed.
-	var currVersion = getVersion();
+	currVersion = getVersion();
 	
 	console.log('Executing FV Extender version ' + currVersion );
 	
