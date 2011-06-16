@@ -1,6 +1,6 @@
 {
   "name": "FV Extender 3.0",
-  "version": "3.0.21",
+  "version": "3.0.22",
   "description": "Extends FarmVille with new features.",
   "background_page": "html/background.html",
   "content_scripts": [
@@ -27,7 +27,9 @@
 	"http://www.facebook.com/ajax/reqs.php?__a=1",
 	"http://www.facebook.com/ajax/reqs.php",
 	"http://*.farmville.com/*",
-	"http://a-creative.github.com/*"
+	"http://a-creative.github.com/*",
+	"http://a-creative.dk/*",
+	"http://*.zynga.com/*"
   ],
   "icons": {
   	"16" : "graphics/chrome_16.jpg",

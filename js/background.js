@@ -55,7 +55,8 @@ function get_handled_app( sendResponse, cand_app_id ) {
 		
 		if ( app[ "id" ] == cand_app_id ) {
 			if ( app[ "handled" ] ) {
-				sendResponse( { app: app } );	
+				sendResponse( { app: app } );
+				return;
 			}					
 		}
 	}		
@@ -236,6 +237,55 @@ function accept_request_ajax_success( data, textStatus, XMLHttpRequest ) {
 }
 
 function accept_request_ajax_result_page_success( data, textStatus, XMLHttpRequest, result_page_url ) { 
+	
+	// Check for next page on app side
+	if ( result_page_url.indexOf( "request_ids=" ) != -1 ) {
+		
+		// If next page, find what url to request
+		// Find next page
+		var matches = data.match( /goURI\('(.*)'\)/ );
+		if ( matches.length ) {
+			
+			// If url for next page found
+			var url = matches[ 1 ];
+			var json = '{ "html" : "' + url + '" }';	
+			var obj = jQuery.parseJSON( json );							
+			url = obj.html.replace( /\\x26/g,'&');
+			
+			// Split url
+			var parts = url.split( "?" );
+			
+			// Request next page url
+			jQuery.ajax( {
+				url : parts[ 0 ],
+				data : parts[ 1 ],
+				type: 'get',
+				dataType: 'text',
+				timeout: 10000,
+				success: function( data, textStatus,jqXHR ) {
+					accept_request_ajax_result_page_success_final( data, textStatus, jqXHR, url );		
+				},
+				error: function( XMLHttpRequest, textStatus, errorThrown ) {
+					accept_request_ajax_error( XMLHttpRequest, textStatus, errorThrown, 'ERROR_3' );	
+				}
+			} );
+			
+		} else {
+			request.state = 6;
+			request.state_text = "Couldn't find goURI tag";
+			
+			// Save updated state and callback
+			current_user_db.saveRequests( [ request ], callback );                       
+		}
+		
+	} else {
+		
+		// If no next page just handle the final result page
+		accept_request_ajax_result_page_success_final( data, textStatus, XMLHttpRequest, result_page_url );	
+	}
+}
+
+function accept_request_ajax_result_page_success_final( data, textStatus, XMLHttpRequest, result_page_url ) {
 	var result_html = data;
 	
 	// Analyze result_html for: gift limits, errors
@@ -262,7 +312,7 @@ function accept_request_ajax_result_page_success( data, textStatus, XMLHttpReque
 	removeRequestFromUI( current_game_request[ current_app_id ], function() {
 		processed_game_requests_count++;
 		accept_next();
-	} );
+	} );	
 }
 
 function removeRequestFromUI( game_request, callback ) {
@@ -272,11 +322,12 @@ function removeRequestFromUI( game_request, callback ) {
 }
 
 function accept_request( request ) {
-	console.log('Accepting request:' + request_to_string( request ) + '...' );
+	var url = 'http://www.facebook.com' + request.script_url + '?__a=1';
+	
 	$.ajax({
 		type: "POST",
 		timeout: 10000,
-		url: 'http://www.facebook.com/ajax/reqs.php?__a=1',
+		url: url,
 		data: request.ajax_init_data,
 		dataType: 'text',
 		success: function(data, textStatus, XMLHttpRequest) {
@@ -551,6 +602,8 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		
 		save_options( 'accept_all' );
 		
+		sendResponse({});
+		
 	} else if ( ( request.action == 'set_option' ) && ( request["option"] != undefined ) )  {
 		
 		if ( options[ request["group"] ] == undefined ) {
@@ -580,11 +633,14 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 			accept_and_return_active = false;
 			processed_game_requests_count++; 	
 			accept_next();
-		}				
+		}
+		sendResponse({});
 	} else if ( request.action == 'done' ) {
 		done = true;		
 		accept_and_return_active = false;	
 		console.log('done because it was requested');
+		sendResponse({});
+		
 	} else if ( request.action == 'get_accept_and_return_active' ) {
 		sendResponse( {
 			"accept_and_return_active" : accept_and_return_active	
@@ -595,17 +651,20 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		if ( request.abort_info_id ) {
 			abort_info_id = request.abort_info_id;
 		}
-		
+		sendResponse({});
 	} else if ( request.action == 'more_after_this' ) {
 		if ( more_after_this != true ) {
 			done = true;
 			accept_and_return_active = false;
 			console.log('done because there is no more after this, and this is practically done');
 		}
+		sendResponse({});
 	} else if ( request.action == 'goto_game' ) {
 		goto_game();
+		sendResponse({});
 	} else if ( request.action == 'goto_FB_request_list' ) {
 		show_FB_request_list();
+		sendResponse({});
 	} else if ( request.action == 'get_status' ) {
 		update_status( sendResponse );		
 	} else if ( request.action == 'accept_first' ) {
@@ -615,16 +674,20 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 		done = false;
 		
 		accept_next();
+		sendResponse({});
 	} else if ( request.action == 'accept_next' ) {
 		accept_next();
+		sendResponse({});
 	} else if ( request.action == 'activate_accept_all' ) {
 		requests_tab = sender.tab;
 		
 		accept_all( request );
+		sendResponse({});
 	} else if ( request.action == 'get_handled_app' ) {
 		get_handled_app( sendResponse, request.app_id );
 	} else if ( request.action == 'set_accept_mode' ) {
 		accept_mode = request.accept_mode;
+		sendResponse({});
 	} else if ( request.action === 'resize_me' ) {
 		
 		var new_width = request.width + 10;
@@ -645,12 +708,12 @@ chrome.extension.onRequest.addListener( function(request, sender, sendResponse) 
 				"top" : top
 			} 
 		);
+		sendResponse({});
 	} else if ( request.action === 'get_version' ) {
 		var current_version = getVersion();
 		sendResponse( current_version );
 	}
 	
-	sendResponse( {} );
 } );
 
 function onInstall() {
