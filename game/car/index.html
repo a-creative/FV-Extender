@@ -23,7 +23,6 @@
 			font-family: Helvetica, Verdana, Arial, sans-serif;
 			background-color: black;
 			color: white;
-			text-align: center;
 		}
 		a:link, a:visited {
 			color: #bfbfbf;
@@ -36,9 +35,6 @@
 		}
 		p.header span {
 			font-weight: bold;
-		}
-		p.footer {
-			font-size: x-small;
 		}
 		div.content {
 			margin: auto;
@@ -63,20 +59,59 @@
 			height: 640px;
 			width: 1024px;
 		}
+		
+		div#site {
+			width:1024px;
+			left:50%;
+			margin-left:-512px;
+			position:absolute;
+			
+		}
+		
+		.footer h1, .footer p {
+			font-size:11px;
+		}
+		
+		.footer {
+			line-height:1.6;
+		}
+		
+		.footer b {
+			background-color:#fff;
+			color:#000;
+			padding:1px 4px;
+		}
 		-->
 		</style>
 	</head>
 	<body>
-		<p class="header"><span>Unity Web Player | </span>WebPlayer</p>
-		<div class="content">
-			<div id="unityPlayer">
-				<div class="missing">
-					<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
-						<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
-					</a>
+		<div id="site">
+			<div class="footer">
+				<p>
+					<b>Why I made this game</b>
+					It was made as a gift for my nephew and niece at my niece's
+					christening. Therefore pictures of both of them are in the game.
+				    <b>Goal of the game</b> To get the best time.<br />
+					<b>Get time bonuses by</b> Collecting coins
+					<b>Finish your time by</b> Driving your car around and
+					finish all the instructions.				
+					<b>Control your car:</b>
+					[ Left/Right arrow keys ] = Turn your car left and right.<br />
+					[ Up/Down arrow keys ] = Throttle and reverse.
+					[ Enter ] = Save your car if it turns over(gives a time penalty).
+					[ Alt + F9 ] = Turn music.
+				</p>			
+			</div>
+			<div class="content">
+				<div id="unityPlayer">
+					<div class="missing">
+						<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+							<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
+						</a>
+					</div>
 				</div>
 			</div>
+				
 		</div>
-		<p class="footer">&laquo; created with <a href="http://unity3d.com/unity/" title="Go to unity3d.com">Unity</a> &raquo;</p>
 	</body>
 </html>
