@@ -1,41 +1,43 @@
 {
-  "name": "FV Extender 3.0",
-  "version": "3.0.22",
-  "description": "Extends FarmVille with new features.",
-  "background_page": "html/background.html",
-  "homepage_url" : "http://a-creative.github.com/FV-extender/",
-  "content_scripts": [
-    {
-      "matches": [
-		"http://www.farmville.com/*",
-		"http://www.facebook.com/reqs.php",
-		"https://www.facebook.com/reqs.php",
-		"http://apps.facebook.com/onthefarm*"
-	  ],
-      "js": ["js/jquery.js","js/shared.js","js/main_content_script.js","js/start_content_script.js"],
-      "css" : ["css/style.css"],
-      "run_at": "document_end"
-    }
-  ],
-  "browser_action": {
-	"default_icon"	: "graphics/chrome_16.jpg", 
-	"default_title"	: "FV Extender 3 - Requests"           
-  },
-  "permissions": [
-    "tabs",
-	"https://apps.facebook.com/onthefarm*",
-	"http://apps.facebook.com/onthefarm*",
-	"http://www.facebook.com/ajax/reqs.php?__a=1",
-	"http://www.facebook.com/ajax/reqs.php",
-	"http://*.farmville.com/*",
-	"http://a-creative.github.com/*",
-	"http://a-creative.dk/*",
-	"http://*.zynga.com/*"
-  ],
-  "icons": {
-  	"16" : "graphics/chrome_16.jpg",
-  	"32" : "graphics/chrome_32.jpg",
-  	"48" : "graphics/chrome_48.jpg",
-  	"128" : "graphics/chrome_128.jpg"
-  }
+	"name": "FV Extender 3.1",
+	"version": "3.1.0",
+	"description": "Helps you accept FarmVille requests.",
+	"homepage_url" : "http://a-creative.dk/fv-extender-3",
+	"background_page": "html/background.html",
+	"content_scripts": [
+		{
+			"matches": [
+			  "http://www.facebook.com/reqs.php",
+			  "https://www.facebook.com/reqs.php"
+			],
+			"js": [
+				"js/ui_events.js",
+				"js/content_accept_all.js"
+			],
+			"css": [
+				"css/global.css",
+				"css/accept_all.css"
+			],
+			"run_at": "document_end"
+		}, {
+			"matches" : [
+				"http://apps.facebook.com/onthefarm/*",
+				"https://apps.facebook.com/onthefarm/*"
+			],
+			"js": [
+				"js/content_app_request.js"
+			],
+			"run_at": "document_end"
+		}
+	],
+	"browser_action": {
+		"default_icon"	: "graphics/chrome_16.jpg", 
+		"default_title"	: "FV Extender 3 - Requests"           
+	},
+	"icons": {
+		"16" : "graphics/chrome_16.jpg",
+		"32" : "graphics/chrome_32.jpg",
+		"48" : "graphics/chrome_48.jpg",
+		"128" : "graphics/chrome_128.jpg"
+	}
 }

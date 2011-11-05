@@ -1,0 +1,15 @@
+#fv-extender {
+	height:20px;
+	margin-bottom:10px;
+}
+
+#fv-extender .main {
+	float:right;	
+}
+
+
+
+
+#fv-extender .fveButton input {
+	color:#fff;
+}
