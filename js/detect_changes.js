@@ -1,6 +1,5 @@
 console.log( 'Loading detect_changes.js...');
 
-
 function if_not_detected( el, func ) {
 	if ( el.attr( 'FV_Extender_detected' ) != 'true' ) {
 		el.attr('FV_Extender_detected', 'true' );
@@ -34,5 +33,8 @@ function run(){
 		startWork();
 }
 
-run();
+if (!handled) {
+	run();
+}
+
 console.log( 'detect_changes.js loaded.');

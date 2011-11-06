@@ -25,7 +25,9 @@
 				"https://apps.facebook.com/onthefarm/*"
 			],
 			"js": [
-				"js/content_app_request.js"
+				"js/jquery-1.7.min.js",
+				"js/content_app_request.js",
+				"js/detect_changes.js"		
 			],
 			"run_at": "document_end"
 		}
