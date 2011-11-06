@@ -1,0 +1,37 @@
+body {
+	margin:0px;
+	padding:0px;
+	background-color:#FF7F00;;
+}
+
+.menu {
+	font: 11px/20px verdana;
+	padding:10px;
+}
+
+.menu a {
+	display:block;
+	height:20px;
+	line-height:20px;
+	white-space:nowrap;
+}
+
+.menu a {
+	text-decoration: none;
+}
+
+.menu a:link    { color: #fff;}
+.menu a:visited { color: #fff;}
+.menu a:hover   { color: #fff;}
+.menu a:active  { color: #000;}
+
+
+.enabled {
+	cursor:pointer;
+}
+
+.disabled {
+	cursor:default;
+	opacity:0.4;
+}
+

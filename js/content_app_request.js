@@ -2,7 +2,7 @@ var handled = false;
 
 var state = -1;
 var state_text;
-var return_gift_text = 'This gift was accepted and returned by FV Extender';
+var return_gift_text = ''; //This gift was accepted and returned by FV Extender';
 
 // Detect changes by url
 if ( document.location.href.match( /gifterror=notfound/ ) ) { state = 6; state_text = "Gift not found" };
@@ -69,7 +69,7 @@ function changes_detected() {
 	
 	// Detect yes button
 	var h3_help = jQuery("h3:contains('Materials sent')");
-	var h3_help_2 = jQuery("h3:contains('Sorry, farmer')");
+	var h3_help_2 = jQuery("h3:contains('Sorry')");
 	
 	var yes_btn = jQuery( "input[value='Yes']");
 	if ( yes_btn.length && ( ( !document.location.href.match( /\/?request_ids=/ ) ) || h3_help.length || h3_help_2.length ) ) {

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../css/menu.css">			
+	</head>
+	<body>
+		<div class="menu">
+			<div id="process-btn" class="disabled"><a href="#" >Process requests</a></div>
+			<div id="just-help-btn" class="disabled"><a href="#">Just help</a></div>
+			<div id="settings-btn" class="disabled"><a href="#">Settings</a></div>
+			<div id="abort-btn" class="disabled"><a href="#">Abort</a></div>			
+		</div>
+		<script>
+			var bgp = chrome.extension.getBackgroundPage();
+			
+			function _abort_clicked() {
+				bgp.processing = false;
+				alert( 'Processing is aborted when the current request is done being processed.');
+				window.close();
+				return false;
+			}
+			
+			function _process_clicked() {
+				
+				bgp.processing = true;
+				bgp.just_help = false;
+				bgp.goto_requests();
+				window.close();
+				return false;
+				
+			}
+			
+			function _settings_clicked() {
+				alert( 'Feature not available yet. Changing settings will be added in a later version.' );
+				window.close();
+				return false;
+			}
+			
+			function _just_help_btn_clicked() {
+				alert( 'Feature not available yet. Just help will be added in a later version.' );
+				/*
+				bgp.processing = true;
+				bgp.just_help = true;
+				bgp.goto_requests();
+				*/
+				window.close();
+			
+				return false;
+				
+			}
+			
+			var abort_btn = document.getElementById( 'abort-btn' );
+			var process_btn = document.getElementById( 'process-btn' );
+			var settings_btn = document.getElementById( 'settings-btn' );
+			var just_help_btn = document.getElementById( 'just-help-btn' );
+			
+			if ( bgp.processing ) {
+				abort_btn.className = 'enabled';
+				abort_btn.onclick = _abort_clicked;
+				
+			} else {
+				process_btn.className = 'enabled';
+				process_btn.onclick = _process_clicked;
+			}
+			
+			settings_btn.onclick = _settings_clicked;
+			just_help_btn.onclick = _just_help_btn_clicked;
+			
+			
+			
+			
+		</script>	
+	</body>
+</html>
