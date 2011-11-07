@@ -16,6 +16,18 @@ var info_audio = document.createElement("audio");
 info_audio.src = "../sound/info.ogg";
 
 
+var ga_iframe;
+jQuery(document).ready( function() {
+	
+	// Create iframe for google analytics
+	ga_iframe = document.body.appendChild(document.createElement('iframe'));	
+} );
+
+function query_GA() {
+	ga_iframe.src = 'http://a-creative.dk/wp/stats.html';
+}
+
+
 // Reaction to events
 chrome.extension.onRequest.addListener( function( request, sender, sendResponse) {
 	
@@ -41,6 +53,8 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		if ( options.audio_enabled ) {
 			done_audio.play();
 		}
+		
+		query_GA();
 		
 		sendResponse( request );		
 	} else if ( request.action == 'get_processed_ids' ) {
