@@ -24,7 +24,7 @@ jQuery(document).ready( function() {
 } );
 
 function query_GA() {
-	ga_iframe.src = 'http://a-creative.dk/wp/stats.html';
+	ga_iframe.src = 'http://a-creative.dk/wp/stats_31.html';
 }
 
 
