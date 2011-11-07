@@ -4,15 +4,28 @@ var current_id = -1;
 var main_tab_id = -1;
 var just_help = false;
 
+var options = {
+	audio_enabled : true,
+};
+
+// Create audio
+var done_audio = document.createElement("audio");
+done_audio.src = "../sound/cow.ogg";
+
+var info_audio = document.createElement("audio");
+info_audio.src = "../sound/info.ogg";
+
+
 // Reaction to events
 chrome.extension.onRequest.addListener( function( request, sender, sendResponse) {
 	
-	console.log( 'Action requested:' + request.action );
+	//console.log( 'Action requested:' + request.action );
 	
 	if ( request.action == 'get_options' ) {		
-		sendResponse( {
-			just_help : just_help			
-		});
+		
+		options.just_help = just_help;
+		
+		sendResponse( options );
 		
 	} else if ( request.action == 'init_process_requests' ) {
 		processing = true;
@@ -21,6 +34,14 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( processing );	
 	} else if ( request.action == 'stop_processing' ) {
 		processing = false;
+		current_id = -1;	
+		
+		chrome.browserAction.setBadgeText( { text : "" } );
+		
+		if ( options.audio_enabled ) {
+			done_audio.play();
+		}
+		
 		sendResponse( request );		
 	} else if ( request.action == 'get_processed_ids' ) {
 		sendResponse( processed_ids );
@@ -33,18 +54,49 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		
 		sendResponse( request.processed_id );
 	} else if ( request.action == 'finish_current_id' ) {
+		
+		console.log( request.state + ':' + request.state_text );
+		
 		processed_ids.push( current_id );
 		if ( processed_ids.length > 20 ) {
 			processed_ids.shift();
 		}
 		
-		sendResponse( current_id );
+		current_id = -1;
+		
+		sendResponse( true );
 	} else if ( request.action == 'set_current_id' ) {
 		current_id = request.current_id;
 		sendResponse( current_id );
 	} else if ( request.action == 'update_badge_text' ) {
-		chrome.browserAction.setBadgeText( { text : request.count + "" } );	
+		chrome.browserAction.setBadgeText( { text : request.count + "" } );
+		sendResponse();
+		
+	} else if ( request.action == 'handle_result_page' ) {
+		
+		sendResponse( ( processing == true ) && ( main_tab_id == sender.tab.id ) );
+	} else if ( request.action == 'check_for_hang' ) {
+		
+		setTimeout( function() {			
+		
+			if ( request.app_request_id == current_id ) {
+				console.log( 'Hang on id:' + request.app_request_id + '. Reloading main tab...' );
+				
+				// Reload main tab
+				chrome.tabs.get( main_tab_id, function( tab ) {
+					chrome.tabs.update( tab.id, { url: tab.url } );
+				} );
+				
+			} else {
+				console.log( 'NO hang on id: ' + request.app_request_id )
+			}
+		}, 10000 );
+		
+		sendResponse( true );
 	}
+	
+	
+	
 } );
 
 function goto_requests() {
@@ -64,6 +116,7 @@ function goto_requests() {
 			} );
 			
 			if ( found_tab ) {
+				main_tab_id = found_tab.id;
 				chrome.tabs.update( 
 					found_tab.id, {
 						url: found_tab.url,
@@ -75,6 +128,8 @@ function goto_requests() {
 					{
 						"windowId" : wnd.id,
 						"url" : 'http://www.facebook.com/reqs.php'
+					}, function( tab ) {
+						main_tab_id = tab.id
 					}
 				);							
 			}							

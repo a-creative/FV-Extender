@@ -21,6 +21,7 @@ function Process_next() {
 				chrome.extension.sendRequest( { "action" : "update_badge_text", count:  app_requests.length } );
 				
 				var i;
+				var request_count = app_requests.length;
 				for ( i = 0; i < app_requests.length; i++ ) {
 					app_request = app_requests[ i ];
 					
@@ -54,26 +55,26 @@ function Process_next() {
 						chrome.extension.sendRequest( { "action" : "set_current_id", "current_id" : app_request_id }, function( app_request_id ) {
 							
 							action_btn = document.evaluate(".//input[starts-with(@name,'actions[accept') or starts-with(@name,'actions[http')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
-							try {
 								console.log('Clicking:' + app_request_id + ':' + app_request );
+								
+								// Check for hang
+								chrome.extension.sendRequest( { "action" : "check_for_hang", "app_request_id" : app_request_id } );	
+								
 								action_btn.click();				
-							} catch( e ) {
-								console.log('Couldn\'t click:' + app_request_id + ':' + app_request.innerHTML );
-							}
+							
 						} );
 						break;
 					} else {
+						request_count--;
+						chrome.extension.sendRequest( { "action" : "update_badge_text", count:  request_count } );
 						action_btn = document.evaluate(".//input[starts-with(@name,'actions[reject')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
 						action_btn.click();				
 					}				
-				}
+				}				
 				
-				console.log( 'i:' + i );
-				console.log( 'al:' + app_requests.length );
+				if ( request_count == 0 ) {
 				
-				if ( i == ( app_requests.length - 1 ) ) {
-				
-					// There was requests but they were all skipped. So we're done!
+					// There was requests but they were all skipped or rejected. So we're done!
 					chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 1 }, _processingDone );
 				}
 			} );
@@ -87,6 +88,7 @@ function Process_next() {
 }
 
 function _processingDone( result ) {
-	alert( 'No FarmVille requests. FVE currently only handles FV requests!' );
+	
+	alert( 'Processing is done.\n\nFVE currently only handles FV requests!' );
 	console.log('ptype:' + result.ptype );
 }

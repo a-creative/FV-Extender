@@ -18,7 +18,7 @@ function callLast(func, t){
 		};
 }
 
-function run(){		
+function run_detect_changes(){		
 		function work(){
 			removeWorker();
 			changes_detected();
@@ -33,8 +33,6 @@ function run(){
 		startWork();
 }
 
-if (!handled) {
-	run();
-}
+
 
 console.log( 'detect_changes.js loaded.');

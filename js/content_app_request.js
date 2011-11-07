@@ -1,33 +1,7 @@
 var handled = false;
-
 var state = -1;
 var state_text;
 var return_gift_text = ''; //This gift was accepted and returned by FV Extender';
-
-// Detect changes by url
-if ( document.location.href.match( /gifterror=notfound/ ) ) { state = 6; state_text = "Gift not found" };
-if ( document.location.href.match( /gifterror=invalid/ ) ) { state = 7; state_text = "Gift was invalid" };
-if ( document.location.href.match( /reqType=yes&clickSrc=$/ ) ) { state = 6; state_text = "Other error(1)" };
-if ( document.location.href.match( /toolbar\.zynga\.com/i ) ) { state = 6; state_text = "Other error(2)" };
-if ( document.location.href.match( /sentthankyougift\.php/ ) ) {
-	state = 3; state_text = "Gift accepted and returned"
-}
-
-/*
-else if ( !document.location.href.match( /\/?request_ids=/ ) ) {
-	state = 3; state_text = "Help request"
-}
-*/
-
-if ( state != -1 ) {
-	chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-		window.location = 'http://www.facebook.com/reqs.php'
-	} );
-	handled = true;
-}
-
-// Detect changes by html
-
 
 // Detect changes by live content
 function changes_detected() {
@@ -46,7 +20,7 @@ function changes_detected() {
 	if ( ok_btn.length ) {
 		if_not_detected( ok_btn, function( ok_btn ) {
 			state = 3;
-			state_text = 'Request accepted!(3)';
+			state_text = 'Request accepted!(by OK button)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
 				window.location = 'http://www.facebook.com/reqs.php'
 			} );
@@ -58,7 +32,7 @@ function changes_detected() {
 	if ( flash_form.length ) {
 		if_not_detected( flash_form, function( flash_form ) {
 			state = 3;
-			state_text = 'Request accepted!(2)';
+			state_text = 'Request accepted!(by Farm show)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
 				window.location = 'http://www.facebook.com/reqs.php'
 			} );
@@ -76,7 +50,7 @@ function changes_detected() {
 		if_not_detected( yes_btn, function( yes_btn ) {
 			
 			state = 3;
-			state_text = 'Request accepted!(1)';
+			state_text = 'Request accepted!( by YES button)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
 				yes_btn.click();
 			} );
@@ -88,7 +62,7 @@ function changes_detected() {
 	if ( play_btn.length ) {
 		if_not_detected( play_btn, function( play_btn ) {
 			state = 3;
-			state_text = 'Request accepted!(2)';
+			state_text = 'Request accepted!(by Play button)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
 				window.location = 'http://www.facebook.com/reqs.php'
 			} );
@@ -129,3 +103,50 @@ function changes_detected() {
 		});	
 	}	
 }
+
+// Check if this is the main tab and that processing is true
+chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( handle_result_page ) {
+
+	if ( !handle_result_page ) {
+		
+		// Don't handle this
+		
+		// Do nothing
+		// And set as handled to avoid detection of changes part 
+		handled = true;
+		console.log( 'FVE didn\'t handle this:' + document.location.href );
+		
+	} else {
+		
+		// Handle this
+		console.log( 'FVE is handling this: ' + document.location.href );	
+		
+		// Detect changes by url
+		if ( document.location.href.match( /gifterror=notfound/ ) ) { state = 6; state_text = "Gift not found" };
+		if ( document.location.href.match( /gifterror=invalid/ ) ) { state = 7; state_text = "Gift was invalid" };
+		if ( document.location.href.match( /reqType=yes&clickSrc=$/ ) ) { state = 6; state_text = "Other error(1)" };
+		if ( document.location.href.match( /toolbar\.zynga\.com/i ) ) { state = 6; state_text = "Other error(2)" };
+		if ( document.location.href.match( /sentthankyougift\.php/ ) ) {
+			state = 3; state_text = 'Request accepted!(with thankyou gift)';
+		}
+		
+		if ( state != -1 ) {
+			handled = true;
+			
+			state_text += ', url( ' + document.location.href + ')';
+			
+			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
+				window.location = 'http://www.facebook.com/reqs.php'
+			} );			
+		}
+		
+		// Detect changes by html
+		
+		// Detect live changes in html
+		if (!handled) {
+			run_detect_changes();
+		}
+		
+	}
+} );
+
