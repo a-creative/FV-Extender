@@ -1,10 +1,10 @@
 {
 	"name": "FV Extender 3.1",
-	"version": "3.1.1",
+	"version": "3.1.2",
 	"description": "Helps you accept FarmVille requests.",
 	"homepage_url" : "http://a-creative.dk/fv-extender-3",
 	"background_page": "html/background.html",
-	"permissions" : [ "tabs" ],
+	"permissions" : [ "tabs", "http://api.twitter.com/*" ],
 	"content_scripts": [
 		{
 			"matches": [

@@ -4,14 +4,52 @@
 		<link rel="stylesheet" href="../css/menu.css">			
 	</head>
 	<body>
-		<div class="menu">
-			<div id="process-btn" class="disabled"><a href="#" >Process requests</a></div>
-			<div id="just-help-btn" class="disabled"><a href="#">Just help</a></div>
-			<div id="settings-btn" class="disabled"><a href="#">Settings</a></div>
-			<div id="abort-btn" class="disabled"><a href="#">Abort</a></div>			
+		<div class="menu" id="menu">			
+			<a href="#" id="process-btn">Process requests</a>
+			<a href="#" id="just-help-btn">Just help</a>
+			<a href="#" id="abort-btn">Abort processing</a>
+			<a href="#" id="settings-btn">Settings</a>
+			<a href="http://a-creative.dk" class="enabled" target="_blank" title="Read about all FVE versions">FVE blog</a>
+			<a href="#" id="updates-btn">- Checking FVE version...</a>
+			<a id="update-sign" title="Click to read more about the new version">New FVE version available</a>
 		</div>
 		<script>
+			
 			var bgp = chrome.extension.getBackgroundPage();
+			
+			
+			bgp.checkForUpdates( function( update ) {
+				
+				var update_link = document.getElementById( 'updates-btn' );
+			
+				if ( update ) {
+					
+					if ( update.manual_update ) {
+						update_link.target = '_blank';
+						update_link.innerHTML = 'Update FVE'
+						update_link.title = 'Click to read more about and update FVE to the latest version: ' + update.version ;
+						
+					} else {
+						update_link.innerHTML = 'Update FVE now'
+						
+						update_link.title = 'Click to update FVE instantly to the latest version: ' + update.version;
+					}
+					
+					update_link.target = '_blank';
+					update_link.href = update.url;
+					update_link.className = 'enabled';
+					
+					var sign = document.getElementById( 'update-sign' );
+					sign.href = update.url;
+					sign.target = '_blank';
+					sign.style.display = 'block';
+					
+				} else {
+					update_link.innerHTML = '- FVE is up-to-date';
+				}
+				
+				
+			} );
 			
 			function _abort_clicked() {
 				bgp.processing = false;

@@ -129,6 +129,9 @@ chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( han
 		if ( document.location.href.match( /sentthankyougift\.php/ ) ) {
 			state = 3; state_text = 'Request accepted!(with thankyou gift)';
 		}
+		if ( document.location.href.match( /sendcredits\.php/ ) ) {
+			state = 3; state_text = 'Help request accepted!';
+		}
 		
 		if ( state != -1 ) {
 			handled = true;
