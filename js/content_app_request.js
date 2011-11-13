@@ -22,7 +22,7 @@ function changes_detected() {
 			state = 3;
 			state_text = 'Request accepted!(by OK button)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php'
+				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
 			} );
 		} );
 	}
@@ -34,7 +34,7 @@ function changes_detected() {
 			state = 3;
 			state_text = 'Request accepted!(by Farm show)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php'
+				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
 			} );
 		} );
 	}
@@ -64,7 +64,7 @@ function changes_detected() {
 			state = 3;
 			state_text = 'Request accepted!(by Play button)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php'
+				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
 			} );
 		} );
 	}
@@ -82,7 +82,9 @@ function changes_detected() {
 				console.log( 'Just before clicking the button.');
 				
 				// If so click button to show return gift window
-				return_gift_btn.click();
+				setTimeout( function() {
+					return_gift_btn.click();
+				}, 500 );
 			} );
 		}
 	}
@@ -98,7 +100,10 @@ function changes_detected() {
 				
 				// Return gift with message
 				msg_box.val( return_gift_text );
-				send_return_gift_btn.click();
+				
+				setTimeout( function() {
+					send_return_gift_btn.click();
+				}, 500 );
 			});
 		});	
 	}	
@@ -139,7 +144,7 @@ chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( han
 			state_text += ', url( ' + document.location.href + ')';
 			
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php'
+				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
 			} );			
 		}
 		

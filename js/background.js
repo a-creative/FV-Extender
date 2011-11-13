@@ -1,7 +1,10 @@
 var FVE_version = getVersion();
 
 var processing = false;
+var app_requests = {};
 var processed_ids = [];
+var weekly_test = false;
+
 var current_id = -1;
 var main_tab_id = -1;
 var just_help = false;
@@ -160,14 +163,12 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 	if ( request.action == 'get_options' ) {		
 		
 		options.just_help = just_help;
+		options.weekly_test = weekly_test;
 		
 		sendResponse( options );
 		
-	} else if ( request.action == 'init_process_requests' ) {
-		processing = true;
-		sendResponse( processing );
 	} else if ( request.action == 'is_processing' ) {
-		sendResponse( processing );	
+		sendResponse( processing );
 	} else if ( request.action == 'stop_processing' ) {
 		processing = false;
 		current_id = -1;	
@@ -193,7 +194,15 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( request.processed_id );
 	} else if ( request.action == 'finish_current_id' ) {
 		
-		console.log( request.state + ':' + request.state_text );
+		console.log( request.state + ' - ' + request.state_text );
+		
+		
+		try {
+			app_requests[ current_id ].state = request.state;
+			app_requests[ current_id ].state_text = request.state_text;
+		} catch( err ) {
+			console.log( 'Could not find request: ' + current_id + ':' + app_requests[ current_id ] );
+		}
 		
 		processed_ids.push( current_id );
 		if ( processed_ids.length > 20 ) {
@@ -205,6 +214,13 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( true );
 	} else if ( request.action == 'set_current_id' ) {
 		current_id = request.current_id;
+		
+		app_requests[ current_id ] = {
+			id: current_id,
+			item_name: request.current_item_name,
+			text: request.current_text
+		};
+		
 		sendResponse( current_id );
 	} else if ( request.action == 'update_badge_text' ) {
 		chrome.browserAction.setBadgeText( { text : request.count + "" } );

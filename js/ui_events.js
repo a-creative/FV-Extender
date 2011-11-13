@@ -1,3 +1,32 @@
+function get_item_name( text ) {
+	
+	var item_name = false;
+	
+	var matches = text.match( /Special Delivery/ );								
+	if ( matches ) {
+		item_name = "Special Delivery"
+	} else {
+	
+		var matches = text.match( /Here is (.+) for your farm/ );
+		if ( matches ) {
+			item_name = matches[ 1 ]
+		} else {
+			
+			var matches = text.match( /Give (?:a|an) (.+) and get one too/ );
+			
+			if ( matches ) {
+				item_name = matches[ 1 ]
+			} else {
+				item_name = 'Help request';	
+			}
+		}
+	}
+	
+	item_name = item_name.replace( /^(?:a|an) /, '' );
+	
+	return item_name;
+}
+
 function Process_next() {	
 	
 	var app_request_group = document.evaluate("//div[@id='confirm_102452128776']", document, null, XPathResult.ANY_TYPE, null).iterateNext();
@@ -13,6 +42,9 @@ function Process_next() {
 		
 		var app_request;
 		var app_request_id;
+		var app_request_text;
+		var app_request_item_name;
+		var item_name;
 		
 		chrome.extension.sendRequest( { "action" : "get_processed_ids" }, function( processed_ids ) {
 			
@@ -22,15 +54,61 @@ function Process_next() {
 				
 				var i;
 				var request_count = app_requests.length;
+				
+				// Optionally perform weekly test
+				if ( options.weekly_test && ( request_count <= 90 ) ) {
+					
+					var item_count = {};
+					for ( i = 0; i < app_requests.length; i++ ) {
+						app_request = app_requests[ i ];
+						
+						// Get app request id
+						try {
+							app_request_text = document.evaluate(".//div[contains(@class,'appRequestBodyNewA')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
+							
+							app_request_item_name = get_item_name( app_request_text );
+							
+							if ( isNaN( item_count[ app_request_item_name ] ) ) {
+								item_count[ app_request_item_name ] = 0;
+							} 
+							
+							item_count[ app_request_item_name ]++;
+							
+						
+						} catch( err ) {
+							
+							console.log('FAILED:' + app_request.innerHTML );
+							continue;
+						}
+					}
+					
+					var stats = '';
+					for ( var item_name in item_count ) {
+						stats += item_count[ item_name ] + 'x\t' + item_name + '\n';						
+					}
+					console.log( stats );
+					
+					chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 3 }, _statsLoaded );
+					
+					return;
+				}	
+				
+				
+				// Find request and click
 				for ( i = 0; i < app_requests.length; i++ ) {
 					app_request = app_requests[ i ];
 					
 					// Get app request id
 					try {
 						app_request_id = document.evaluate(".//input[contains(@id,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
-					} catch( e ) {
+						app_request_text = document.evaluate(".//div[contains(@class,'appRequestBodyNewA')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
 						
-						console.log ('failed:' + app_request.innerHTML );
+						app_request_item_name = get_item_name( app_request_text );
+						
+					
+					} catch( err ) {
+						
+						console.log('FAILED:' + app_request.innerHTML );
 						continue;
 					}
 					
@@ -45,14 +123,12 @@ function Process_next() {
 						}
 					}
 					
-					console.log( i + ':' + app_request_id + ':' + action );
-					
 					// Find the appropiate button and click it
 					var action_btn;
 					if ( action == 'accept' ) {
 						
 						// Set it as the current id in backend
-						chrome.extension.sendRequest( { "action" : "set_current_id", "current_id" : app_request_id }, function( app_request_id ) {
+						chrome.extension.sendRequest( { "action" : "set_current_id", "current_id" : app_request_id, "current_text" : app_request_text, "current_item_name" : app_request_item_name }, function( app_request_id ) {
 							
 							action_btn = document.evaluate(".//input[starts-with(@name,'actions[accept') or starts-with(@name,'actions[http')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
 								console.log('Clicking:' + app_request_id + ':' + app_request );
@@ -91,4 +167,8 @@ function _processingDone( result ) {
 	
 	alert( 'Processing is done.\n\nFVE currently only handles FV requests!' );
 	console.log('ptype:' + result.ptype );
+}
+
+function _statsLoaded( stats ) {
+	alert( 'Stats loaded');
 }
