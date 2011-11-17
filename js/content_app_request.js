@@ -44,9 +44,11 @@ function changes_detected() {
 	// Detect yes button
 	var h3_help = jQuery("h3:contains('Materials sent')");
 	var h3_help_2 = jQuery("h3:contains('Sorry')");
+	var askMore_text_el = jQuery("div[class='askMore_text']");
 	
 	var yes_btn = jQuery( "input[value='Yes']");
-	if ( yes_btn.length && ( ( !document.location.href.match( /\/?request_ids=/ ) ) || h3_help.length || h3_help_2.length ) ) {
+	if ( yes_btn.length && ( h3_help.length || h3_help_2.length || askMore_text_el.length ) ) {
+		
 		if_not_detected( yes_btn, function( yes_btn ) {
 			
 			state = 3;
@@ -79,12 +81,10 @@ function changes_detected() {
 			
 			if_not_detected( return_gift_btn, function( return_gift_btn ) {
 				
-				console.log( 'Just before clicking the button.');
+				console.log( 'Just before clicking the SHOW SEND button.');
 				
 				// If so click button to show return gift window
-				setTimeout( function() {
-					return_gift_btn.click();
-				}, 500 );
+				return_gift_btn.click();
 			} );
 		}
 	}
@@ -101,9 +101,7 @@ function changes_detected() {
 				// Return gift with message
 				msg_box.val( return_gift_text );
 				
-				setTimeout( function() {
-					send_return_gift_btn.click();
-				}, 500 );
+				send_return_gift_btn.click();
 			});
 		});	
 	}	
@@ -137,7 +135,6 @@ chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( han
 		if ( document.location.href.match( /sendcredits\.php/ ) ) {
 			state = 3; state_text = 'Help request accepted!';
 		}
-		
 		if ( state != -1 ) {
 			handled = true;
 			
