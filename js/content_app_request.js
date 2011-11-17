@@ -52,16 +52,19 @@ function changes_detected() {
 		if_not_detected( yes_btn, function( yes_btn ) {
 			
 			if ( !document.location.href.match( /\/?request_ids=/ ) ) {
-			
+				
+				chrome.extension.sendRequest( { "action" : "reset_hang_check" } );
+				
 				setTimeout( function() {
 					if (!handled) {
+						
 						state = 3;
-						state_text = 'Request accepted!( by YES button)';
+						state_text = 'Request accepted!( by YES button on gift returned)';
 						chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
 							yes_btn.click();
 						} );	
 					}
-				}, 5000);
+				}, 7000);
 			} else {
 			
 				state = 3;

@@ -8,6 +8,7 @@ var weekly_test = false;
 var current_id = -1;
 var main_tab_id = -1;
 var just_help = false;
+var hang_timer_id;
 
 var options = {
 	audio_enabled : true,
@@ -231,8 +232,8 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( ( processing == true ) && ( main_tab_id == sender.tab.id ) );
 	} else if ( request.action == 'check_for_hang' ) {
 		
-		setTimeout( function() {			
-		
+		console.log( 'Starting ext. hang check...' );
+		hang_timer_id = setTimeout( function() {			
 			if ( request.app_request_id == current_id ) {
 				console.log( 'Hang on id:' + request.app_request_id + '. Reloading main tab...' );
 				
@@ -246,6 +247,14 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 			}
 		}, 10000 );
 		
+		sendResponse( true );
+	} else if ( request.action == 'reset_hang_check' ) {
+		console.log( 'Starting int. hang check ...' );		
+		
+		if ( hang_timer_id ) {
+			console.log( 'Resetting ext. hang check ...' );
+			clearTimeout( hang_timer_id );
+		}
 		sendResponse( true );
 	}
 	
