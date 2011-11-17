@@ -47,15 +47,29 @@ function changes_detected() {
 	var askMore_text_el = jQuery("div[class='askMore_text']");
 	
 	var yes_btn = jQuery( "input[value='Yes']");
-	if ( yes_btn.length && ( h3_help.length || h3_help_2.length || askMore_text_el.length ) ) {
+	if ( yes_btn.length && ( ( !document.location.href.match( /\/?request_ids=/ ) ) || h3_help.length || h3_help_2.length || askMore_text_el.length ) ) {
 		
 		if_not_detected( yes_btn, function( yes_btn ) {
 			
-			state = 3;
-			state_text = 'Request accepted!( by YES button)';
-			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				yes_btn.click();
-			} );
+			if ( !document.location.href.match( /\/?request_ids=/ ) ) {
+			
+				setTimeout( function() {
+					if (!handled) {
+						state = 3;
+						state_text = 'Request accepted!( by YES button)';
+						chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
+							yes_btn.click();
+						} );	
+					}
+				}, 5000);
+			} else {
+			
+				state = 3;
+				state_text = 'Request accepted!( by YES button)';
+				chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
+					yes_btn.click();
+				} );
+			}
 		} );
 	} 
 	

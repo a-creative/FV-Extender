@@ -1,6 +1,6 @@
 {
 	"name": "FV Extender Classic",
-	"version": "3.1.3",
+	"version": "3.1.4",
 	"description": "Helps you accept FarmVille requests.",
 	"homepage_url" : "http://a-creative.dk/fv-extender-3",
 	"background_page": "html/background.html",
@@ -30,12 +30,12 @@
 				"js/detect_changes.js",
 				"js/content_app_request.js"						
 			],
-			"run_at": "document_end"
+			"run_at": "document_start"
 		}
 	],
 	"browser_action": {
 		"default_icon"	: "graphics/chrome_16.jpg", 
-		"default_title"	: "FV Extender 3 - Requests",
+		"default_title"	: "FV Extender Classic - Requests",
 		"default_popup": "html/menu.html"
 	},
 	"icons": {
