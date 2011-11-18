@@ -5,6 +5,16 @@ var return_gift_text = ''; //This gift was accepted and returned by FV Extender'
 
 // Detect changes by live content
 function changes_detected() {
+	
+	// Detect try again
+	
+	var try_again_btn = jQuery( "input[name='try_again_button']" );
+	if ( try_again_btn && try_again_btn.length ) {
+		if_not_detected( try_again_btn, function(try_again_btn ) {
+			try_again_btn.click();
+		} );
+	}
+	
 	// Detect and react to "angry cow" error
 	var h1 = jQuery( 'h1' );
 	if ( h1 && h1.length && h1.html().match( /Oh no/i ) ) {

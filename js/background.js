@@ -299,3 +299,10 @@ function goto_requests() {
 		});	
 	} );	
 }
+
+chrome.tabs.onRemoved.addListener( function( tabId, removeInfo ) {
+	if ( tabId == main_tab_id ) {
+		main_tab_id = -1;
+		processing = false;
+	}
+});

@@ -52,6 +52,7 @@
 			} );
 			
 			function _abort_clicked() {
+				bgp.main_tab_id = -1;
 				bgp.processing = false;
 				alert( 'Processing is aborted when the current request is done being processed.');
 				window.close();
