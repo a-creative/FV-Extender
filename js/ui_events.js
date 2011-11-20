@@ -149,18 +149,35 @@ function Process_next() {
 				}				
 				
 				if ( request_count == 0 ) {
+					
+					checkFinishPage( function() {
+						
+						// There was requests but they were all skipped or rejected. So we're done!
+						chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 1 }, _processingDone );				
+					} );
 				
-					// There was requests but they were all skipped or rejected. So we're done!
-					chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 1 }, _processingDone );
+					
 				}
 			} );
 		} );
 		
 	} else {
 		
-		// There was no request left at all!
-		chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 2 }, _processingDone );			
+		checkFinishPage( function() {
+			
+			// There was no request left at all!
+			chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 2 }, _processingDone );				
+		} );
 	}	
+}
+
+function checkFinishPage( callback ) {
+	var content_el = document.evaluate("//div[@id='contentArea']/input[@id='post_form_id']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
+	if ( content_el && document.location.href.match( /reqs\.php/ ) ) {
+		callback();
+	} else {
+		window.location.replace( 'https://www.facebook.com/reqs.php' );
+	}
 }
 
 function _processingDone( result ) {

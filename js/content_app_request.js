@@ -32,7 +32,7 @@ function changes_detected() {
 			state = 3;
 			state_text = 'Request accepted!(by OK button)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
+				redirect();
 			} );
 		} );
 	}
@@ -44,7 +44,7 @@ function changes_detected() {
 			state = 3;
 			state_text = 'Request accepted!(by Farm show)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
+				redirect();
 			} );
 		} );
 	}
@@ -93,7 +93,7 @@ function changes_detected() {
 			state = 3;
 			state_text = 'Request accepted!(by Play button)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
+				redirect();
 			} );
 		} );
 	}
@@ -132,6 +132,10 @@ function changes_detected() {
 			});
 		});	
 	}	
+}
+
+function redirect() {
+	window.location.replace('http://www.facebook.com/reqs.php#confirm_102452128776');
 }
 
 // Check if this is the main tab and that processing is true
