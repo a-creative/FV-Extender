@@ -30,6 +30,10 @@ info_audio.src = "../sound/info.ogg";
 var ga_iframe;
 jQuery(document).ready( function() {
 	
+	if ( weekly_test ) {
+		alert( 'Test enabled' );
+	}
+	
 	loadSettings();
 	
 	// Create iframe for google analytics
