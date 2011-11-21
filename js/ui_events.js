@@ -176,7 +176,12 @@ function checkFinishPage( callback ) {
 	if ( content_el && document.location.href.match( /reqs\.php/ ) ) {
 		callback();
 	} else {
-		window.location.replace( 'https://www.facebook.com/reqs.php' );
+		
+		chrome.extension.sendRequest( { "action" : "check_for_list_reload" }, function( do_reload ) {
+			if ( do_reload ) {
+				window.location.replace( 'https://www.facebook.com/reqs.php' );
+			}
+		} );
 	}
 }
 

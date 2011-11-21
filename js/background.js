@@ -9,6 +9,7 @@ var current_id = -1;
 var main_tab_id = -1;
 var just_help = false;
 var hang_timer_id;
+var list_reload_index = 0;
 
 var options = {};
 var settings;
@@ -290,6 +291,36 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 			clearTimeout( hang_timer_id );
 		}
 		sendResponse( true );
+	} else if ( request.action == 'check_for_list_reload' ) {
+		
+		var do_reload;
+		if ( list_reload_index <= 5 ) {
+			do_reload = true;
+			list_reload_index ++;
+		} else {			
+			
+			// Abort if we have tried more than 5 tims
+			list_reload_index = 0;
+			main_tab_id = -1;
+			processing = false;
+			do_reload = false;
+			
+			alert(
+					'FV Extender has stopped processing because it after several '
+				+ 	'retries couldn\'t access your list of requests.\n'
+				+	'\n'
+				+	'Please verify your list of FV requests here:\n'
+				+	'http://www.facebook.com/games\n'
+				+	'\n'
+				+	'If the list looks empty you should look for a solution here:\n'
+				+	'http://a-creative.dk/?p=861\n'
+				+	'\n'
+				+	'If there seem to be another problem you can always contact me here:\n'
+				+	'http://a-creative.dk/contact/' 
+			);
+		}
+		
+		sendResponse( do_reload );	
 	}
 	
 	
