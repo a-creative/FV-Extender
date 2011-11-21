@@ -1,7 +1,12 @@
 var handled = false;
 var state = -1;
 var state_text;
-var return_gift_text = ''; //This gift was accepted and returned by FV Extender';
+
+var return_gift_message = '';
+
+chrome.extension.sendRequest( { "action" : "get_return_gift_message" }, function( my_return_gift_message ) {
+	return_gift_message = my_return_gift_message;
+} );
 
 // Detect changes by live content
 function changes_detected() {
@@ -124,10 +129,7 @@ function changes_detected() {
 	if ( ( send_return_gift_btn.length ) && ( msg_box.length) ) {
 		if_not_detected( send_return_gift_btn, function( send_return_gift_btn ) {
 			if_not_detected( msg_box, function( msg_box ) {
-				
-				// Return gift with message
-				msg_box.val( return_gift_text );
-				
+				msg_box.val( return_gift_message );
 				send_return_gift_btn.click();
 			});
 		});	

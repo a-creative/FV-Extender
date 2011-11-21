@@ -10,9 +10,13 @@ var main_tab_id = -1;
 var just_help = false;
 var hang_timer_id;
 
-var options = {
-	audio_enabled : true,
-};
+var options = {};
+var settings;
+
+var setting_defaults = {
+	"audio_enabled" : "1",
+	"returnGiftMessage"  : ""
+}
 
 // Create audio
 var done_audio = document.createElement("audio");
@@ -24,6 +28,8 @@ info_audio.src = "../sound/info.ogg";
 
 var ga_iframe;
 jQuery(document).ready( function() {
+	
+	loadSettings();
 	
 	// Create iframe for google analytics
 	ga_iframe = document.body.appendChild(document.createElement('iframe'));	
@@ -54,6 +60,27 @@ function getVersion() {
 		return ( 'Could not detect version' );
 	}
 	
+}
+
+function loadSettings( loadDefaults ) {
+	
+	for ( var key in setting_defaults ) {		
+		if ( loadDefaults || ( ( typeof localStorage[ key ] ) == 'undefined' ) ) {
+			localStorage[ key ] = setting_defaults[ key ]
+		}		
+	}
+	
+	settings = localStorage;
+}
+
+function loadDefaults() {
+	loadSettings( true );
+}
+
+function saveSettings() {		
+	for ( var key in setting_defaults ) {
+		localStorage[ key ] = settings[ key ];
+	}
 }
 
 function _twitterSuccess( callback, tweets ) {
@@ -161,10 +188,17 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 	
 	//console.log( 'Action requested:' + request.action );
 	
-	if ( request.action == 'get_options' ) {		
+	if ( request.action == 'get_return_gift_message' ) {
+		
+		console.log( 'Returning with gift message:"' + settings.returnGiftMessage + '"' );
+		
+		sendResponse( settings.returnGiftMessage );
+		
+	} else if ( request.action == 'get_options' ) {		
 		
 		options.just_help = just_help;
 		options.weekly_test = weekly_test;
+		options.settings = settings;
 		
 		sendResponse( options );
 		
@@ -176,7 +210,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		
 		chrome.browserAction.setBadgeText( { text : "" } );
 		
-		if ( options.audio_enabled ) {
+		if ( settings.audio_enabled == '1' ) {
 			done_audio.play();
 		}
 		
@@ -306,3 +340,51 @@ chrome.tabs.onRemoved.addListener( function( tabId, removeInfo ) {
 		processing = false;
 	}
 });
+
+openTab = function( options ) {
+	
+	if ( typeof options.reuse == 'undefined' ) { options.reuse = false };
+	
+	if ( !options.reuse) {
+		
+		chrome.tabs.create(
+			{
+				"url" : options.url
+			}
+		);		
+	} else {
+	
+		chrome.windows.getCurrent( function( wnd ) {
+			
+			chrome.tabs.getAllInWindow( wnd.id, function( tabs ) {
+				var found_tab;
+				
+				jQuery.each( tabs, function( i, tab ) {
+					
+					if ( tab.url.toLowerCase().match( options.url ) ) {
+						found_tab = tab;
+						return false;
+					}
+					
+					return true;
+				} );
+				
+				if ( found_tab ) {
+					chrome.tabs.update( 
+						found_tab.id, {
+							url: found_tab.url,
+							selected: options.selected	
+						}
+					);
+				} else {
+					chrome.tabs.create(
+						{
+							"windowId" : wnd.id,
+							"url" : options.url
+						}
+					);							
+				}							
+			});	
+		} );
+	}	
+};

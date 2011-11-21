@@ -5,6 +5,7 @@
 	"homepage_url" : "http://a-creative.dk/fv-extender-3",
 	"background_page": "html/background.html",
 	"permissions" : [ "tabs", "http://api.twitter.com/*" ],
+	"options_page" : "html/settings.html",
 	"content_scripts": [
 		{
 			"matches": [
