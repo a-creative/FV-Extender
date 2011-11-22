@@ -8,6 +8,7 @@ var weekly_test = false;
 var current_id = -1;
 var main_tab_id = -1;
 var just_help = false;
+var hang_check = true;
 var hang_timer_id;
 var list_reload_index = 0;
 
@@ -272,19 +273,26 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 	} else if ( request.action == 'check_for_hang' ) {
 		
 		console.log( 'Starting ext. hang check...' );
-		hang_timer_id = setTimeout( function() {			
-			if ( request.app_request_id == current_id ) {
-				console.log( 'Hang on id:' + request.app_request_id + '. Reloading main tab...' );
-				
-				// Reload main tab
-				chrome.tabs.get( main_tab_id, function( tab ) {
-					chrome.tabs.update( tab.id, { url: tab.url } );
-				} );
-				
-			} else {
-				console.log( 'NO hang on id: ' + request.app_request_id )
-			}
-		}, 10000 );
+		if ( hang_check ) {
+			hang_timer_id = setTimeout( function() {			
+				if ( request.app_request_id == current_id ) {
+					console.log( 'Hang on id:' + request.app_request_id + '. Reloading main tab...' );
+					
+					// Reload main tab
+					chrome.tabs.get( main_tab_id, function( tab ) {
+						
+						console.log( 'Got main tab:' + tab.id );
+						
+						chrome.tabs.update( tab.id, { url: tab.url }, function( tab ) {
+							console.log( 'Initiated reload of tab: ' + tab + '  with ' + tab.url );
+						} );
+					} );
+					
+				} else {
+					console.log( 'NO hang on id: ' + request.app_request_id )
+				}
+			}, 10000 );
+		}
 		
 		sendResponse( true );
 	} else if ( request.action == 'reset_hang_check' ) {

@@ -11,6 +11,8 @@ chrome.extension.sendRequest( { "action" : "get_return_gift_message" }, function
 // Detect changes by live content
 function changes_detected() {
 	
+	console.log( 'Detects changes for game...');
+	
 	// Detect try again
 	
 	var try_again_btn = jQuery( "input[name='try_again_button']" );
@@ -173,8 +175,10 @@ chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( han
 			
 			state_text += ', url( ' + document.location.href + ')';
 			
+			console.log( 'Initiates finish by url:' +  state_text + ' ( ' + state + ' ) '  );
+			
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-				window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776'
+				redirect();
 			} );			
 		}
 		
