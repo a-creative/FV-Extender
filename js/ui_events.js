@@ -173,11 +173,23 @@ function Process_next() {
 
 function checkFinishPage( callback ) {
 	var content_el = document.evaluate("//div[@id='contentArea']/input[@id='post_form_id']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-	if ( content_el && document.location.href.match( /reqs\.php/ ) ) {
+	var right_url = document.location.href.match( /reqs\.php/ );
+	
+	if ( content_el && right_url ) {
 		callback();
 	} else {
 		
-		chrome.extension.sendRequest( { "action" : "check_for_list_reload" }, function( do_reload ) {
+		var reason = '';
+		
+		if ( !content_el ) {
+			reason += ' "no post form id el" '
+		}
+		
+		if (!right_url) {
+			reason += ' "not right url: \'' + document.location.href + '\'" ';
+		}
+		
+		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( do_reload ) {
 			if ( do_reload ) {
 				
 				// Reload in 10 seconds

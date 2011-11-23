@@ -211,6 +211,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 	} else if ( request.action == 'is_processing' ) {
 		sendResponse( processing );
 	} else if ( request.action == 'stop_processing' ) {
+		list_reload_index = 0;
 		processing = false;
 		current_id = -1;	
 		
@@ -305,13 +306,15 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( true );
 	} else if ( request.action == 'check_for_list_reload' ) {
 		
+		console.log( 'Finish reload. Reason:' + request.reason );
+		
 		var do_reload;
 		if ( list_reload_index <= 5 ) {
 			do_reload = true;
 			list_reload_index ++;
 		} else {			
 			
-			// Abort if we have tried more than 5 tims
+			// Abort if we have tried more than 5 times
 			list_reload_index = 0;
 			main_tab_id = -1;
 			processing = false;
