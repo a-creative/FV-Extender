@@ -10,8 +10,6 @@ function locatePageletContent( data, pagelet_name ) {
 	var begin2 = data.indexOf( begin2_search )
 	if ( begin2 != -1 ) {
 		
-		alert('found a');
-		
 		// Request data is inside hidden element
 		
 		// Find the container id for the element
@@ -35,14 +33,10 @@ function locatePageletContent( data, pagelet_name ) {
 		}
 	} else {
 		
-		alert('not found a');
-		
 		console.log( 'Find b:' +  '"content":{"pagelet_' + pagelet_name + '":"' );
 		
 		var begin3 = data.indexOf( '"content":{"pagelet_' + pagelet_name + '":"' );
 		if ( begin3 != -1 ) {
-			
-			alert('found b');
 			
 			var end = data.indexOf( '"}', ( begin3 + 10 ) ) + 2;
 			var json_str_data = data.slice( ( begin3 + 10 ), end );
@@ -56,8 +50,6 @@ function locatePageletContent( data, pagelet_name ) {
 			
 			html_data = json_data[ 'pagelet_' + pagelet_name ];
 		} else {
-			
-			alert('not found b');
 			
 			input_err_code = -1;
 		}
