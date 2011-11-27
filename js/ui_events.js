@@ -1,3 +1,72 @@
+function locatePageletContent( data, pagelet_name ) {
+	
+	var input_err_code = 0;
+	var html_data = '';
+	
+	var begin2_search = '"content":{"pagelet_' + pagelet_name + '":{"container_id":"';
+	
+	console.log( 'Find a:' +  begin2_search );
+	
+	var begin2 = data.indexOf( begin2_search )
+	if ( begin2 != -1 ) {
+		
+		alert('found a');
+		
+		// Request data is inside hidden element
+		
+		// Find the container id for the element
+		var container_id_cand = data.substr( begin2 + begin2_search.length, begin2 + begin2_search.length + 100 );
+		
+		var end2 = container_id_cand.indexOf('"');
+		var container_id = container_id_cand.slice(0,end2);
+		
+		// Find container value with html for requests
+		var hidden_el_begin_str = '<code class="hidden_elem" id="' + container_id + '"><!-- ';
+		
+		var hidden_el_begin = data.indexOf( hidden_el_begin_str );
+		if ( hidden_el_begin != -1 ) {
+			
+			var hidden_el_content_cand = data.substr( hidden_el_begin + hidden_el_begin_str.length );
+			var hidden_el_end = hidden_el_content_cand.indexOf(" --></code>");
+			html_data = hidden_el_content_cand.slice(0,hidden_el_end);
+		
+		} else {
+			input_err_code = 1;
+		}
+	} else {
+		
+		alert('not found a');
+		
+		console.log( 'Find b:' +  '"content":{"pagelet_' + pagelet_name + '":"' );
+		
+		var begin3 = data.indexOf( '"content":{"pagelet_' + pagelet_name + '":"' );
+		if ( begin3 != -1 ) {
+			
+			alert('found b');
+			
+			var end = data.indexOf( '"}', ( begin3 + 10 ) ) + 2;
+			var json_str_data = data.slice( ( begin3 + 10 ), end );
+		
+			var json_data = {};
+			try {
+				json_data = JSON.parse( json_str_data );
+			} catch( e ) {
+				input_err_code = 2
+			}
+			
+			html_data = json_data[ 'pagelet_' + pagelet_name ];
+		} else {
+			
+			alert('not found b');
+			
+			input_err_code = -1;
+		}
+		
+	}
+	
+	return ( { error: input_err_code, content: html_data } ); 		
+}
+
 function get_item_name( text ) {
 	
 	var item_name = false;
@@ -29,14 +98,30 @@ function get_item_name( text ) {
 
 function Process_next() {	
 	
-	var app_request_group = document.evaluate("//div[@id='confirm_102452128776']", document, null, XPathResult.ANY_TYPE, null).iterateNext();
+	var app_request_group = jQuery('#confirm_102452128776');
+	if( ! ( app_request_group && app_request_group.length ) ) {
 	
-	if ( app_request_group ) {
+		var result = locatePageletContent( document.body.innerHTML, 'requests' );
+		
+		if ( result.error == 0 ) {
+			
+			var html = "<div>" + result.content + "</div>";
+			
+			var document_el = jQuery( html );
+			
+			app_request_group = document_el.find( '#confirm_102452128776');
+			
+		} else {
+			alert( 'error:' + result.error );
+		}
+	}
+	
+	if ( app_request_group && app_request_group.length ) {
 		
 		// If FarmVille request group was found
 		
 		// Find the container for requests
-		var requests_el = app_request_group.getElementsByClassName( 'requests' )[ 0 ];
+		var requests_el = app_request_group[ 0 ].getElementsByClassName( 'requests' )[ 0 ];
 		
 		var app_requests = requests_el.childNodes;
 		
@@ -172,10 +257,17 @@ function Process_next() {
 }
 
 function checkFinishPage( callback ) {
-	var content_el = document.evaluate("//div[@id='contentArea']/input[@id='post_form_id']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-	var right_url = document.location.href.match( /reqs\.php/ );
 	
-	if ( content_el && right_url ) {
+	var content_el = document.evaluate("//div[@id='contentArea']/input[@id='post_form_id']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
+	var content_el_2 = document.evaluate("//div[@id='pagelet_requests']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
+	
+	var right_url = document.location.href.match( /reqs\.php/ );
+	var right_url_2 = document.location.href.match( /\/games/ );
+	
+	var page_1 = ( right_url && content_el );
+	var page_2 = ( right_url_2 && content_el_2 );
+	
+	if ( page_1 || page_2 ) {
 		callback();
 	} else {
 		
@@ -194,7 +286,7 @@ function checkFinishPage( callback ) {
 				
 				// Reload in 5 seconds
 				setTimeout( function() {
-					window.location.replace( 'https://www.facebook.com/reqs.php' );
+					window.location.replace( 'http://www.facebook.com/games' );
 				}, 5000 );
 			}
 		} );

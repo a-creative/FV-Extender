@@ -350,7 +350,7 @@ function goto_requests() {
 			
 			jQuery.each( tabs, function( i, tab ) {
 				
-				if ( tab.url.toLowerCase().match('reqs.php' ) ) {
+				if ( tab.url.toLowerCase().match('/games' ) ) {
 					found_tab = tab;
 					return false;
 				}
@@ -370,7 +370,7 @@ function goto_requests() {
 				chrome.tabs.create(
 					{
 						"windowId" : wnd.id,
-						"url" : 'http://www.facebook.com/reqs.php'
+						"url" : 'http://www.facebook.com/games'
 					}, function( tab ) {
 						main_tab_id = tab.id
 					}

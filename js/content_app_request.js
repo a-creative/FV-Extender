@@ -87,7 +87,8 @@ function changes_detected() {
 				state = 3;
 				state_text = 'Request accepted!( by YES button)';
 				chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-					yes_btn.click();
+					
+					redirect();
 				} );
 			}
 		} );
@@ -139,7 +140,7 @@ function changes_detected() {
 }
 
 function redirect() {
-	window.location.replace('http://www.facebook.com/reqs.php#confirm_102452128776');
+	window.location.replace('http://www.facebook.com/games#confirm_10245212877');
 }
 
 // Check if this is the main tab and that processing is true

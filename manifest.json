@@ -9,10 +9,11 @@
 	"content_scripts": [
 		{
 			"matches": [
-			  "http://www.facebook.com/reqs.php",
-			  "https://www.facebook.com/reqs.php"
+			  "http://www.facebook.com/games",
+			  "https://www.facebook.com/games"
 			],
 			"js": [
+				"js/jquery-1.7.min.js",
 				"js/ui_events.js",
 				"js/content_accept_all.js"
 			],
