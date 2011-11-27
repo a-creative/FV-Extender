@@ -192,10 +192,10 @@ function checkFinishPage( callback ) {
 		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( do_reload ) {
 			if ( do_reload ) {
 				
-				// Reload in 10 seconds
+				// Reload in 5 seconds
 				setTimeout( function() {
 					window.location.replace( 'https://www.facebook.com/reqs.php' );
-				}, 10000 );
+				}, 5000 );
 			}
 		} );
 	}
