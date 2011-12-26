@@ -257,7 +257,11 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( processed_ids );
 	} else if ( request.action == 'add_processed_id' ) {
 		
-		processed_ids[ request.processed_id ]++;
+		if ( processed_ids[ request.processed_id ] == 'undefined' ) {
+			processed_ids[ request.processed_id ] = 1;
+		} else {
+			processed_ids[ request.processed_id ]++;
+		}
 				
 		sendResponse( request.processed_id );
 	} else if ( request.action == 'finish_current_id' ) {
@@ -277,7 +281,12 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( true );
 	} else if ( request.action == 'set_current_id' ) {
 		current_id = request.current_id;
-		processed_ids[ request.processed_id ]++;
+		
+		if ( processed_ids[ request.processed_id ] == 'undefined' ) {
+			processed_ids[ request.processed_id ] = 1;
+		} else {
+			processed_ids[ request.processed_id ]++;
+		}
 		
 		app_requests[ current_id ] = {
 			id: current_id,
