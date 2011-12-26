@@ -257,6 +257,8 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( processed_ids );
 	} else if ( request.action == 'add_processed_id' ) {
 		
+		alert( 'Marking id:' + request.processed_id + ' as processed' );
+		
 		if ( processed_ids[ request.processed_id ] == 'undefined' ) {
 			processed_ids[ request.processed_id ] = 1;
 		} else {
