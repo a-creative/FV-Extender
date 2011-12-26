@@ -14,6 +14,7 @@
 			],
 			"js": [
 				"js/jquery-1.7.min.js",
+				"js/detect_changes.js",
 				"js/ui_events.js",
 				"js/content_accept_all.js"
 			],
@@ -21,7 +22,7 @@
 				"css/global.css",
 				"css/accept_all.css"
 			],
-			"run_at": "document_end"
+			"run_at": "document_start"
 		}, {
 			"matches" : [
 				"http://apps.facebook.com/onthefarm/*",

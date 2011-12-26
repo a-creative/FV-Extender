@@ -1,4 +1,10 @@
+var handled = false;
 
+function changes_detected() {
+	
+	// If changes detected
+	Find_requets();
+}
 
 // Check if processing is active
 chrome.extension.sendRequest( { "action" : "is_processing" }, function( is_processing ) {
@@ -7,8 +13,24 @@ chrome.extension.sendRequest( { "action" : "is_processing" }, function( is_proce
 		
 		// We are in processing mode
 		
-		// Process next app request
-		Process_next();
+		// Start timeout in case or malformed list
+		setTimeout(
+			function() {
+			
+				if ( !handled ) {
+					checkFinishPage( function() {
+						
+						// There was no request left at all!
+						chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 2 }, _processingDone );				
+					} );
+				}
+			}
+			, 10000
+		);
+		
+		
+		// Start detecting changes		
+		run_detect_changes();
 		
 	}	
 });		

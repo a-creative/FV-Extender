@@ -23,13 +23,28 @@ function changes_detected() {
 	}
 	
 	// Detect and react to "angry cow" error
-	var h1 = jQuery( 'h1' );
+	var h1 = jQuery( '#pagelet_fbml_canvas_content h1' );
 	if ( h1 && h1.length && h1.html().match( /Oh no/i ) ) {
 		if_not_detected( h1, function( h1 ) {
 			
 			document.location.reload();
 			
 		} );
+	}
+	
+	if ( h1 && h1.length && h1.html().match( /Select which reward you/ ) ) {
+		if_not_detected( h1, function( h1 ) {
+			state = 3;
+			state_text = 'Request accepted!(by select reward)';
+			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
+				redirect();
+			} );
+			
+		} );
+	}
+	
+	if ( h1 && h1.length && h1.html().match( /Select which reward you/ ) ) {
+		redirect();
 	}
 	
 	// Detect ok
@@ -78,7 +93,7 @@ function changes_detected() {
 						state = 3;
 						state_text = 'Request accepted!( by YES button on gift returned)';
 						chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-							yes_btn.click();
+							redirect();
 						} );	
 					}
 				}, 7000);

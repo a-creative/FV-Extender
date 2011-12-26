@@ -7,6 +7,13 @@ function if_not_detected( el, func ) {
 	}	
 }
 
+function if_not_detected_XPATH( el, func ) {
+	if ( el.getAttribute( 'FV_Extender_detected' ) != 'true' ) {
+		el.setAttribute( 'FV_Extender_detected', 'true' );
+		func( el );
+	}	
+}
+
 function callLast(func, t){
 		if(!t){ t = 100; }
 		var callLastTimeout = null; 
