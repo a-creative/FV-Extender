@@ -155,7 +155,8 @@ function changes_detected() {
 }
 
 function redirect() {
-	window.location.replace('http://www.facebook.com/games#confirm_10245212877');
+	
+	chrome.extension.sendRequest( { "action" : "games_redirect" } );
 }
 
 // Check if this is the main tab and that processing is true

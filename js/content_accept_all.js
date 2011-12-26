@@ -7,7 +7,7 @@ function changes_detected() {
 }
 
 // Check if processing is active
-chrome.extension.sendRequest( { "action" : "is_processing" }, function( is_processing ) {
+chrome.extension.sendRequest( { "action" : "is_processing", "time:" : ( new Date().getTime() ) }, function( is_processing ) {
 	
 	if ( is_processing ) {
 		

@@ -11,6 +11,7 @@ var just_help = false;
 var hang_check = true;
 var hang_timer_id;
 var list_reload_index = 0;
+var listLoadId = 0;
 
 var options = {};
 var settings;
@@ -186,7 +187,26 @@ function checkForUpdates( callback ) {
 	} );
 }
 
-
+function games_redirect( tab ) {
+	listLoadId = new Date().getTime();
+	var listLoadIdCheck = listLoadId;
+	setTimeout( function() {
+		
+		if ( listLoadIdCheck == listLoadId ) {
+			
+			games_redirect( tab );
+		
+		}			
+	}, 10000 );
+	
+	chrome.tabs.update( 
+		tab.id, {
+			url: 'http://www.facebook.com/games#confirm_10245212877',
+			selected: false,
+			active: false
+		}
+	);	
+}
 
 
 // Reaction to events
@@ -194,7 +214,13 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 	
 	//console.log( 'Action requested:' + request.action );
 	
-	if ( request.action == 'get_return_gift_message' ) {
+	if ( request.action == 'games_redirect' ) {
+		
+		games_redirect( sender.tab )
+		
+		sendResponse();
+		
+	} else if ( request.action == 'get_return_gift_message' ) {
 		
 		console.log( 'Returning with gift message:"' + settings.returnGiftMessage + '"' );
 		
@@ -209,6 +235,9 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( options );
 		
 	} else if ( request.action == 'is_processing' ) {
+		
+		listLoadId = request.time;
+		
 		sendResponse( processing );
 	} else if ( request.action == 'stop_processing' ) {
 		list_reload_index = 0;
@@ -434,3 +463,4 @@ openTab = function( options ) {
 		} );
 	}	
 };
+
