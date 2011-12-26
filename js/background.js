@@ -2,7 +2,7 @@ var FVE_version = getVersion();
 
 var processing = false;
 var app_requests = {};
-var processed_ids = [];
+var processed_ids = {};
 var weekly_test = false;
 
 var current_id = -1;
@@ -257,11 +257,8 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( processed_ids );
 	} else if ( request.action == 'add_processed_id' ) {
 		
-		processed_ids.push( request.processed_id );
-		if ( processed_ids.length > 20 ) {
-			processed_ids.shift();
-		}
-		
+		processed_ids[ request.processed_id ]++;
+				
 		sendResponse( request.processed_id );
 	} else if ( request.action == 'finish_current_id' ) {
 		
@@ -275,16 +272,12 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 			console.log( 'Could not find request: ' + current_id + ':' + app_requests[ current_id ] );
 		}
 		
-		processed_ids.push( current_id );
-		if ( processed_ids.length > 20 ) {
-			processed_ids.shift();
-		}
-		
 		current_id = -1;
 		
 		sendResponse( true );
 	} else if ( request.action == 'set_current_id' ) {
 		current_id = request.current_id;
+		processed_ids[ request.processed_id ]++;
 		
 		app_requests[ current_id ] = {
 			id: current_id,

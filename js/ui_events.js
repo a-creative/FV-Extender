@@ -103,15 +103,27 @@ function Process_requests( app_requests ) {
 				
 				// Set to accept as default
 				var action = 'accept';
-				for ( var j = 0; j < processed_ids.length; j++ ) {
-					if ( processed_ids[ j ] == app_request_id ) {
+				
+				if ( typeof processed_ids[ app_request_id ] != 'undefined' ) {
+					
+					// If request has already been processed
+					
+					if ( processed_ids[ app_request_id ] == 1 ) {
 						
-						// Set to reject if has already been processed once, but is still on the list
-						action = 'reject';
+						// If it has only been processed one time				
+						action = 'reject';												
+						
+					} else if ( processed_ids[ app_request_id ] > 1 ) {
+						
+						// If it has been processed several times
+						
+						// Then stop processing due to problems with rejecting requests
+						handled = true;				
+						chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 4 }, _processingDone );				
 						break;
 					}
 				}
-				
+								
 				// Find the appropiate button and click it
 				var action_btn;
 				if ( action == 'accept' ) {
@@ -129,12 +141,18 @@ function Process_requests( app_requests ) {
 						
 					} );
 					break;
-				} else {
+				} else if ( action == 'reject' ) {
 					request_count--;
 					chrome.extension.sendRequest( { "action" : "update_badge_text", count:  request_count } );
 					action_btn = document.evaluate(".//input[starts-with(@name,'actions[reject')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
-					action_btn.click();				
-				}				
+					
+					chrome.extension.sendRequest( { "action" : "add_processed_id", "processed_id" : app_request_id }, function() {
+						action_btn.click();
+					} );	
+				}
+				
+				
+				
 			}				
 			
 			// Check if all shown requests were rejected
