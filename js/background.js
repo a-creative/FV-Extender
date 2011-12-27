@@ -201,7 +201,7 @@ function games_redirect( tab ) {
 	
 	chrome.tabs.update( 
 		tab.id, {
-			url: 'http://www.facebook.com/games#confirm_10245212877',
+			url: 'http://www.facebook.com/games#confirm_102452128776',
 			selected: false,
 			active: false
 		}
@@ -221,8 +221,6 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse();
 		
 	} else if ( request.action == 'get_return_gift_message' ) {
-		
-		console.log( 'Returning with gift message:"' + settings.returnGiftMessage + '"' );
 		
 		sendResponse( settings.returnGiftMessage );
 		
@@ -255,26 +253,28 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( request );		
 	} else if ( request.action == 'get_processed_ids' ) {
 		sendResponse( processed_ids );
-	} else if ( request.action == 'add_processed_id' ) {
+	} else if ( request.action == 'finish_reject' ) {
 		
-		alert( 'Marking id:' + request.processed_id + ' as processed' );
-		
-		if ( processed_ids[ request.processed_id ] == 'undefined' ) {
+		console.log( 'REJECT:' + request.processed_id );
+				
+		if ( typeof processed_ids[ request.processed_id ] == 'undefined' ) {
 			processed_ids[ request.processed_id ] = 1;
 		} else {
 			processed_ids[ request.processed_id ]++;
 		}
+		
+		current_id = -1;
 				
 		sendResponse( request.processed_id );
 	} else if ( request.action == 'finish_current_id' ) {
 		
-		if ( processed_ids[ current_id ] == 'undefined' ) {
+		if ( typeof processed_ids[ current_id ] == 'undefined' ) {
 			processed_ids[ current_id ] = 1;
 		} else {
 			processed_ids[ current_id ]++;
 		}
 		
-		console.log( request.state + ' - ' + request.state_text );
+		console.log( 'ACCEPT:' + current_id + ':' + request.state + ' - ' + request.state_text );
 		
 		
 		try {
@@ -306,40 +306,40 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( ( processing == true ) && ( main_tab_id == sender.tab.id ) );
 	} else if ( request.action == 'check_for_hang' ) {
 		
-		console.log( 'Starting ext. hang check...' );
+		//console.log( 'Starting ext. hang check...' );
 		if ( hang_check ) {
 			hang_timer_id = setTimeout( function() {			
 				if ( request.app_request_id == current_id ) {
-					console.log( 'Hang on id:' + request.app_request_id + '. Reloading main tab...' );
+					//console.log( 'Hang on id:' + request.app_request_id + '. Reloading main tab...' );
 					
 					// Reload main tab
 					chrome.tabs.get( main_tab_id, function( tab ) {
 						
-						console.log( 'Got main tab:' + tab.id );
+						//console.log( 'Got main tab:' + tab.id );
 						
 						chrome.tabs.update( tab.id, { url: tab.url }, function( tab ) {
-							console.log( 'Initiated reload of tab: ' + tab + '  with ' + tab.url );
+							//console.log( 'Initiated reload of tab: ' + tab + '  with ' + tab.url );
 						} );
 					} );
 					
 				} else {
-					console.log( 'NO hang on id: ' + request.app_request_id )
+					//console.log( 'NO hang on id: ' + request.app_request_id )
 				}
 			}, 10000 );
 		}
 		
 		sendResponse( true );
 	} else if ( request.action == 'reset_hang_check' ) {
-		console.log( 'Starting int. hang check ...' );		
+		//console.log( 'Starting int. hang check ...' );		
 		
 		if ( hang_timer_id ) {
-			console.log( 'Resetting ext. hang check ...' );
+			//console.log( 'Resetting ext. hang check ...' );
 			clearTimeout( hang_timer_id );
 		}
 		sendResponse( true );
 	} else if ( request.action == 'check_for_list_reload' ) {
 		
-		console.log( 'Finish reload. Reason:' + request.reason );
+		//console.log( 'Finish reload. Reason:' + request.reason );
 		
 		var do_reload;
 		if ( list_reload_index <= 5 ) {

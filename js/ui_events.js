@@ -101,6 +101,8 @@ function Process_requests( app_requests ) {
 					continue;
 				}
 				
+				
+				
 				// Set to accept as default
 				var action = 'accept';
 				
@@ -119,7 +121,17 @@ function Process_requests( app_requests ) {
 						
 						// Then stop processing due to problems with rejecting requests
 						handled = true;				
-						chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 4 }, _processingDone );				
+						chrome.extension.sendRequest( {
+							"action" : "stop_processing",
+							"error" :
+									"Processing stopped because request with id: "
+								+ 	app_request_id +
+									" was tried processed "
+								+ 	processed_ids[ app_request_id ]
+								+ 	' times. Please restart FVE to continue.'
+							},
+							_processingDone
+						);				
 						break;
 					}
 				}
@@ -146,12 +158,14 @@ function Process_requests( app_requests ) {
 					chrome.extension.sendRequest( { "action" : "update_badge_text", count:  request_count } );
 					action_btn = document.evaluate(".//input[starts-with(@name,'actions[reject')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
 					
-					chrome.extension.sendRequest( { "action" : "add_processed_id", "processed_id" : app_request_id }, function() {
-						action_btn.click();
-					} );	
+					action_btn.click();
+					setTimeout( function() {
+						chrome.extension.sendRequest( { "action" : "finish_reject", "processed_id" : app_request_id }, function() {
+							window.location.reload();
+						});	
+					}, 3000 );
+					break;
 				}
-				
-				
 				
 			}				
 			
@@ -218,8 +232,12 @@ function checkFinishPage( callback ) {
 
 function _processingDone( result ) {
 	
-	alert( 'Processing is done.\n\nFVE currently only handles FV requests!' );
-	console.log('ptype:' + result.ptype );
+	if ( result.error ) {
+		alert ( 'ERROR:' + result.error );	
+	} else {
+		alert( 'Processing is done.\n\nFVE currently only handles FV requests!' );
+		console.log('ptype:' + result.ptype );
+	}
 }
 
 function _statsLoaded( stats ) {
