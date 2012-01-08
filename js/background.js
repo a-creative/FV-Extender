@@ -298,6 +298,11 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		
 		sendResponse( current_id );
 	} else if ( request.action == 'update_badge_text' ) {
+		
+		if ( request.count > 100 ) {
+			request.count = request.count + "+";
+		} 
+		
 		chrome.browserAction.setBadgeText( { text : request.count + "" } );
 		sendResponse();
 		
@@ -369,6 +374,27 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		}
 		
 		sendResponse( do_reload );	
+	} else if ( request.action == 'inject_scripts' ) {
+		console.log('Inject scripts 1/4');
+		// Possibly inject scripts
+		
+		// First we check that we're processing and we're in the processing tab
+		if ( ( processing == true ) && ( main_tab_id == sender.tab.id ) ) {			
+			console.log('Inject scripts 2/4');
+			sendResponse( true );	
+			console.log('Inject scripts 3/4');			
+			// Then we inject scripts
+			chrome.tabs.executeScript( sender.tab.id, { "file" : "js/jquery-1.7.min.js", "allFrames"  : true }, function() {
+				chrome.tabs.executeScript( sender.tab.id, { "file" : "js/detect_changes.js", "allFrames"  : true }, function() {
+					chrome.tabs.executeScript( sender.tab.id, { "file" : "js/content_app_request.js", "allFrames"  : true }, function() {
+						console.log( '******* Scripts are injected 4/4');	
+					});
+				});
+			});
+			
+		} else {
+			sendResponse( false );
+		}
 	}
 	
 	

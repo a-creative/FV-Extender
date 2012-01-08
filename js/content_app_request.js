@@ -60,9 +60,9 @@ function changes_detected() {
 	}
 	
 	// Detect flash
-	var flash_form = jQuery("form[target='flashAppIframe']");
-	if ( flash_form.length ) {
-		if_not_detected( flash_form, function( flash_form ) {
+	var flash_iframe = jQuery("iframe[id='farmvilleIframe']");
+	if ( flash_iframe.length ) {
+		if_not_detected( flash_iframe, function( flash_iframe ) {
 			state = 3;
 			state_text = 'Request accepted!(by Farm show)';
 			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {

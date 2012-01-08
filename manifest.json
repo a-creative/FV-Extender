@@ -1,12 +1,29 @@
 {
 	"name": "FV Extender Classic",
-	"version": "3.1.7",
+	"version": "3.1.8",
 	"description": "Helps you accept FarmVille requests.",
 	"homepage_url" : "http://a-creative.dk/fv-extender-3",
 	"background_page": "html/background.html",
-	"permissions" : [ "tabs", "http://api.twitter.com/*" ],
+	"permissions" : [
+		"tabs",
+		"http://api.twitter.com/*",
+		"http://www.facebook.com/plugins/serverfbml.php",
+		"https://www.facebook.com/plugins/serverfbml.php",
+		"http://apps.facebook.com/onthefarm*"
+	],
 	"options_page" : "html/settings.html",
 	"content_scripts": [
+		{
+			"matches" : [
+				"https://www.facebook.com/plugins/serverfbml.php*",
+				"http://www.facebook.com/plugins/serverfbml.php*"				
+			],
+			"js": [
+				"js/content_min.js"						
+			],
+			"run_at": "document_start",
+			"all_frames" : true	
+		},
 		{
 			"matches": [
 			  "http://www.facebook.com/games",
@@ -25,15 +42,18 @@
 			"run_at": "document_start"
 		}, {
 			"matches" : [
-				"http://apps.facebook.com/onthefarm/*",
-				"https://apps.facebook.com/onthefarm/*"
+				"http://apps.facebook.com/onthefarm*",
+				"https://apps.facebook.com/onthefarm*",
+				"http://facebook.farmville.com/*",
+				"https://facebook.farmville.com/*"
 			],
 			"js": [
 				"js/jquery-1.7.min.js",
 				"js/detect_changes.js",
 				"js/content_app_request.js"						
 			],
-			"run_at": "document_start"
+			"run_at": "document_start",
+			"all_frames" : true
 		}
 	],
 	"browser_action": {

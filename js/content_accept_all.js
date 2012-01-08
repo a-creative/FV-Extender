@@ -25,7 +25,7 @@ chrome.extension.sendRequest( { "action" : "is_processing", "time:" : ( new Date
 					} );
 				}
 			}
-			, 10000
+			, 20000
 		);
 		
 		

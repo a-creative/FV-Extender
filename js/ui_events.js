@@ -115,7 +115,7 @@ function Process_requests( app_requests ) {
 						// If it has only been processed one time				
 						action = 'reject';												
 						
-					} else if ( processed_ids[ app_request_id ] > 1 ) {
+					} else if ( processed_ids[ app_request_id ] > 3 ) {
 						
 						// If it has been processed several times
 						
