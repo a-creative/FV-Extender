@@ -105,6 +105,7 @@ function Process_requests( app_requests ) {
 				
 				// Set to accept as default
 				var action = 'accept';
+				var delay = 0;
 				
 				if ( typeof processed_ids[ app_request_id ] != 'undefined' ) {
 					
@@ -113,26 +114,16 @@ function Process_requests( app_requests ) {
 					if ( processed_ids[ app_request_id ] == 1 ) {
 						
 						// If it has only been processed one time				
-						action = 'reject';												
+						action = 'reject';
+						delay = 3000;
 						
-					} else if ( processed_ids[ app_request_id ] > 3 ) {
+					} else if ( processed_ids[ app_request_id ] > 2 ) {
 						
 						// If it has been processed several times
 						
 						// Then stop processing due to problems with rejecting requests
-						handled = true;				
-						chrome.extension.sendRequest( {
-							"action" : "stop_processing",
-							"error" :
-									"Processing stopped because request with id: "
-								+ 	app_request_id +
-									" was tried processed "
-								+ 	processed_ids[ app_request_id ]
-								+ 	' times. Please restart FVE to continue.'
-							},
-							_processingDone
-						);				
-						break;
+						action = 'reject';	
+						delay = 3000 + ( 500 * processed_ids[ app_request_id ] );
 					}
 				}
 								
@@ -163,7 +154,7 @@ function Process_requests( app_requests ) {
 						chrome.extension.sendRequest( { "action" : "finish_reject", "processed_id" : app_request_id }, function() {
 							window.location.reload();
 						});	
-					}, 3000 );
+					}, delay );
 					break;
 				}
 				

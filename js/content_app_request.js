@@ -23,7 +23,7 @@ function changes_detected() {
 	}
 	
 	// Detect and react to "angry cow" error
-	var h1 = jQuery( '#pagelet_fbml_canvas_content h1' );
+	var h1 = jQuery( 'h1' );
 	if ( h1 && h1.length && h1.html().match( /Oh no/i ) ) {
 		if_not_detected( h1, function( h1 ) {
 			

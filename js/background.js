@@ -299,10 +299,6 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( current_id );
 	} else if ( request.action == 'update_badge_text' ) {
 		
-		if ( request.count > 100 ) {
-			request.count = request.count + "+";
-		} 
-		
 		chrome.browserAction.setBadgeText( { text : request.count + "" } );
 		sendResponse();
 		
