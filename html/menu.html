@@ -10,6 +10,7 @@
 			<a href="#" id="abort-btn">Abort processing</a>
 			<a href="#" id="settings-btn" class="enabled">Settings</a>
 			<a href="http://a-creative.dk" class="enabled" target="_blank" title="Read about all FVE versions">FVE blog</a>
+			<a href="#" id="donate-btn" class="enabled">Donate</a>
 			<a href="#" id="updates-btn">- Checking FVE version...</a>
 			<a id="update-sign" title="Click to read more about the new version">New FVE version available</a>
 		</div>
@@ -90,10 +91,17 @@
 				
 			}
 			
+			function _donate_btn_clicked() {
+				bgp.openTab( { url: "http://a-creative.dk/donate/" } );
+				window.close();
+				return false;
+			}
+			
 			var abort_btn = document.getElementById( 'abort-btn' );
 			var process_btn = document.getElementById( 'process-btn' );
 			var settings_btn = document.getElementById( 'settings-btn' );
 			var just_help_btn = document.getElementById( 'just-help-btn' );
+			var donate_btn = document.getElementById( 'donate-btn' );
 			
 			if ( bgp.processing ) {
 				abort_btn.className = 'enabled';
@@ -106,6 +114,7 @@
 			
 			settings_btn.onclick = _settings_clicked;
 			just_help_btn.onclick = _just_help_btn_clicked;
+			donate_btn.onclick = _donate_btn_clicked;
 			
 			
 			

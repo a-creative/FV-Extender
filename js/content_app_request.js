@@ -61,7 +61,15 @@ function changes_detected() {
 	
 	// Detect flash
 	var flash_iframe = jQuery("iframe[id='farmvilleIframe']");
-	if ( flash_iframe.length ) {
+	if ( (!flash_iframe) || ( flash_iframe.length == 0 ) ) {
+		flash_iframe = jQuery("iframe[name='flashAppIframe']");
+		
+		if ( (!flash_iframe) || ( flash_iframe.length == 0 ) ) {
+			flash_iframe = jQuery("iframe[id='flashAppIframe']");
+		}
+	}
+	
+	if ( flash_iframe && flash_iframe.length ) {
 		if_not_detected( flash_iframe, function( flash_iframe ) {
 			state = 3;
 			state_text = 'Request accepted!(by Farm show)';
