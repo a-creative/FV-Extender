@@ -48,7 +48,7 @@ function Process_requests( app_requests ) {
 				
 				var item_count = {};
 				for ( i = 0; i < app_requests.length; i++ ) {
-					app_request = app_requests[ i ][ 0 ] ;
+					app_request = app_requests[ i ] ;
 					
 					// Get app request id
 					try {
@@ -65,7 +65,7 @@ function Process_requests( app_requests ) {
 					
 					} catch( err ) {
 						
-						console.log('FAILED:' + app_request.innerHTML );
+						console.log('FAILED at index:' + i + ' - ' + app_requests[ i ] );
 						continue;
 					}
 				}

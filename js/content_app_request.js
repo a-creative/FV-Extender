@@ -130,11 +130,19 @@ function changes_detected() {
 	}
 	
 	// Detect and click on return gift button
-	var return_gift_btn = jQuery( 'input[name=send]' );
+	var return_gift_btn = jQuery( 'img[class=send_thank_you]' );
+	var img_found = false;
+	if ( return_gift_btn.length == 0 ) {
+		return_gift_btn = jQuery( 'input[name=send]' );
+	} else {
+		img_found = true;
+	}
+	
+	
 	if ( return_gift_btn.length ) {
 		console.log( 'Found gift back button');
 		
-		if ( return_gift_btn.val().match( /thank you/i ) ) {					
+		if ( img_found || ( return_gift_btn.val().match( /thank you/i ) ) ) {					
 			console.log( 'Found gift back button text ');
 			
 			if_not_detected( return_gift_btn, function( return_gift_btn ) {
