@@ -197,7 +197,7 @@ chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( han
 		if ( document.location.href.match( /gifterror=invalid/ ) ) { state = 7; state_text = "Gift was invalid" };
 		if ( document.location.href.match( /reqType=yes&clickSrc=$/ ) ) { state = 6; state_text = "Other error(1)" };
 		if ( document.location.href.match( /toolbar\.zynga\.com/i ) ) { state = 6; state_text = "Other error(2)" };
-		if ( document.location.href.match( /sentthankyougift\.php/ ) ) {
+		if ( ( document.location.href.match( /sentthankyougift\.php/ ) ) || ( document.location.href.match( /redirecting_zy_session_expired\=1/ ) ) ) {
 			state = 3; state_text = 'Request accepted!(with thankyou gift)';
 		}
 		if ( document.location.href.match( /sendcredits\.php/ ) ) {

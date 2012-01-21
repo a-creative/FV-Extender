@@ -15,6 +15,19 @@
 	"content_scripts": [
 		{
 			"matches" : [
+				"https://www.facebook.com/dialog/apprequests*",
+				"http://www.facebook.com/dialog/apprequests*"				
+			],
+			"js": [
+				"js/jquery-1.7.min.js",
+				"js/detect_changes.js",
+				"js/content_send_request.js"						
+			],
+			"run_at": "document_start",
+			"all_frames" : true		
+		},
+		{
+			"matches" : [
 				"https://www.facebook.com/plugins/serverfbml.php*",
 				"http://www.facebook.com/plugins/serverfbml.php*"				
 			],
