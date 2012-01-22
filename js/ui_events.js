@@ -44,7 +44,7 @@ function Process_requests( app_requests ) {
 			var request_count = app_requests.length;
 			
 			// Optionally perform weekly test
-			if ( options.weekly_test && ( request_count <= 90 ) ) {
+			if ( options.weekly_test && ( request_count <= 50 ) ) {
 				
 				var item_count = {};
 				for ( i = 0; i < app_requests.length; i++ ) {
