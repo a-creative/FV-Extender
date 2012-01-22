@@ -107,7 +107,13 @@ function Process_requests( app_requests ) {
 				var action = 'accept';
 				var delay = 0;
 				
-				if ( typeof processed_ids[ app_request_id ] != 'undefined' ) {
+				if ( ( options.settings.rejectGifts == 'true' ) && ( app_request_item_name != 'Help request' ) ) {
+					action = 'reject';
+					delay = 3000;
+				} else if ( ( options.settings.rejectNeighbors == 'true' ) && ( app_request_text.match( /Howdy friend\! How'd you like to be neighbors/ ) ) ) {
+					action = 'reject';
+					delay = 3000;
+				} else if ( typeof processed_ids[ app_request_id ] != 'undefined' ) {
 					
 					// If request has already been processed
 					
@@ -126,7 +132,9 @@ function Process_requests( app_requests ) {
 						delay = 3000 + ( 500 * processed_ids[ app_request_id ] );
 					}
 				}
-								
+				
+				console.log(action + ':' + app_request_item_name + ' : "' + app_request_text + '"' );
+				
 				// Find the appropiate button and click it
 				var action_btn;
 				if ( action == 'accept' ) {

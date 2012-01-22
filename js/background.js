@@ -311,6 +311,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		
 		//console.log( 'Starting ext. hang check...' );
 		if ( hang_check ) {
+			/*
 			hang_timer_id = setTimeout( function() {			
 				if ( request.app_request_id == current_id ) {
 					//console.log( 'Hang on id:' + request.app_request_id + '. Reloading main tab...' );
@@ -329,6 +330,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 					//console.log( 'NO hang on id: ' + request.app_request_id )
 				}
 			}, 10000 );
+			*/
 		}
 		
 		sendResponse( true );
