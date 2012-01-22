@@ -18,7 +18,9 @@ var settings;
 
 var setting_defaults = {
 	"audio_enabled" : "1",
-	"returnGiftMessage"  : ""
+	"returnGiftMessage"  : "",
+	"rejectGifts" : 'false',
+	"rejectNeighbors" : 'false'	
 }
 
 // Create audio

@@ -39,8 +39,37 @@
 					
 					$('#user-settings input:radio[name="sound"]').filter('[value="' + bgp.setting_defaults.audio_enabled + '"]').attr('checked', true);
 					
+					if ( bgp.setting_defaults.rejectGifts == 'true') {
+						$('#user-settings input:checkbox[name="reject_gifts"]').attr('checked', 'checked' );
+					} else {
+						$('#user-settings input:checkbox[name="reject_gifts"]').removeAttr('checked');
+					}
+					
+					if ( bgp.setting_defaults.rejectNeighbors == 'true' ) {
+						$('#user-settings input:checkbox[name="reject_neighbors"]').attr('checked', 'checked' );
+					} else {
+						$('#user-settings input:checkbox[name="reject_neighbors"]').removeAttr('checked');
+					}
+					
+					
 				} else {
+					
 					$('#user-settings input:radio[name="sound"]').filter('[value="' + bgp.settings.audio_enabled + '"]').attr('checked', true);
+					
+					if ( bgp.settings.rejectGifts == 'true' ) {
+						
+						$('#user-settings input:checkbox[name="reject_gifts"]').attr('checked', 'checked' );
+					} else {
+						$('#user-settings input:checkbox[name="reject_gifts"]').removeAttr('checked');
+					}
+					
+					if ( bgp.settings.rejectNeighbors == 'true' ) {
+						$('#user-settings input:checkbox[name="reject_neighbors"]').attr('checked', 'checked' );
+					} else {
+						$('#user-settings input:checkbox[name="reject_neighbors"]').removeAttr('checked');
+					}
+					
+					
 					$("#user-settings .return-gift-text textarea").val( bgp.settings.returnGiftMessage );
 				}	
 			}
@@ -49,6 +78,9 @@
 				
 				bgp.settings.returnGiftMessage = $("#user-settings .return-gift-text textarea").val();
 				bgp.settings.audio_enabled = $('input:radio[name="sound"]:checked').val();
+				
+				bgp.settings.rejectGifts = $('input:checkbox[name="reject_gifts"]').is(':checked')
+				bgp.settings.rejectNeighbors = $('input:checkbox[name="reject_neighbors"]').is(':checked')
 				
 				bgp.saveSettings();
 				
@@ -82,6 +114,28 @@
 								<div class="text"><b>Disabled</b>.</div>
 								<br clear="all" />
 							</div>						
+						</div>
+						<br clear="all" />
+					</div>
+					<div class="field reject-neighbors">
+						<div class="label">Reject neighbor requests:</div>
+						<div class="input">
+							<div class="option">
+								<div class="mark"><input type="checkbox" name="reject_neighbors" /></div>
+								<div class="text"></div>
+								<br clear="all" />
+							</div>					
+						</div>
+						<br clear="all" />
+					</div>
+					<div class="field reject-gifts">
+						<div class="label">Only accept non-gifts:</div>
+						<div class="input">
+							<div class="option">
+								<div class="mark"><input type="checkbox" name="reject_gifts" /></div>
+								<div class="text">(and reject the rest)</div>
+								<br clear="all" />
+							</div>					
 						</div>
 						<br clear="all" />
 					</div>
