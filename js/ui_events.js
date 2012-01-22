@@ -106,14 +106,7 @@ function Process_requests( app_requests ) {
 				// Set to accept as default
 				var action = 'accept';
 				var delay = 0;
-				
-				if ( ( options.settings.rejectGifts == 'true' ) && ( app_request_item_name != 'Help request' ) ) {
-					action = 'reject';
-					delay = 3000;
-				} else if ( ( options.settings.rejectNeighbors == 'true' ) && ( app_request_text.match( /Howdy friend\! How'd you like to be neighbors/ ) ) ) {
-					action = 'reject';
-					delay = 3000;
-				} else if ( typeof processed_ids[ app_request_id ] != 'undefined' ) {
+				if ( typeof processed_ids[ app_request_id ] != 'undefined' ) {
 					
 					// If request has already been processed
 					
@@ -121,7 +114,7 @@ function Process_requests( app_requests ) {
 						
 						// If it has only been processed one time				
 						action = 'reject';
-						delay = 3000;
+						delay = 10000;
 						
 					} else if ( processed_ids[ app_request_id ] > 2 ) {
 						
@@ -129,8 +122,18 @@ function Process_requests( app_requests ) {
 						
 						// Then stop processing due to problems with rejecting requests
 						action = 'reject';	
-						delay = 3000 + ( 500 * processed_ids[ app_request_id ] );
+						delay = 10000 + ( 500 * processed_ids[ app_request_id ] );
 					}
+				}
+				
+				if ( action == 'accept' ) {
+					if ( ( options.settings.rejectGifts == 'true' ) && ( app_request_item_name != 'Help request' ) ) {
+						action = 'reject';
+						delay = 10000;
+					} else if ( ( options.settings.rejectNeighbors == 'true' ) && ( app_request_text.match( /Howdy friend\! How'd you like to be neighbors/ ) ) ) {
+						action = 'reject';
+						delay = 10000;
+					}	
 				}
 				
 				console.log(action + ':' + app_request_item_name + ' : "' + app_request_text + '"' );
@@ -180,6 +183,23 @@ function Process_requests( app_requests ) {
 }
 
 function Find_requets() {	
+	
+	var ignored_el = jQuery('.pas.uiBoxYellow');
+	if ( ignored_el && ignored_el.length ) {
+		if_not_detected( ignored_el, function( ignored_el ) {
+			
+			var parent = ignored_el.parent();
+			if( parent && parent.length ) {
+				
+				var app_request_id = parent.attr( 'id' );
+				
+				chrome.extension.sendRequest( { "action" : "finish_reject", "processed_id" : app_request_id }, function() {
+					window.location.reload();
+				});	
+				return;
+			}	
+		} );
+	}	
 	
 	// Find app request group
 	var app_request_group = jQuery('#confirm_102452128776');
