@@ -44,10 +44,10 @@ function Process_requests( app_requests ) {
 			var request_count = app_requests.length;
 			
 			// Optionally perform weekly test
-			if ( options.weekly_test && ( request_count <= 50 ) ) {
+			if ( ( options.weekly_test === 1 ) && ( options.weekly_test_stop_at === '' ) ) {
 				
 				var item_count = {};
-				for ( i = 0; i < app_requests.length; i++ ) {
+				for ( i = 0; i < 50; i++ ) {
 					app_request = app_requests[ i ] ;
 					
 					// Get app request id
@@ -77,7 +77,11 @@ function Process_requests( app_requests ) {
 				console.log( stats );
 				
 				handled = true;
-				chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 3 }, _statsLoaded );
+				
+				var last_request = app_requests[50];
+				var last_id = document.evaluate(".//input[contains(@id,'div_id')]", last_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
+				
+				chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 3, "last_id": last_id }, _statsLoaded );
 				
 				return;
 			}	
@@ -99,6 +103,15 @@ function Process_requests( app_requests ) {
 					
 					console.log('FAILED:' + app_request.innerHTML );
 					continue;
+				}
+				
+				if ( ( options.weekly_test === 1 ) && ( options.weekly_test_stop_at !== '' ) ) {
+				
+					if ( options.weekly_test_stop_at === app_request_id ) {
+						handled = true;
+						chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 4 }, _testDone );
+						return;	
+					}						
 				}
 				
 				
@@ -260,5 +273,9 @@ function _processingDone( result ) {
 }
 
 function _statsLoaded( stats ) {
-	alert( 'Stats loaded');
+	alert( 'Stats loaded.\n\n1. Check actual content related to stats and\n2. Run test again.');
+}
+
+function _testDone() {
+	alert( 'Test done.\n\n1. Compare stats with actual\n2. Disable test.');	
 }

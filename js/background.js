@@ -3,7 +3,9 @@ var FVE_version = getVersion();
 var processing = false;
 var app_requests = {};
 var processed_ids = {};
-var weekly_test = false;
+
+var weekly_test = 0;
+var weekly_test_stop_at = '';
 
 var current_id = -1;
 var main_tab_id = -1;
@@ -34,8 +36,8 @@ info_audio.src = "../sound/info.ogg";
 var ga_iframe;
 jQuery(document).ready( function() {
 	
-	if ( weekly_test ) {
-		alert( 'Test enabled' );
+	if ( weekly_test === 1 ) {
+		alert( 'Test enabled:' + weekly_test_stop_at );
 	}
 	
 	loadSettings();
@@ -230,6 +232,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		
 		options.just_help = just_help;
 		options.weekly_test = weekly_test;
+		options.weekly_test_stop_at = weekly_test_stop_at;
 		options.settings = settings;
 		
 		sendResponse( options );
@@ -240,6 +243,16 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		
 		sendResponse( processing );
 	} else if ( request.action == 'stop_processing' ) {
+		
+		
+		if ( request.ptype == 3 && weekly_test == 1 ) {			
+			weekly_test_stop_at = request.last_id;
+		}
+		
+		if ( request.ptype == 4 && weekly_test == 1 ) {
+			weekly_test_stop_at = '';
+		}
+		
 		list_reload_index = 0;
 		processing = false;
 		current_id = -1;	
