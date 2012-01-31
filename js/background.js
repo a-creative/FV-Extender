@@ -407,10 +407,56 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		} else {
 			sendResponse( false );
 		}
-	}
+	} else if ( request.action == 'toggle_fve_for_app' ) {
+		
+		var apps = localStorage[ "apps" ];
+		if ( ( typeof apps ) == 'undefined' ) {
+			apps = "102452128776";
+			localStorage[ "apps" ] = "102452128776";
+		}
+		
+		if ( apps ==='' ) {
+			apps = [];	
+		} else {
+			apps = apps.split( "," );
+		}
+		
+		var i = 0;
+		var app_id;
+		var found_at = -1;
+		
+		while( ( found_at == -1 ) && ( i < apps.length ) ) {
+			app_id = apps[ i ];
+			
+			if ( app_id === request.app_id ) {
+				found_at = i;	
+			}		
+			
+			i++;
+		}
+		
+		if ( found_at == -1 ) {
+			
+			if ( request.get_status ) {
+				sendResponse( false );
+			} else {
+				apps.push( request.app_id )
+				sendResponse( true );
+			}
+		} else {
+			
+			if ( request.get_status ) {
+				sendResponse( true );	
+			} else {
+				
+				apps.splice( found_at, 1 )
+				sendResponse( false );
+			}
+		}
+		
+		localStorage[ "apps" ] = apps.join(",");
 	
-	
-	
+	} 
 } );
 
 function goto_requests() {
