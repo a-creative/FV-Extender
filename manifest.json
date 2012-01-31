@@ -15,6 +15,18 @@
 	"content_scripts": [
 		{
 			"matches" : [
+				"http://www.facebook.com/settings?tab=applications",
+				"https://www.facebook.com/settings?tab=applications"
+			],
+			"js": [
+				"js/jquery-1.7.min.js",
+				"js/detect_changes.js",
+				"js/content_app_settings.js"						
+			],
+			"run_at": "document_start"
+		},
+		{
+			"matches" : [
 				"https://www.facebook.com/dialog/apprequests*",
 				"http://www.facebook.com/dialog/apprequests*"				
 			],

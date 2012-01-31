@@ -10,6 +10,7 @@
 			<a href="#" id="just-help-btn">Just help</a>
 			<a href="#" id="abort-btn">Abort processing</a>
 			<a href="#" id="settings-btn" class="enabled">Settings</a>
+			<a href="#" id="app-settings-btn" class="enabled">App. Settings</a>
 			<a href="http://a-creative.dk" class="enabled" target="_blank" title="Read about all FVE versions">FVE blog</a>
 			<a href="#" id="donate-btn" class="enabled">Donate</a>
 			<a href="#" id="updates-btn">- Checking FVE version...</a>
@@ -79,6 +80,12 @@
 				return false;
 			}
 			
+			function _app_settings_clicked() {
+				bgp.openTab( { url: "https://www.facebook.com/settings?tab=applications" } );
+				window.close();
+				return false;
+			}
+			
 			function _just_help_btn_clicked() {
 				alert( 'Feature not available yet. Just help will be added in a later version.' );
 				/*
@@ -113,6 +120,7 @@
 			var abort_btn = document.getElementById( 'abort-btn' );
 			var process_btn = document.getElementById( 'process-btn' );
 			var settings_btn = document.getElementById( 'settings-btn' );
+			var app_settings_btn = document.getElementById( 'app-settings-btn' );
 			var just_help_btn = document.getElementById( 'just-help-btn' );
 			var donate_btn = document.getElementById( 'donate-btn' );
 			var auto_process_btn = document.getElementById( 'auto-process-btn' );
@@ -127,6 +135,7 @@
 			}
 			
 			settings_btn.onclick = _settings_clicked;
+			app_settings_btn.onclick = _app_settings_clicked;
 			just_help_btn.onclick = _just_help_btn_clicked;
 			donate_btn.onclick = _donate_btn_clicked;
 			auto_process_btn.onclick = _auto_process_btn_clicked;
