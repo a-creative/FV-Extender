@@ -140,10 +140,10 @@ function Process_requests( app_requests ) {
 				}
 				
 				if ( action == 'accept' ) {
-					if ( ( options.settings.rejectGifts == 'true' ) && ( app_request_item_name != 'Help request' ) ) {
+					if ( ( ( options.settings.rejectGifts === 'true' ) || ( options.settings.rejectGifts === true ) ) && ( app_request_item_name != 'Help request' ) ) {
 						action = 'reject';
 						delay = 10000;
-					} else if ( ( options.settings.rejectNeighbors == 'true' ) && ( app_request_text.match( /Howdy friend\! How'd you like to be neighbors/ ) ) ) {
+					} else if ( ( ( options.settings.rejectNeighbors === 'true' ) || ( options.settings.rejectNeighbors === true ) ) && ( app_request_text.match( /Howdy friend\! How'd you like to be neighbors/ ) ) ) {
 						action = 'reject';
 						delay = 10000;
 					}	

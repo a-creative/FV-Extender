@@ -16,13 +16,15 @@ var list_reload_index = 0;
 var listLoadId = 0;
 
 var options = {};
-var settings;
+var settings = {}
+
+var app_settings = {};
 
 var setting_defaults = {
 	"audio_enabled" : "1",
 	"returnGiftMessage"  : "",
-	"rejectGifts" : 'false',
-	"rejectNeighbors" : 'false',
+	"rejectGifts" : false,
+	"rejectNeighbors" : false,
 	"feature_activate_auto_process" : "0"
 }
 
@@ -43,12 +45,103 @@ jQuery(document).ready( function() {
 	
 	loadSettings();
 	
+	// Init. app settings with FV enabled
+	var apps = localStorage.getItem[ 'apps' ];
+	
+	if ( ( apps === null ) || ( typeof apps === 'undefined' ) ){
+		localStorage.setItem( 'apps', "" );
+		setAppSetting( 102452128776, true, -1, true );
+		
+	}	
+	
 	// Create iframe for google analytics
 	ga_iframe = document.body.appendChild(document.createElement('iframe'));	
 } );
 
 function query_GA() {
 	ga_iframe.src = 'http://a-creative.dk/wp/stats_31.html';
+}
+
+function setAppSetting( app_id, full_support, timeout, store ) {
+	app_settings[ app_id ] = {
+		"full_support" : full_support,
+		"timeout" : timeout
+	};
+	
+	saveAppSetting( app_id, false );
+}
+
+function getAppSetting( app_id ) {
+	return ( app_settings[ app_id ] );
+}
+
+function removeApp( app_id, store ) {
+	saveAppSetting( app_id, true );
+	delete app_settings[ app_id ];	
+}
+
+function saveAppSetting( save_app_id, remove ) {
+	
+	// Init. app_id in array
+	var stored_ids = localStorage.getItem('apps');
+	
+	// Turn stored string into an array to work with
+	if ( ( stored_ids ==='' ) || ( stored_ids === null ) || ( typeof stored_ids === 'undefined' ) ){
+		stored_ids = [];	
+	} else {
+		stored_ids = stored_ids.split( "," );
+	}	
+	
+	// Find out if the id exists in storage
+	var i = 0;
+	var stored_app_id;
+	var found_at = -1;
+	
+	while( ( found_at == -1 ) && ( i < stored_ids.length ) ) {
+		stored_app_id = stored_ids[ i ];
+		
+		if ( stored_app_id === save_app_id ) {
+			found_at = i;	
+		}		
+		
+		i++;
+	}	
+	
+	if ( ( found_at !== -1 ) && remove ) {
+		
+		// Remove app from storage
+		stored_ids.splice( found_at, 1 )
+		
+		// Update app in storage
+		for ( var key in app_settings[ save_app_id ] ) {
+			
+			localStorage.removeItem( "app_" + save_app_id + "_" + key );
+			delete localStorage[ "app_" + save_app_id + "_" + key ];
+		}	
+		
+		
+	} else if ( !remove ) {
+		
+		// Add/update app to storage
+		
+		if ( found_at == -1 ) {
+		
+			// Add app
+			stored_ids.push( save_app_id )
+		
+		}
+		
+		// Update app in storage
+		for ( var key in app_settings[ save_app_id ] ) {
+			localStorage.setItem(
+				"app_" + save_app_id + "_" + key ,
+				app_settings[ save_app_id ][ key ]
+			);
+		}	
+	}
+	
+	localStorage.setItem( "apps", stored_ids.join(",") );	
+	
 }
 
 function getVersion() {
@@ -75,14 +168,14 @@ function getVersion() {
 }
 
 function loadSettings( loadDefaults ) {
-	
 	for ( var key in setting_defaults ) {		
-		if ( loadDefaults || ( ( typeof localStorage[ key ] ) == 'undefined' ) ) {
-			localStorage[ key ] = setting_defaults[ key ]
+		if ( loadDefaults || ( localStorage.getItem( key ) === null ) || ( typeof localStorage.getItem( key ) === 'undefined' ) ) {
+			localStorage.setItem( key, setting_defaults[ key ] );
+			settings[ key ] = setting_defaults[ key ];
+		} else {
+			settings[ key ] = localStorage.getItem( key );
 		}		
 	}
-	
-	settings = localStorage;
 }
 
 function loadDefaults() {
@@ -91,7 +184,8 @@ function loadDefaults() {
 
 function saveSettings() {		
 	for ( var key in setting_defaults ) {
-		localStorage[ key ] = settings[ key ];
+		
+		localStorage.setItem( key, settings[ key ] );
 	}
 }
 
@@ -409,54 +503,28 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		}
 	} else if ( request.action == 'toggle_fve_for_app' ) {
 		
-		var apps = localStorage[ "apps" ];
-		if ( ( typeof apps ) == 'undefined' ) {
-			apps = "102452128776";
-			localStorage[ "apps" ] = "102452128776";
-		}
+		var app_setting = getAppSetting( request.app_id );
 		
-		if ( apps ==='' ) {
-			apps = [];	
-		} else {
-			apps = apps.split( "," );
-		}
+		if ( app_setting ) {
 		
-		var i = 0;
-		var app_id;
-		var found_at = -1;
-		
-		while( ( found_at == -1 ) && ( i < apps.length ) ) {
-			app_id = apps[ i ];
-			
-			if ( app_id === request.app_id ) {
-				found_at = i;	
-			}		
-			
-			i++;
-		}
-		
-		if ( found_at == -1 ) {
-			
-			if ( request.get_status ) {
-				sendResponse( false );
-			} else {
-				apps.push( request.app_id )
-				sendResponse( true );
-			}
-		} else {
-			
 			if ( request.get_status ) {
 				sendResponse( true );	
 			} else {
 				
-				apps.splice( found_at, 1 )
+				removeApp( request.app_id, true );
 				sendResponse( false );
-			}
+			}	
+				
+		} else {
+			if ( request.get_status ) {
+				sendResponse( false );
+			} else {
+				
+				setAppSetting( request.app_id, false, -1, true );
+				sendResponse( true );
+			}		
 		}
-		
-		localStorage[ "apps" ] = apps.join(",");
-	
-	} 
+	}
 } );
 
 function goto_requests() {
