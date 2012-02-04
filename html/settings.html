@@ -20,22 +20,6 @@
 				$("#save-btn").click( function( evt ) {
 					
 					var valid = true;
-					var activation_code_el = $( '.auto-process textarea:visible' )
-					if ( activation_code_el && activation_code_el.length && activation_code_el.val() != activation_code_el.attr('default-value' ) ) {
-						if (
-								(	activation_code_el.val() === 'The value of a man resides in what he gives and not in what he is capable of receiving.' )
-							||	(	activation_code_el.val() === 'We make a living by what we get, but we make a life by what we give.' )
-							||	(	activation_code_el.val() === 'You cannot do a kindness too soon because you never know how soon it will be too late.' )
-							||	(	activation_code_el.val() === 'Love grows by giving. The love we give away is the only love we keep. The only way to retain love is to give it away.' )
-							||	(	activation_code_el.val() === 'Many people despise wealth, but few know how to give it away.' )
-						) {
-							bgp.settings.feature_activate_auto_process = '1';
-							alert( 'The feature "Auto process" was activated successfully. Now click "Auto process" in the FVE menu to start using the feature for the first time.')
-						} else {
-							alert( 'The feature "Auto process" failed to activate. Please re-type the received activation code and click "Save" again.')
-							valid = false;
-						}
-					}
 					
 					if ( valid ) {
 						saveSettings();
@@ -111,15 +95,6 @@
 					
 					$("#user-settings .return-gift-text textarea").val( bgp.settings.returnGiftMessage );
 				}
-				
-				
-				if ( bgp.settings.feature_activate_auto_process === '1' ) {
-					$('.auto-process .activated').css('display', 'block' );
-					$('.auto-process .deactivated').css('display', 'none' );
-				} else {
-					$('.auto-process .activated').css('display', 'none' );
-					$('.auto-process .deactivated').css('display', 'block' );
-				}
 			}
 			
 			function saveSettings() {
@@ -184,14 +159,6 @@
 								<div class="text">(and reject the rest)</div>
 								<br clear="all" />
 							</div>					
-						</div>
-						<br clear="all" />
-					</div>
-					<div class="field auto-process">
-						<div class="label">Activate feature<br /> "Auto process" (<a href="http://a-creative.dk/donate/auto-process-feature-activation/" title="Click '?' to read more about this feature and how to get an activation code">?</a>):</div>
-						<div class="input">
-							<textarea type="text" class="default-value deactivated">Type received activation code here...</textarea></textarea>
-							<div class="activated">(the "Auto process" feature is active)</div>
 						</div>
 						<br clear="all" />
 					</div>

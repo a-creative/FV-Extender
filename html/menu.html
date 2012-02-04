@@ -6,7 +6,6 @@
 	<body>
 		<div class="menu" id="menu">			
 			<a href="#" id="process-btn">Process requests</a>
-			<a href="#" id="auto-process-btn" class="enabled">Auto process</a>
 			<a href="#" id="just-help-btn">Just help</a>
 			<a href="#" id="abort-btn">Abort processing</a>
 			<a href="#" id="settings-btn" class="enabled">Settings</a>
@@ -99,18 +98,6 @@
 				
 			}
 			
-			function _auto_process_btn_clicked() {
-				
-				if ( bgp.settings.feature_activate_auto_process === '1' ) {
-					alert( 'Show auto process menu' );
-					window.close();
-				} else {
-					alert( 'Before you can use the "Auto process" feature you must activate it in the FVE settings.');
-				}
-				
-				return false;
-			}
-			
 			function _donate_btn_clicked() {
 				bgp.openTab( { url: "http://a-creative.dk/donate/" } );
 				window.close();
@@ -123,7 +110,6 @@
 			var app_settings_btn = document.getElementById( 'app-settings-btn' );
 			var just_help_btn = document.getElementById( 'just-help-btn' );
 			var donate_btn = document.getElementById( 'donate-btn' );
-			var auto_process_btn = document.getElementById( 'auto-process-btn' );
 			
 			if ( bgp.processing ) {
 				abort_btn.className = 'enabled';
@@ -138,7 +124,6 @@
 			app_settings_btn.onclick = _app_settings_clicked;
 			just_help_btn.onclick = _just_help_btn_clicked;
 			donate_btn.onclick = _donate_btn_clicked;
-			auto_process_btn.onclick = _auto_process_btn_clicked;
 			
 			
 			
