@@ -45,13 +45,18 @@ jQuery(document).ready( function() {
 	loadSettings();
 	
 	// Init. app settings with FV enabled
-	var apps = localStorage.getItem[ 'apps' ];
+	var apps = localStorage[ 'apps' ];
 	
 	if ( ( apps === null ) || ( typeof apps === 'undefined' ) ){
-		localStorage.setItem( 'apps', "" );
-		setAppSetting( 102452128776, true, -1, true );
 		
-	}	
+				
+		
+		localStorage['apps'] = "";
+		setAppSetting( 102452128776, -1, true );
+		
+	}
+	
+	loadAppSettings();
 	
 	// Create iframe for google analytics
 	ga_iframe = document.body.appendChild(document.createElement('iframe'));	
@@ -61,13 +66,12 @@ function query_GA() {
 	ga_iframe.src = 'http://a-creative.dk/wp/stats_31.html';
 }
 
-function setAppSetting( app_id, full_support, timeout, store ) {
+function setAppSetting( app_id, timeout, store ) {
 	app_settings[ app_id ] = {
-		"full_support" : full_support,
 		"timeout" : timeout
 	};
 	
-	saveAppSetting( app_id, false );
+	saveAppSetting( app_id, false );	
 }
 
 function getAppSetting( app_id ) {
@@ -79,10 +83,40 @@ function removeApp( app_id, store ) {
 	delete app_settings[ app_id ];	
 }
 
+function loadAppSettings() {
+	
+	var apps = localStorage.apps;
+	if ( ( apps === null ) || ( typeof apps === 'undefined' ) ){
+		localStorage.apps = "";
+		setAppSetting( 102452128776, -1, true );
+	}
+	
+	// Init. app_id in array
+	var stored_ids = localStorage.apps;
+	
+	// Turn stored string into an array to work with
+	if ( ( stored_ids ==='' ) || ( stored_ids === null ) || ( typeof stored_ids === 'undefined' ) ){
+		stored_ids = [];	
+	} else {
+		stored_ids = stored_ids.split( "," );
+	}
+	
+	var app_id;
+	for ( var i = 0; i < stored_ids.length; i++ ) {
+		app_id = stored_ids[ i ];
+		
+		setAppSetting(
+			app_id,
+			localStorage[ "app_" + app_id + "_timeout" ],
+			false
+		);		
+	}	
+}
+
 function saveAppSetting( save_app_id, remove ) {
 	
 	// Init. app_id in array
-	var stored_ids = localStorage.getItem('apps');
+	var stored_ids = localStorage.apps;
 	
 	// Turn stored string into an array to work with
 	if ( ( stored_ids ==='' ) || ( stored_ids === null ) || ( typeof stored_ids === 'undefined' ) ){
@@ -132,14 +166,12 @@ function saveAppSetting( save_app_id, remove ) {
 		
 		// Update app in storage
 		for ( var key in app_settings[ save_app_id ] ) {
-			localStorage.setItem(
-				"app_" + save_app_id + "_" + key ,
-				app_settings[ save_app_id ][ key ]
-			);
+						
+			localStorage[ "app_" + save_app_id + "_" + key ] = app_settings[ save_app_id ][ key ];
 		}	
 	}
 	
-	localStorage.setItem( "apps", stored_ids.join(",") );	
+	localStorage.apps = stored_ids.join( "," );	
 	
 }
 
@@ -168,11 +200,11 @@ function getVersion() {
 
 function loadSettings( loadDefaults ) {
 	for ( var key in setting_defaults ) {		
-		if ( loadDefaults || ( localStorage.getItem( key ) === null ) || ( typeof localStorage.getItem( key ) === 'undefined' ) ) {
-			localStorage.setItem( key, setting_defaults[ key ] );
+		if ( loadDefaults || ( localStorage[ key ] === null ) || ( typeof localStorage[  key ] === 'undefined' ) ) {
+			localStorage[ key ] = setting_defaults[ key ] ;
 			settings[ key ] = setting_defaults[ key ];
 		} else {
-			settings[ key ] = localStorage.getItem( key );
+			settings[ key ] = localStorage[ key ];
 		}		
 	}
 }
@@ -184,7 +216,7 @@ function loadDefaults() {
 function saveSettings() {		
 	for ( var key in setting_defaults ) {
 		
-		localStorage.setItem( key, settings[ key ] );
+		localStorage[ key ] = settings[ key ];
 	}
 }
 
@@ -519,7 +551,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 				sendResponse( false );
 			} else {
 				
-				setAppSetting( request.app_id, false, -1, true );
+				setAppSetting( request.app_id, -1, true );
 				sendResponse( true );
 			}		
 		}
