@@ -19,8 +19,7 @@
 			
 			var bgp = chrome.extension.getBackgroundPage();
 			
-			
-			bgp.checkForUpdates( function( update ) {
+			bgp.Version.checkForUpdates( function( update ) {
 				
 				var update_link = document.getElementById( 'updates-btn' );
 			
@@ -63,6 +62,11 @@
 			
 			function _process_clicked() {
 				
+				bgp.process_requests( -1 );
+				window.close();
+				return false;
+				
+				/*
 				bgp.app_requests = {};
 				bgp.processed_ids = {};
 				bgp.processing = true;
@@ -70,13 +74,15 @@
 				bgp.goto_requests();
 				window.close();
 				return false;
-				
+				*/
 			}
 			
 			function _settings_clicked() {
-				bgp.openTab( { url: "html/settings.html" } );
+				
+				bgp.Tabs.openTab( { url: "html/settings.html" } );
 				window.close();
 				return false;
+				
 			}
 			
 			function _app_settings_clicked() {
