@@ -62,19 +62,15 @@
 			
 			function _process_clicked() {
 				
-				bgp.process_requests( -1 );
-				window.close();
-				return false;
+				this.innerHTML = 'Loading requests...';
+				this.onclick = function() {
+					return false;
+				};
+				bgp.Proc.ProcessRequests( -1, function() {
+					window.close();					
+				} );
 				
-				/*
-				bgp.app_requests = {};
-				bgp.processed_ids = {};
-				bgp.processing = true;
-				bgp.just_help = false;
-				bgp.goto_requests();
-				window.close();
-				return false;
-				*/
+				return false;	
 			}
 			
 			function _settings_clicked() {

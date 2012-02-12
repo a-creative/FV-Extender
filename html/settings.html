@@ -62,6 +62,8 @@
 					);
 					
 					$('#user-settings input:radio[name="sound"]').filter('[value="' + bgp.Settings.core_setting_defaults.audio_enabled + '"]').attr('checked', true);
+					$('#user-settings input:radio[name="speed"]').filter('[value="' + bgp.Settings.core_setting_defaults.speed + '"]').attr('checked', true);
+										
 					
 					if ( bgp.Settings.core_setting_defaults.rejectGifts === true || bgp.Settings.core_setting_defaults.rejectGifts === 'true') {
 						$('#user-settings input:checkbox[name="reject_gifts"]').attr('checked', 'checked' );
@@ -78,6 +80,8 @@
 				} else {
 					
 					$('#user-settings input:radio[name="sound"]').filter('[value="' + bgp.Settings.core_settings.audio_enabled + '"]').attr('checked', true);
+					$('#user-settings input:radio[name="speed"]').filter('[value="' + bgp.Settings.core_settings.speed + '"]').attr('checked', true);
+										
 					
 					if ( bgp.Settings.core_settings.rejectGifts === true || bgp.Settings.core_settings.rejectGifts === 'true' ) {
 						
@@ -101,6 +105,7 @@
 				
 				bgp.Settings.core_settings.returnGiftMessage = $("#user-settings .return-gift-text textarea").val();
 				bgp.Settings.core_settings.audio_enabled = $('input:radio[name="sound"]:checked').val();
+				bgp.Settings.core_settings.speed = $('input:radio[name="speed"]:checked').val();
 				
 				bgp.Settings.core_settings.rejectGifts = $('input:checkbox[name="reject_gifts"]').is(':checked') + "";
 				bgp.Settings.core_settings.rejectNeighbors = $('input:checkbox[name="reject_neighbors"]').is(':checked') + "";
@@ -134,9 +139,30 @@
 							</div>
 							<div class="option">
 								<div class="mark"><input type="radio" name="sound" value="0" /></div>
-								<div class="text"><b>Disabled</b>.</div>
+								<div class="text"><b>Disabled</b></div>
 								<br clear="all" />
 							</div>						
+						</div>
+						<br clear="all" />
+					</div>
+					<div class="field speed">
+						<div class="label">Processing speed:</div>
+						<div class="input">
+							<div class="option">
+								<div class="mark"><input type="radio" name="speed" value="1" /></div>
+								<div class="text"><b>Default(No concurrent processes)</b></div>
+								<br clear="all" />
+							</div>
+							<div class="option">
+								<div class="mark"><input type="radio" name="speed" value="2" /></div>
+								<div class="text"><b>Faster(2 simultaneous processes)</b></div>
+								<br clear="all" />
+							</div>
+							<div class="option">
+								<div class="mark"><input type="radio" name="speed" value="4" /></div>
+								<div class="text"><b>Fastest(4 simultaneous processes)</b></div>
+								<br clear="all" />
+							</div>
 						</div>
 						<br clear="all" />
 					</div>

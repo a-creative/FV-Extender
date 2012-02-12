@@ -6,7 +6,8 @@ var Settings = {
 		"audio_enabled" : "1",
 		"returnGiftMessage"  : "",
 		"rejectGifts" : false,
-		"rejectNeighbors" : false
+		"rejectNeighbors" : false,
+		"speed" : 1,
 	},
 	app_settings : {},
 	core_settings : {},
@@ -20,11 +21,11 @@ var Settings = {
 		Settings.saveAppSetting( app_id, false );	
 	},
 	getAppSetting: function( app_id ) {
-		return ( app_settings[ app_id ] );
+		return ( Settings.app_settings[ app_id ] );
 	},
 	removeApp: function( app_id, store ) {
 		Settings.saveAppSetting( app_id, true );
-		delete app_settings[ app_id ];	
+		delete Settings.app_settings[ app_id ];	
 	},
 	loadAppSettings: function() {
 	
@@ -88,7 +89,7 @@ var Settings = {
 			stored_ids.splice( found_at, 1 )
 			
 			// Update app in storage
-			for ( var key in app_settings[ save_app_id ] ) {
+			for ( var key in Settings.app_settings[ save_app_id ] ) {
 				
 				localStorage.removeItem( "app_" + save_app_id + "_" + key );
 				delete localStorage[ "app_" + save_app_id + "_" + key ];
