@@ -1,6 +1,6 @@
 {
 	"name": "FV Extender Classic",
-	"version": "3.1.10",
+	"version": "3.1.11",
 	"description": "Helps you accept FarmVille requests.",
 	"homepage_url" : "http://a-creative.dk/fv-extender-3",
 	"background_page": "html/background.html",
@@ -55,10 +55,12 @@
 			"run_at": "document_start"
 		}, {
 			"matches" : [
-				"http://apps.facebook.com/onthefarm*",
-				"https://apps.facebook.com/onthefarm*",
-				"http://facebook.farmville.com/*",
-				"https://facebook.farmville.com/*"
+				"http://fv-zprod.farmville.com/?fb_source=request&request_ids=*",
+				"https://fv-zprod.farmville.com/?fb_source=request&request_ids=*",
+				"http://apps.facebook.com/onthefarm/",
+				"https://apps.facebook.com/onthefarm/",
+				"http://apps.facebook.com/onthefarm/index.php*",
+				"https://apps.facebook.com/onthefarm/index.php*"
 			],
 			"js": [
 				"js/jquery-1.7.min.js",
