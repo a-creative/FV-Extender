@@ -7,16 +7,14 @@
 	"permissions" : [
 		"tabs",
 		"http://api.twitter.com/*",
-		"http://www.facebook.com/plugins/serverfbml.php",
-		"https://www.facebook.com/plugins/serverfbml.php",
+		"*://www.facebook.com/plugins/serverfbml.php",
 		"http://apps.facebook.com/onthefarm*"
 	],
 	"options_page" : "html/settings.html",
 	"content_scripts": [
 		{
 			"matches" : [
-				"https://www.facebook.com/dialog/apprequests*",
-				"http://www.facebook.com/dialog/apprequests*"				
+				"*://www.facebook.com/dialog/apprequests*"
 			],
 			"js": [
 				"js/jquery-1.7.min.js",
@@ -28,8 +26,7 @@
 		},
 		{
 			"matches" : [
-				"https://www.facebook.com/plugins/serverfbml.php*",
-				"http://www.facebook.com/plugins/serverfbml.php*"				
+				"*://www.facebook.com/plugins/serverfbml.php*"
 			],
 			"js": [
 				"js/content_min.js"						
@@ -39,8 +36,7 @@
 		},
 		{
 			"matches": [
-			  "http://www.facebook.com/games",
-			  "https://www.facebook.com/games"
+			  "*://www.facebook.com/games"
 			],
 			"js": [
 				"js/jquery-1.7.min.js",
@@ -55,12 +51,12 @@
 			"run_at": "document_start"
 		}, {
 			"matches" : [
-				"http://fv-zprod.farmville.com/?fb_source=request&request_ids=*",
-				"https://fv-zprod.farmville.com/?fb_source=request&request_ids=*",
-				"http://apps.facebook.com/onthefarm/",
-				"https://apps.facebook.com/onthefarm/",
-				"http://apps.facebook.com/onthefarm/index.php*",
-				"https://apps.facebook.com/onthefarm/index.php*"
+				"*://fv-zprod.farmville.com/?fb_source=request&request_ids=*",
+				"*://apps.facebook.com/onthefarm/",
+				"*://apps.facebook.com/onthefarm/index.php*",
+				"*://apps.facebook.com/onthefarm/?installed=1*",
+				"*://fv-zprod.farmville.com/"
+				
 			],
 			"js": [
 				"js/jquery-1.7.min.js",

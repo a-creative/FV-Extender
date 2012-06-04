@@ -84,10 +84,11 @@ function changes_detected() {
 	// Detect yes button
 	var h3_help = jQuery("h3:contains('Materials sent')");
 	var h3_help_2 = jQuery("h3:contains('Sorry')");
+	var add_text = jQuery(".main_giftConfirm_cont .additional_text");
 	var askMore_text_el = jQuery("div[class='askMore_text']");
 	
 	var yes_btn = jQuery( "input[value='Yes']");
-	if ( yes_btn.length && ( ( !document.location.href.match( /\/?request_ids=/ ) ) || h3_help.length || h3_help_2.length || askMore_text_el.length ) ) {
+	if ( yes_btn.length && ( ( !document.location.href.match( /\/?request_ids=/ ) ) || h3_help.length || h3_help_2.length || askMore_text_el.length || add_text.length ) ) {
 		
 		if_not_detected( yes_btn, function( yes_btn ) {
 			
@@ -119,7 +120,11 @@ function changes_detected() {
 	
 	// Detect play farmville
 	var play_btn = jQuery( "input[value='Play FarmVille']");
-	if ( play_btn.length ) {
+	if ( play_btn.length == 0 ) {
+		play_btn = jQuery( "input[value='Play FarmVille!']");
+	}
+	
+	if ( play_btn.length  ) {
 		if_not_detected( play_btn, function( play_btn ) {
 			state = 3;
 			state_text = 'Request accepted!(by Play button)';
