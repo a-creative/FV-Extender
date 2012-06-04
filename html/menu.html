@@ -9,6 +9,7 @@
 			<a href="#" id="just-help-btn">Just help</a>
 			<a href="#" id="abort-btn">Abort processing</a>
 			<a href="#" id="settings-btn" class="enabled">Settings</a>
+			<a href="#" id="app-settings-btn" class="enabled">App. Settings</a>
 			<a href="http://a-creative.dk" class="enabled" target="_blank" title="Read about all FVE versions">FVE blog</a>
 			<a href="#" id="donate-btn" class="enabled">Donate</a>
 			<a href="#" id="updates-btn">- Checking FVE version...</a>
@@ -18,8 +19,7 @@
 			
 			var bgp = chrome.extension.getBackgroundPage();
 			
-			
-			bgp.checkForUpdates( function( update ) {
+			bgp.Version.checkForUpdates( function( update ) {
 				
 				var update_link = document.getElementById( 'updates-btn' );
 			
@@ -62,18 +62,27 @@
 			
 			function _process_clicked() {
 				
-				bgp.app_requests = {};
-				bgp.processed_ids = {};
-				bgp.processing = true;
-				bgp.just_help = false;
-				bgp.goto_requests();
+				this.innerHTML = 'Loading requests...';
+				this.onclick = function() {
+					return false;
+				};
+				bgp.Proc.ProcessRequests( -1, function() {
+					window.close();					
+				} );
+				
+				return false;	
+			}
+			
+			function _settings_clicked() {
+				
+				bgp.Tabs.openTab( { url: "html/settings.html" } );
 				window.close();
 				return false;
 				
 			}
 			
-			function _settings_clicked() {
-				bgp.openTab( { url: "html/settings.html" } );
+			function _app_settings_clicked() {
+				bgp.openTab( { url: "https://www.facebook.com/settings?tab=applications" } );
 				window.close();
 				return false;
 			}
@@ -100,6 +109,7 @@
 			var abort_btn = document.getElementById( 'abort-btn' );
 			var process_btn = document.getElementById( 'process-btn' );
 			var settings_btn = document.getElementById( 'settings-btn' );
+			var app_settings_btn = document.getElementById( 'app-settings-btn' );
 			var just_help_btn = document.getElementById( 'just-help-btn' );
 			var donate_btn = document.getElementById( 'donate-btn' );
 			
@@ -113,6 +123,7 @@
 			}
 			
 			settings_btn.onclick = _settings_clicked;
+			app_settings_btn.onclick = _app_settings_clicked;
 			just_help_btn.onclick = _just_help_btn_clicked;
 			donate_btn.onclick = _donate_btn_clicked;
 			

@@ -132,22 +132,27 @@ a.button:active {
 }
 
 .user-settings .form .field .label {
-	width:150px;
+	width:170px;
 	float:left;
 	clear:both;
 	padding-top:3px;
 }
 
+.user-settings .form .field .label a {
+	text-decoration:underline;
+}
+
+
 .user-settings .form .field .input {
 	margin-left:10px;
-	width:383px;
+	width:363px;
 	float:left;
 }
 
 .user-settings .form .field .input > input {
 	height:14px;
 	padding:3px;
-	width:377px;
+	width:357px;
 }
 
 .option {
@@ -168,7 +173,7 @@ a.button:active {
 }
 
 .user-settings .form .field .option .text {
-	width:363px;
+	width:343px;
 }
 
 .user-settings .form .field .option.x .text input {
@@ -179,7 +184,7 @@ a.button:active {
 .user-settings .form textarea {
 	height:48px;
 	padding:3px;
-	width:377px;
+	width:367px;
 }
 
 .user-settings .form .buttons {
