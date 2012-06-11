@@ -143,7 +143,10 @@ chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( han
 		if ( ( document.location.href.match( /sentthankyougift\.php/ ) ) || ( document.location.href.match( /redirecting_zy_session_expired\=1/ ) ) ) {
 			state = 3; state_text = 'Request accepted!(with thankyou gift)';
 		}
-		if ( document.location.href.match( /sendcredits\.php/ ) ) {
+		if (
+					( document.location.href.match( /sendcredits\.php/ ) )
+				 || ( document.location.href.match( /InventoryCellar_send/ ) )
+		) {
 			state = 3; state_text = 'Help request accepted!';
 		}
 		if ( state != -1 ) {
