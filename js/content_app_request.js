@@ -133,46 +133,7 @@ function changes_detected() {
 			} );
 		} );
 	}
-	
-	// Detect and click on return gift button
-	var return_gift_btn = jQuery( 'img[class=send_thank_you]' );
-	var img_found = false;
-	if ( return_gift_btn.length == 0 ) {
-		return_gift_btn = jQuery( 'input[name=send]' );
-	} else {
-		img_found = true;
-	}
-	
-	
-	if ( return_gift_btn.length ) {
-		console.log( 'Found gift back button');
 		
-		if ( img_found || ( return_gift_btn.val().match( /thank you/i ) ) ) {					
-			console.log( 'Found gift back button text ');
-			
-			if_not_detected( return_gift_btn, function( return_gift_btn ) {
-				
-				console.log( 'Just before clicking the SHOW SEND button.');
-				
-				// If so click button to show return gift window
-				return_gift_btn.click();
-			} );
-		}
-	}
-	
-	// Handle out of requests error
-	
-	// Detect text field for return gift message
-	var msg_box = $('#personal_msg_box textarea');
-	var send_return_gift_btn = jQuery( 'input[name=sendit]' );
-	if ( ( send_return_gift_btn.length ) && ( msg_box.length) ) {
-		if_not_detected( send_return_gift_btn, function( send_return_gift_btn ) {
-			if_not_detected( msg_box, function( msg_box ) {
-				msg_box.val( return_gift_message );
-				send_return_gift_btn.click();
-			});
-		});	
-	}	
 }
 
 function redirect() {
