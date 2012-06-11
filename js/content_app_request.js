@@ -82,39 +82,16 @@ function changes_detected() {
 	
 	
 	// Detect yes button
-	var h3_help = jQuery("h3:contains('Materials sent')");
-	var h3_help_2 = jQuery("h3:contains('Sorry')");
-	var add_text = jQuery(".main_giftConfirm_cont .additional_text");
-	var askMore_text_el = jQuery("div[class='askMore_text']");
-	
 	var yes_btn = jQuery( "input[value='Yes']");
-	if ( yes_btn.length && ( ( !document.location.href.match( /\/?request_ids=/ ) ) || h3_help.length || h3_help_2.length || askMore_text_el.length || add_text.length ) ) {
+	if ( yes_btn.length ) {
 		
 		if_not_detected( yes_btn, function( yes_btn ) {
 			
-			if ( !document.location.href.match( /\/?request_ids=/ ) ) {
-				
-				chrome.extension.sendRequest( { "action" : "reset_hang_check" } );
-				
-				setTimeout( function() {
-					if (!handled) {
-						
-						state = 3;
-						state_text = 'Request accepted!( by YES button on gift returned)';
-						chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-							redirect();
-						} );	
-					}
-				}, 7000);
-			} else {
-			
-				state = 3;
-				state_text = 'Request accepted!( by YES button)';
-				chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {
-					
-					redirect();
-				} );
-			}
+			state = 3;
+			state_text = 'Request accepted!( by YES button)';
+			chrome.extension.sendRequest( { "action" : "finish_current_id", state: state, state_text: state_text }, function() {				
+				redirect();
+			} );
 		} );
 	} 
 	
