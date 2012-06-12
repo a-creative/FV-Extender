@@ -1,3 +1,5 @@
+var is_google_shop = false;
+
 var FVE_version = getVersion();
 
 var processing = false;
@@ -58,6 +60,11 @@ function getVersion() {
 		xhr.send(null);
 		try {
 			manifest = JSON.parse( xhr.responseText );
+			
+			if ( manifest && ( typeof manifest.update_url !== 'undefined' ) ) {
+				is_google_shop = true;
+			}
+			
 		} catch( e ) {			
 			log_error( e.message );
 		}

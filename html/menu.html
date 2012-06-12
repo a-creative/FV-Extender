@@ -18,39 +18,44 @@
 			
 			var bgp = chrome.extension.getBackgroundPage();
 			
-			
-			bgp.checkForUpdates( function( update ) {
-				
+			if ( bgp.is_google_shop ) {
 				var update_link = document.getElementById( 'updates-btn' );
-			
-				if ( update ) {
+				update_link.innerHTML = '- FVE is up-to-date';
+			} else {
+				
+				bgp.checkForUpdates( function( update ) {
 					
-					if ( update.manual_update ) {
+					var update_link = document.getElementById( 'updates-btn' );
+				
+					if ( update ) {
+						
+						if ( update.manual_update ) {
+							update_link.target = '_blank';
+							update_link.innerHTML = 'Update FVE'
+							update_link.title = 'Click to read more about and update FVE to the latest version: ' + update.version ;
+							
+						} else {
+							update_link.innerHTML = 'Update FVE now'
+							
+							update_link.title = 'Click to update FVE instantly to the latest version: ' + update.version;
+						}
+						
 						update_link.target = '_blank';
-						update_link.innerHTML = 'Update FVE'
-						update_link.title = 'Click to read more about and update FVE to the latest version: ' + update.version ;
+						update_link.href = update.url;
+						update_link.className = 'enabled';
+						
+						var sign = document.getElementById( 'update-sign' );
+						sign.href = update.url;
+						sign.target = '_blank';
+						sign.style.display = 'block';
 						
 					} else {
-						update_link.innerHTML = 'Update FVE now'
-						
-						update_link.title = 'Click to update FVE instantly to the latest version: ' + update.version;
+						update_link.innerHTML = '- FVE is up-to-date';
 					}
 					
-					update_link.target = '_blank';
-					update_link.href = update.url;
-					update_link.className = 'enabled';
 					
-					var sign = document.getElementById( 'update-sign' );
-					sign.href = update.url;
-					sign.target = '_blank';
-					sign.style.display = 'block';
-					
-				} else {
-					update_link.innerHTML = '- FVE is up-to-date';
-				}
-				
-				
-			} );
+				} );
+			}
 			
 			function _abort_clicked() {
 				bgp.main_tab_id = -1;
