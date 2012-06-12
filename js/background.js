@@ -210,7 +210,7 @@ function games_redirect( tab ) {
 	
 	chrome.tabs.update( 
 		tab.id, {
-			url: 'http://www.facebook.com/appcenter/requests#confirm_102452128776',
+			url: 'http://www.facebook.com/games#confirm_102452128776',
 			selected: false,
 			active: false
 		}
@@ -368,7 +368,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 				+ 	'retries couldn\'t access your list of requests.\n'
 				+	'\n'
 				+	'Please verify your list of FV requests here:\n'
-				+	'http://www.facebook.com/appcenter/requests#confirm_102452128776\n'
+				+	'http://www.facebook.com/games\n'
 				+	'\n'
 				+	'If the list looks empty you should look for a solution here:\n'
 				+	'http://a-creative.dk/?p=861\n'
@@ -411,9 +411,10 @@ function goto_requests() {
 		
 		chrome.tabs.getAllInWindow( wnd.id, function( tabs ) {
 			var found_tab;
+			
 			jQuery.each( tabs, function( i, tab ) {
 				
-				if ( tab.url.toLowerCase().match('/requests' ) ) {
+				if ( tab.url.toLowerCase().match('/games' ) ) {
 					found_tab = tab;
 					return false;
 				}
@@ -433,7 +434,7 @@ function goto_requests() {
 				chrome.tabs.create(
 					{
 						"windowId" : wnd.id,
-						"url" : 'http://www.facebook.com/appcenter/requests#confirm_102452128776'
+						"url" : 'http://www.facebook.com/games'
 					}, function( tab ) {
 						main_tab_id = tab.id
 					}

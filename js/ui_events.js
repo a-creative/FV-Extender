@@ -90,10 +90,11 @@ function Process_requests( app_requests ) {
 				// Get app request id
 				try {
 					app_request_id = document.evaluate(".//input[contains(@id,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
-					app_request_text = document.evaluate(".//div[contains(@class,'message')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
+					app_request_text = document.evaluate(".//div[contains(@class,'appRequestBodyNewA')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
 					
 					app_request_item_name = get_item_name( app_request_text );
 					
+				
 				} catch( err ) {
 					
 					console.log('FAILED:' + app_request.innerHTML );
@@ -203,10 +204,10 @@ function Find_requets() {
 	// Find app request group
 	var app_request_group = jQuery('#confirm_102452128776');
 	
-	
 	if ( app_request_group && app_request_group.length ) {
 		
-		var app_requests = app_request_group.find( ".requests .appCenterRequest" );
+		var app_requests = app_request_group.find( "li.requestStatus" );
+		
 		if ( app_requests && app_requests.length ) {
 		
 			if_not_detected( app_requests, function() {
@@ -224,7 +225,8 @@ function Find_requets() {
 function checkFinishPage( callback ) {
 	
 	var content_el = document.evaluate("//div[@id='pagelet_requests']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-	var right_url = document.location.href.match( /\/requests/ );
+	var right_url = document.location.href.match( /\/games/ );
+	
 	if ( content_el && right_url ) {
 		callback();
 	} else {
@@ -241,7 +243,7 @@ function checkFinishPage( callback ) {
 		
 		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( do_reload ) {
 			if ( do_reload ) {
-				window.location.replace( 'http://www.facebook.com/appcenter/requests' );
+				window.location.replace( 'http://www.facebook.com/games' );
 			}
 		} );
 	}
