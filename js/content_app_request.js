@@ -146,6 +146,7 @@ chrome.extension.sendRequest( { "action" : "handle_result_page" }, function( han
 		if (
 					( document.location.href.match( /sendcredits\.php/ ) )
 				 || ( document.location.href.match( /InventoryCellar_send/ ) )
+			     || ( document.location.href.match( /\?ref=.+?_send/ ) )
 		) {
 			state = 3; state_text = 'Help request accepted!';
 		}
