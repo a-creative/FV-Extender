@@ -145,7 +145,7 @@ function getLatestVersion( callback ) {
 	var screen_name = 'fv_extender';	
 	
 	$.ajax({
-		url: "http://api.twitter.com/1/statuses/user_timeline.json",
+		url: "https://api.twitter.com/1/statuses/user_timeline.json",
 		dataType: 'json',
 		data: "screen_name=" + screen_name + "&count=3&callback=?",
 		success: function( tweets ) {

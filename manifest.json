@@ -57,6 +57,7 @@
 		}, {
 			"matches" : [
 				"*://fv-zprod.farmville.com/?fb_source=request&request_ids=*",
+				"*://fv-zprod.farmville.com/?fb_source=appcenter_request&request_ids=*",
 				"*://apps.facebook.com/onthefarm/",
 				"*://apps.facebook.com/onthefarm/index.php*",
 				"*://apps.facebook.com/onthefarm/?installed=1*",
