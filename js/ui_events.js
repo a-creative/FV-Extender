@@ -89,14 +89,23 @@ function Process_requests( app_requests ) {
 				
 				// Get app request id
 				try {
-					app_request_id = document.evaluate(".//input[contains(@id,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
+					app_request_id = document.evaluate(".//input[contains(@name,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
+				} catch( err ) {
+					try {
+						app_request_id = document.evaluate(".//input[contains(@id,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
+						
+					} catch( err ) {
+						console.log( err );
+						continue;
+					}
+				}
+				
+				try {
 					app_request_text = document.evaluate(".//div[contains(@class,'message')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
 					
-					app_request_item_name = get_item_name( app_request_text );
-					
+					app_request_item_name = get_item_name( app_request_text );	
 				} catch( err ) {
-					
-					console.log('FAILED:' + app_request.innerHTML );
+					console.log( err );
 					continue;
 				}
 				
