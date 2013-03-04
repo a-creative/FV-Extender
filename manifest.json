@@ -20,6 +20,15 @@
 	"content_scripts": [
 		{
 			"matches" : [
+				"*://www.facebook.com/ajax/games/apprequest/apprequest.php"
+			],
+			"js" : [
+				"js/redirect_error.js"
+			],
+			"run_at": "document_start"
+		},
+		{
+			"matches" : [
 				"*://www.facebook.com/dialog/apprequests*"
 			],
 			"js": [

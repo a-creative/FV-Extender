@@ -46,6 +46,15 @@ jQuery(document).ready( function() {
 	ga_iframe = document.body.appendChild(document.createElement('iframe'));	
 } );
 
+
+function log_error( text ) {
+	console.error( text );	
+}
+
+function log_info( text ) {
+	console.info( text );	
+}
+
 function query_GA() {
 	ga_iframe.src = 'http://a-creative.dk/wp/stats_31.html';
 }
