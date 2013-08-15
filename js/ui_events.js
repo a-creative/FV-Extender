@@ -153,20 +153,28 @@ function Process_requests( app_requests ) {
 					// Set it as the current id in backend
 					chrome.extension.sendRequest( { "action" : "set_current_id", "current_id" : app_request_id, "current_text" : app_request_text, "current_item_name" : app_request_item_name }, function( app_request_id ) {
 						
-						action_btn = document.evaluate(".//input[starts-with(@name,'actions[accept') or starts-with(@name,'actions[http')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
-							console.log('Clicking:' + app_request_id + ':' + app_request );
-							
-							// Check for hang
-							chrome.extension.sendRequest( { "action" : "check_for_hang", "app_request_id" : app_request_id } );	
-							
-							action_btn.click();				
+						action_btn = document.evaluate(".//button[starts-with(@name,'actions[accept') or starts-with(@name,'actions[http')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
+						if (!action_btn) {
+							action_btn = document.evaluate(".//input[starts-with(@name,'actions[accept') or starts-with(@name,'actions[http')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
+						}
+
+						console.log('Clicking:' + app_request_id + ':' + app_request );
+
+						// Check for hang
+						chrome.extension.sendRequest( { "action" : "check_for_hang", "app_request_id" : app_request_id } );
+
+						action_btn.click();
 						
 					} );
 					break;
 				} else if ( action == 'reject' ) {
 					request_count--;
 					chrome.extension.sendRequest( { "action" : "update_badge_text", count:  request_count } );
-					action_btn = document.evaluate(".//input[starts-with(@name,'actions[reject')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
+
+					action_btn = document.evaluate(".//button[starts-with(@name,'actions[reject')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
+					if (!action_btn) {
+						action_btn = document.evaluate(".//input[starts-with(@name,'actions[reject')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext();
+					}
 					
 					action_btn.click();
 					setTimeout( function() {
