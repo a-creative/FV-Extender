@@ -23,7 +23,7 @@ var setting_defaults = {
 	"returnGiftMessage"  : "",
 	"rejectGifts" : 'false',
 	"rejectNeighbors" : 'false'	
-}
+};
 
 // Create audio
 var done_audio = document.createElement("audio");
@@ -234,7 +234,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 	
 	if ( request.action == 'games_redirect' ) {
 		
-		games_redirect( sender.tab )
+		games_redirect( sender.tab );
 		
 		sendResponse();
 		
@@ -422,7 +422,7 @@ function goto_requests() {
 			var found_tab;
 			jQuery.each( tabs, function( i, tab ) {
 				
-				if ( tab.url.toLowerCase().match('/reqs.php' ) ) {
+				if ( tab.url.toLowerCase().match( /\/reqs\.php/ ) ) {
 					found_tab = tab;
 					return false;
 				}

@@ -242,7 +242,7 @@ function Find_requets() {
 function checkFinishPage( callback ) {
 	
 	var content_el = document.evaluate("//div[@id='pagelet_requests']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-	var right_url = document.location.href.match( /\/requests/ );
+	var right_url = document.location.href.match( /\/reqs\.php/ );
 	if ( content_el && right_url ) {
 		callback();
 	} else {

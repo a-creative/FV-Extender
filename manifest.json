@@ -51,8 +51,7 @@
 		},
 		{
 			"matches": [
-			    "*://www.facebook.com/appcenter/requests",
-				"*://www.facebook.com/reqs.php"
+			    "*://www.facebook.com/reqs.php"
 			],
 			"js": [
 				"js/jquery-1.7.min.js",

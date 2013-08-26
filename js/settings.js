@@ -2,7 +2,7 @@ var bgp = chrome.extension.getBackgroundPage();
 		
 $(document).ready( function() {
 	
-	loadSettings( false )
+	loadSettings( false );
 
 	$("#defaults-btn").click( function( evt ) {
 		loadSettings( true );
@@ -72,8 +72,8 @@ function saveSettings() {
 	bgp.settings.returnGiftMessage = $("#user-settings .return-gift-text textarea").val();
 	bgp.settings.audio_enabled = $('input:radio[name="sound"]:checked').val();
 	
-	bgp.settings.rejectGifts = $('input:checkbox[name="reject_gifts"]').is(':checked')
-	bgp.settings.rejectNeighbors = $('input:checkbox[name="reject_neighbors"]').is(':checked')
+	bgp.settings.rejectGifts = $('input:checkbox[name="reject_gifts"]').is(':checked');
+	bgp.settings.rejectNeighbors = $('input:checkbox[name="reject_neighbors"]').is(':checked');
 	
 	bgp.saveSettings();
 	

@@ -57,11 +57,11 @@ window.onload = function() {
 				
 				if ( update.manual_update ) {
 					update_link.target = '_blank';
-					update_link.innerHTML = 'Update FVE'
+					update_link.innerHTML = 'Update FVE';
 					update_link.title = 'Click to read more about and update FVE to the latest version: ' + update.version ;
 					
 				} else {
-					update_link.innerHTML = 'Update FVE now'
+					update_link.innerHTML = 'Update FVE now';
 					
 					update_link.title = 'Click to update FVE instantly to the latest version: ' + update.version;
 				}
