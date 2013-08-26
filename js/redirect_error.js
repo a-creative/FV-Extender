@@ -1,1 +1,1 @@
-window.location = 'http://www.facebook.com/appcenter/requests#confirm_102452128776';
+window.location = 'http://www.facebook.com/reqs.php#confirm_102452128776';

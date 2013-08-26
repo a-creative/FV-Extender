@@ -154,7 +154,7 @@ function getLatestVersion( callback ) {
 	var screen_name = 'fv_extender';	
 	
 	$.ajax({
-		url: "https://api.twitter.com/1/statuses/user_timeline.json",
+		url: "https://api.twitter.com/1.1/statuses/user_timeline.json",
 		dataType: 'json',
 		data: "screen_name=" + screen_name + "&count=3&callback=?",
 		success: function( tweets ) {
@@ -219,7 +219,7 @@ function games_redirect( tab ) {
 	
 	chrome.tabs.update( 
 		tab.id, {
-			url: 'http://www.facebook.com/appcenter/requests#confirm_102452128776',
+			url: 'http://www.facebook.com/reqs.php#confirm_102452128776',
 			selected: false,
 			active: false
 		}
@@ -377,7 +377,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 				+ 	'retries couldn\'t access your list of requests.\n'
 				+	'\n'
 				+	'Please verify your list of FV requests here:\n'
-				+	'http://www.facebook.com/appcenter/requests#confirm_102452128776\n'
+				+	'http://www.facebook.com/reqs.php#confirm_102452128776\n'
 				+	'\n'
 				+	'If the list looks empty you should look for a solution here:\n'
 				+	'http://a-creative.dk/?p=861\n'
@@ -442,7 +442,7 @@ function goto_requests() {
 				chrome.tabs.create(
 					{
 						"windowId" : wnd.id,
-						"url" : 'http://www.facebook.com/appcenter/requests#confirm_102452128776'
+						"url" : 'http://www.facebook.com/reqs.php#confirm_102452128776'
 					}, function( tab ) {
 						main_tab_id = tab.id
 					}

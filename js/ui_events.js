@@ -49,13 +49,13 @@ function Process_requests( app_requests ) {
 				var item_count = {};
 				for ( i = 0; i < app_requests.length; i++ ) {
 					app_request = app_requests[ i ] ;
-					
+
 					// Get app request id
 					try {
 						app_request_text = document.evaluate(".//div[contains(@class,'appRequestBodyNewA')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
 						
 						app_request_item_name = get_item_name( app_request_text );
-						
+
 						if ( isNaN( item_count[ app_request_item_name ] ) ) {
 							item_count[ app_request_item_name ] = 0;
 						} 
@@ -64,7 +64,7 @@ function Process_requests( app_requests ) {
 						
 					
 					} catch( err ) {
-						
+
 						console.log('FAILED at index:' + i + ' - ' + app_requests[ i ] );
 						continue;
 					}
@@ -82,11 +82,11 @@ function Process_requests( app_requests ) {
 				return;
 			}	
 			
-			
+
 			// Find request and click
 			for ( i = 0; i < app_requests.length; i++ ) {
 				app_request = app_requests[ i ];
-				
+
 				// Get app request id
 				try {
 					app_request_id = document.evaluate(".//input[contains(@name,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
@@ -99,7 +99,8 @@ function Process_requests( app_requests ) {
 						continue;
 					}
 				}
-				
+
+				/*
 				try {
 					app_request_text = document.evaluate(".//div[contains(@class,'message')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
 					
@@ -108,7 +109,7 @@ function Process_requests( app_requests ) {
 					console.log( err );
 					continue;
 				}
-				
+				*/
 				
 				
 				// Set to accept as default
@@ -223,7 +224,7 @@ function Find_requets() {
 	
 	if ( app_request_group && app_request_group.length ) {
 		
-		var app_requests = app_request_group.find( ".requests .appCenterRequest" );
+		var app_requests = app_request_group.find( ".requests > li" );
 		if ( app_requests && app_requests.length ) {
 		
 			if_not_detected( app_requests, function() {
@@ -258,7 +259,7 @@ function checkFinishPage( callback ) {
 		
 		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( do_reload ) {
 			if ( do_reload ) {
-				window.location.replace( 'http://www.facebook.com/appcenter/requests' );
+				window.location.replace( 'http://www.facebook.com/reqs.php' );
 			}
 		} );
 	}
