@@ -422,7 +422,7 @@ function goto_requests() {
 			var found_tab;
 			jQuery.each( tabs, function( i, tab ) {
 				
-				if ( tab.url.toLowerCase().match('/requests' ) ) {
+				if ( tab.url.toLowerCase().match('/reqs.php' ) ) {
 					found_tab = tab;
 					return false;
 				}
