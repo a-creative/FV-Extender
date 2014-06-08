@@ -43,23 +43,3 @@ body {
 	cursor:default;
 	opacity:0.4;
 }
-
-#updates-btn {
-	margin-bottom:10px;
-}
-
-#update-sign {
-	display:none;
-	background-color:red;
-	border-top:1px solid #fff;
-	border-left:1px solid #fff;
-	color:white;
-	font: 9px/15px verdana;
-	height:15px;
-	padding: 0px 5px;
-	margin-top:10px;
-	opacity:1;
-	cursor:pointer;
-}
-
-
