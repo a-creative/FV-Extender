@@ -199,6 +199,17 @@ a.button:active {
 	margin-right:10px;
 }
 
+.bandwidth-use input {
+    width:50px !important;
+    float:left;
+}
+
+.bandwidth-use .text {
+    float:left;
+    margin-left:5px !important;
+    margin-top:5px !important;
+}
+
 
 
 /* User settings - end */

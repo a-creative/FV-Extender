@@ -27,9 +27,13 @@ function loadSettings( loadDefaults ) {
 	if ( loadDefaults ) {
 		
 		$("#user-settings .return-gift-text textarea").val(
-			'This gift was returned by FV Extender for Google Chrome.'
-		);
-		
+            bgp.setting_defaults.returnGiftMessage
+        );
+
+        $("#user-settings .bandwidth-use input").val(
+            bgp.setting_defaults.bandwidthUse
+        );
+
 		$('#user-settings input:radio[name="sound"]').filter('[value="' + bgp.setting_defaults.audio_enabled + '"]').attr('checked', true);
 		
 		if ( bgp.setting_defaults.rejectGifts == 'true') {
@@ -64,6 +68,8 @@ function loadSettings( loadDefaults ) {
 		
 		
 		$("#user-settings .return-gift-text textarea").val( bgp.settings.returnGiftMessage );
+
+        $("#user-settings .bandwidth-use input").val( bgp.settings.bandwidthUse );
 	}	
 }
 
@@ -74,6 +80,13 @@ function saveSettings() {
 	
 	bgp.settings.rejectGifts = $('input:checkbox[name="reject_gifts"]').is(':checked');
 	bgp.settings.rejectNeighbors = $('input:checkbox[name="reject_neighbors"]').is(':checked');
+
+    bgp.settings.bandwidthUse =  "" + parseInt( $("#user-settings .bandwidth-use input").val() );
+    if (isNaN( bgp.settings.bandwidthUse ) ) {
+        bgp.settings.bandwidthUse = ""
+    } else if ( parseInt( bgp.settings.bandwidthUse )< 0 ) {
+        bgp.settings.bandwidthUse = ""
+    }
 	
 	bgp.saveSettings();
 	

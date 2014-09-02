@@ -161,10 +161,16 @@ function Process_requests( app_requests ) {
 
 						console.log('Clicking:' + app_request_id + ':' + app_request );
 
-						// Check for hang
-						chrome.extension.sendRequest( { "action" : "check_for_hang", "app_request_id" : app_request_id } );
+                        var slowDownDelay = 0;
+                        if ( options.settings.bandwidthUse !=='' ) {
+                            slowDownDelay = 1000 * parseInt( options.settings.bandwidthUse );
+                        }
 
-						action_btn.click();
+						setTimeout( function() {
+                            // Check for hang
+                            chrome.extension.sendRequest( { "action" : "check_for_hang", "app_request_id" : app_request_id } );
+                            action_btn.click();
+                        }, slowDownDelay );
 						
 					} );
 					break;

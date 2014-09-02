@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "FV Extender",
     "short_name": "FVE",
-    "version": "3.1.27",
+    "version": "3.1.28",
 
     "description": "Helps you accept FarmVille requests.",
     "icons": {

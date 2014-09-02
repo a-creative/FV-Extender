@@ -20,9 +20,10 @@ var settings;
 
 var setting_defaults = {
 	"audio_enabled" : "1",
-	"returnGiftMessage"  : "",
+	"returnGiftMessage"  : "This gift was returned by FV Extender for Google Chrome.",
 	"rejectGifts" : 'false',
-	"rejectNeighbors" : 'false'	
+	"rejectNeighbors" : 'false',
+    "bandwidthUse" : ""
 };
 
 // Create audio
