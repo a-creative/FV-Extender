@@ -155,10 +155,13 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 		sendResponse( options );
 		
 	} else if ( request.action == 'is_processing' ) {
+        var delay_seconds = parseInt( settings.bandwidthUse );
+        if ( isNaN( delay_seconds ) ) {
+            delay_seconds = 0;
+        }
 		
 		listLoadId = request.time;
-		
-		sendResponse( processing );
+		sendResponse( { is_processing: processing, delay_seconds: delay_seconds } );
 	} else if ( request.action == 'stop_processing' ) {
 		list_reload_index = 0;
 		processing = false;

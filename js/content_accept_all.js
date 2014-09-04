@@ -7,12 +7,12 @@ function changes_detected() {
 }
 
 // Check if processing is active
-chrome.extension.sendRequest( { "action" : "is_processing", "time:" : ( new Date().getTime() ) }, function( is_processing ) {
-	
-	if ( is_processing ) {
-		
+chrome.extension.sendRequest( { "action" : "is_processing", "time:" : ( new Date().getTime() ) }, function( result ) {
+	if ( result.is_processing ) {
+
 		// We are in processing mode
-		
+		var delay_seconds = 20000 + ( result.delay_seconds * 1000 );
+
 		// Start timeout in case or malformed list
 		setTimeout(
 			function() {
@@ -25,7 +25,7 @@ chrome.extension.sendRequest( { "action" : "is_processing", "time:" : ( new Date
 					} );
 				}
 			}
-			, 20000
+			, delay_seconds
 		);
 		
 		
