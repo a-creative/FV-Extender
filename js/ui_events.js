@@ -260,14 +260,25 @@ function Find_requets() {
 	} );
 }
 
-function checkFinishPage( callback ) {
-	
-	var content_el = document.evaluate("//div[@id='pagelet_requests']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
-	var right_url = document.location.href.match( /\/reqs\.php/ );
+function checkFinishPage( result, callback ) {
+	var content_el;
+	if ( result.useAlternativeDataPage === 'true' ) {
+		content_el = document.evaluate("//div[@id='games_hub_root_content']", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
+	} else {
+		content_el = document.evaluate("//h3[contains(@class,'uiHeaderTitle')]", window.document, null, XPathResult.ANY_TYPE, null).iterateNext();
+	}
+
+	var check_path = result.def_data_page_check;
+
+	if ( result.useAlternativeDataPage === 'true' ) {
+		check_path = result.alt_data_page_check;
+	}
+
+	var right_url = ( document.location.href.indexOf(check_path) !==-1 );
+
 	if ( content_el && right_url ) {
 		callback();
 	} else {
-		
 		var reason = '';
 		
 		if ( !content_el ) {
@@ -278,9 +289,10 @@ function checkFinishPage( callback ) {
 			reason += ' "not right url: \'' + document.location.href + '\'" ';
 		}
 		
-		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( do_reload, data_page_url ) {
-			if ( do_reload ) {
-			    window.location.replace( data_page_url );
+		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( result ) {
+
+			if ( result.do_reload ) {
+			    window.location.replace( result.data_page_url );
 			}
 		} );
 	}

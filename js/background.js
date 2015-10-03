@@ -173,7 +173,13 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
         }
 		
 		listLoadId = request.time;
-		sendResponse( { is_processing: processing, delay_seconds: delay_seconds } );
+		sendResponse( {
+			is_processing: processing,
+			delay_seconds: delay_seconds,
+			useAlternativeDataPage: settings.useAlternativeDataPage,
+			alt_data_page_check: alt_data_page_check,
+			def_data_page_check: def_data_page_check
+		} );
 	} else if ( request.action == 'stop_processing' ) {
 		list_reload_index = 0;
 		processing = false;
@@ -278,7 +284,11 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 	} else if ( request.action == 'check_for_list_reload' ) {
 		
 		//console.log( 'Finish reload. Reason:' + request.reason );
-		
+
+		var data_page_url = def_data_page;
+		if ( settings.useAlternativeDataPage === 'true' ) {
+			data_page_url = alt_data_page;
+		}
 		var do_reload;
 		if ( list_reload_index <= 5 ) {
 			do_reload = true;
@@ -291,11 +301,6 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 			processing = false;
 			do_reload = false;
 
-			var data_page_url = def_data_page;
-			if ( settings.useAlternativeDataPage === 'true' ) {
-				data_page_url = alt_data_page;
-			}
-
 			alert(
 					'FV Extender has stopped processing because it after several '
 				+ 	'retries couldn\'t access your list of requests.\n'
@@ -304,14 +309,14 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 				+	data_page_url + '\n'
 				+	'\n'
 				+	'If the list looks empty you should look for a solution here:\n'
-				+	'http://a-creative.dk/?p=861\n'
+				+	'http://a-creative.dk/2011/10/16/no-more-empty-request-pages/\n'
 				+	'\n'
 				+	'If there seem to be another problem you can always contact me here:\n'
 				+	'http://a-creative.dk/contact/' 
 			);
 		}
 		
-		sendResponse( do_reload, data_page_url );
+		sendResponse( { do_reload: do_reload, data_page_url: data_page_url } );
 	} else if ( request.action == 'inject_scripts' ) {
 		console.log('Inject scripts 1/4');
 		// Possibly inject scripts

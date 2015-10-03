@@ -23,7 +23,7 @@ chrome.extension.sendRequest( { "action" : "is_processing", "time:" : ( new Date
 
 			    if ( !handled ) {
 
-					checkFinishPage( function() {
+				    checkFinishPage( result, function() {
 						
 						// There was no request left at all!
 						chrome.extension.sendRequest( { "action" : "stop_processing", "ptype" : 2 }, _processingDone );				
