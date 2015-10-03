@@ -2,6 +2,12 @@ var is_google_shop = false;
 
 var FVE_version = getVersion();
 
+
+var def_data_page = "http://www.facebook.com/reqs.php#confirm_102452128776";
+var def_data_page_check = "facebook.com/reqs.php";
+var alt_data_page = "http://www.facebook.com/games/activity";
+var alt_data_page_check ="facebook.com/games/activity";
+
 var processing = false;
 var app_requests = {};
 var processed_ids = {};
@@ -23,7 +29,8 @@ var setting_defaults = {
 	"returnGiftMessage"  : "This gift was returned by FV Extender for Google Chrome.",
 	"rejectGifts" : 'false',
 	"rejectNeighbors" : 'false',
-    "bandwidthUse" : ""
+    "bandwidthUse" : "",
+	"useAlternativeDataPage" : 'true'
 };
 
 // Create audio
@@ -120,10 +127,15 @@ function games_redirect( tab ) {
 		
 		}			
 	}, 10000 );
-	
-	chrome.tabs.update( 
+
+	var data_page_url = def_data_page;
+	if ( settings.useAlternativeDataPage === 'true' ) {
+		data_page_url = alt_data_page;
+	}
+
+	chrome.tabs.update(
 		tab.id, {
-			url: 'http://www.facebook.com/reqs.php#confirm_102452128776',
+			url: data_page_url,
 			selected: false,
 			active: false
 		}
@@ -278,13 +290,18 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 			main_tab_id = -1;
 			processing = false;
 			do_reload = false;
-			
+
+			var data_page_url = def_data_page;
+			if ( settings.useAlternativeDataPage === 'true' ) {
+				data_page_url = alt_data_page;
+			}
+
 			alert(
 					'FV Extender has stopped processing because it after several '
 				+ 	'retries couldn\'t access your list of requests.\n'
 				+	'\n'
 				+	'Please verify your list of FV requests here:\n'
-				+	'http://www.facebook.com/reqs.php#confirm_102452128776\n'
+				+	data_page_url + '\n'
 				+	'\n'
 				+	'If the list looks empty you should look for a solution here:\n'
 				+	'http://a-creative.dk/?p=861\n'
@@ -294,7 +311,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 			);
 		}
 		
-		sendResponse( do_reload );	
+		sendResponse( do_reload, data_page_url );
 	} else if ( request.action == 'inject_scripts' ) {
 		console.log('Inject scripts 1/4');
 		// Possibly inject scripts
@@ -328,8 +345,14 @@ function goto_requests() {
 		chrome.tabs.getAllInWindow( wnd.id, function( tabs ) {
 			var found_tab;
 			jQuery.each( tabs, function( i, tab ) {
-				
-				if ( tab.url.toLowerCase().match( /\/reqs\.php/ ) ) {
+
+				var check_path = def_data_page_check;
+
+				if ( settings.useAlternativeDataPage === 'true' ) {
+					check_path = alt_data_page_check;
+				}
+
+				if ( tab.url.toLowerCase().indexOf( check_path ) !==-1 ) {
 					found_tab = tab;
 					return false;
 				}
@@ -346,10 +369,16 @@ function goto_requests() {
 					}
 				);
 			} else {
+
+				var data_page_url = def_data_page;
+				if ( settings.useAlternativeDataPage === 'true' ) {
+					data_page_url = alt_data_page;
+				}
+
 				chrome.tabs.create(
 					{
 						"windowId" : wnd.id,
-						"url" : 'http://www.facebook.com/reqs.php#confirm_102452128776'
+						"url" : data_page_url
 					}, function( tab ) {
 						main_tab_id = tab.id
 					}

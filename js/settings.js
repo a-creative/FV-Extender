@@ -41,6 +41,12 @@ function loadSettings( loadDefaults ) {
 		} else {
 			$('#user-settings input:checkbox[name="reject_gifts"]').removeAttr('checked');
 		}
+
+		if ( bgp.setting_defaults.useAlternativeDataPage == 'true') {
+			$('#user-settings input:checkbox[name="use_alternative_data_page"]').attr('checked', 'checked' );
+		} else {
+			$('#user-settings input:checkbox[name="use_alternative_data_page"]').removeAttr('checked');
+		}
 		
 		if ( bgp.setting_defaults.rejectNeighbors == 'true' ) {
 			$('#user-settings input:checkbox[name="reject_neighbors"]').attr('checked', 'checked' );
@@ -58,6 +64,13 @@ function loadSettings( loadDefaults ) {
 			$('#user-settings input:checkbox[name="reject_gifts"]').attr('checked', 'checked' );
 		} else {
 			$('#user-settings input:checkbox[name="reject_gifts"]').removeAttr('checked');
+		}
+
+		if ( bgp.settings.useAlternativeDataPage == 'true' ) {
+
+			$('#user-settings input:checkbox[name="use_alternative_data_page"]').attr('checked', 'checked' );
+		} else {
+			$('#user-settings input:checkbox[name="use_alternative_data_page"]').removeAttr('checked');
 		}
 		
 		if ( bgp.settings.rejectNeighbors == 'true' ) {
@@ -79,6 +92,8 @@ function saveSettings() {
 	bgp.settings.audio_enabled = $('input:radio[name="sound"]:checked').val();
 	
 	bgp.settings.rejectGifts = $('input:checkbox[name="reject_gifts"]').is(':checked');
+	bgp.settings.useAlternativeDataPage = $('input:checkbox[name="use_alternative_data_page"]').is(':checked');
+
 	bgp.settings.rejectNeighbors = $('input:checkbox[name="reject_neighbors"]').is(':checked');
 
     bgp.settings.bandwidthUse =  "" + parseInt( $("#user-settings .bandwidth-use input").val() );

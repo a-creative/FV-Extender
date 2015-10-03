@@ -1,3 +1,5 @@
+console.log( 'Loading ui_event.js');
+
 function get_item_name( text ) {
 	
 	var item_name = false;
@@ -87,30 +89,31 @@ function Process_requests( app_requests ) {
 			for ( i = 0; i < app_requests.length; i++ ) {
 				app_request = app_requests[ i ];
 
-				// Get app request id
-				try {
-					app_request_id = document.evaluate(".//input[contains(@name,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
-				} catch( err ) {
+				if ( options.useAlternativeDataPage ) {
+
 					try {
-						app_request_id = document.evaluate(".//input[contains(@id,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
-						
+						app_request_id = $(app_request ).attr('id');;
 					} catch( err ) {
 						console.log( err );
 						continue;
 					}
-				}
 
-				/*
-				try {
-					app_request_text = document.evaluate(".//div[contains(@class,'message')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().textContent;
-					
-					app_request_item_name = get_item_name( app_request_text );	
-				} catch( err ) {
-					console.log( err );
-					continue;
+				} else {
+
+					// Get app request id
+					try {
+						app_request_id = document.evaluate(".//input[contains(@name,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
+					} catch( err ) {
+						try {
+							app_request_id = document.evaluate(".//input[contains(@id,'div_id')]", app_request, null, XPathResult.ANY_TYPE, null).iterateNext().value;
+
+						} catch( err ) {
+							console.log( err );
+							continue;
+						}
+					}
+
 				}
-				*/
-				
 				
 				// Set to accept as default
 				var action = 'accept';
@@ -205,44 +208,56 @@ function Process_requests( app_requests ) {
 	} );	
 }
 
-function Find_requets() {	
-	
-	var ignored_el = jQuery('.pas.uiBoxYellow');
-	if ( ignored_el && ignored_el.length ) {
-		if_not_detected( ignored_el, function( ignored_el ) {
-			
-			var parent = ignored_el.parent();
-			if( parent && parent.length ) {
-				
-				var app_request_id = parent.attr( 'id' );
-				
-				chrome.extension.sendRequest( { "action" : "finish_reject", "processed_id" : app_request_id }, function() {
-					window.location.reload();
-				});	
-				return;
-			}	
-		} );
-	}	
-	
-	// Find app request group
-	var app_request_group = jQuery('#confirm_102452128776');
-	
-	
-	if ( app_request_group && app_request_group.length ) {
-		
-		var app_requests = app_request_group.find( ".requests > li" );
-		if ( app_requests && app_requests.length ) {
-		
-			if_not_detected( app_requests, function() {
-				
-				// Requets found
-				
-				// Process requests found
-				Process_requests( app_requests );
-				
-			});
+function Find_requets() {
+
+	chrome.extension.sendRequest( { "action" : "get_options" }, function( options ) {
+
+		var ignored_el = jQuery( '.pas.uiBoxYellow' );
+		if ( ignored_el && ignored_el.length ) {
+			if_not_detected( ignored_el, function ( ignored_el ) {
+
+				var parent = ignored_el.parent();
+				if ( parent && parent.length ) {
+
+					var app_request_id = parent.attr( 'id' );
+
+					chrome.extension.sendRequest( {
+						"action"      : "finish_reject",
+						"processed_id": app_request_id
+					}, function () {
+						window.location.reload();
+					} );
+					return;
+				}
+			} );
 		}
-	}
+
+		// Find app request group
+		var app_request_group = jQuery( '#confirm_102452128776' );
+		if ( options.settings.useAlternativeDataPage ) {
+			app_request_group = jQuery( '#requests_102452128776');
+		}
+
+		if ( app_request_group && app_request_group.length ) {
+
+			var app_requests = app_request_group.find( ".requests > li" );
+			if ( options.settings.useAlternativeDataPage ) {
+				app_requests = app_request_group.find( "> ul > div" );
+			}
+
+			if ( app_requests && app_requests.length ) {
+
+				if_not_detected( app_requests, function() {
+
+			        // Requets found
+
+			        // Process requests found
+			        Process_requests( app_requests );
+
+			    });
+			}
+		}
+	} );
 }
 
 function checkFinishPage( callback ) {
@@ -263,9 +278,9 @@ function checkFinishPage( callback ) {
 			reason += ' "not right url: \'' + document.location.href + '\'" ';
 		}
 		
-		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( do_reload ) {
+		chrome.extension.sendRequest( { "action" : "check_for_list_reload", "reason" : reason }, function( do_reload, data_page_url ) {
 			if ( do_reload ) {
-				window.location.replace( 'http://www.facebook.com/reqs.php' );
+			    window.location.replace( data_page_url );
 			}
 		} );
 	}
