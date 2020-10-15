@@ -13,4 +13,4 @@ It was not intended that any of the features would in any way ruin the experienc
 
 # Getting started
 
-Please don't get started. As of fall 2020 the extension has been closed down. Primarily due to the lack of time to add compatibility with a new Facebook layout. Secondarily due to Zynga announcing the closing of the original FarmVille game in 2021, which the extension was a utility.
+Please don't get started. As of fall 2020 the extension has been closed down. Primarily due to the lack of time to add compatibility with a new Facebook layout. Secondarily due to Zynga announcing the closing of the original FarmVille game in 2021, which the extension was a utility for.
