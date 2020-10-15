@@ -19,7 +19,7 @@ Please don't get started. As of fall 2020 the extension has been closed down. Pr
 
 ...to everyone that made it really fun for me to work on this. Particularly in 2010 when the extension had it's major success. It had approx. 30.000 daily users. It had/has approx. [10.000 still standing likes on Facebook](https://www.facebook.com/FV.Extender/). Finally I can't forget the overwhelming amount of support requests(in many languages) that helped me create something people loved for many more years than I had imagined.
 
-<3 Maya Kathrine Andersen (the designer, developer and supporter)
+❤️ Maya Kathrine Andersen (the designer, developer and supporter)
 
 October 2020
 
